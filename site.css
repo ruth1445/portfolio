@@ -32,7 +32,8 @@ body, .site-shell { font-family: var(--font); }
   padding: 44px 48px 56px 44px;
   box-sizing: border-box;
 }
-.ab-photo { display: block; width: 100%; height: auto; aspect-ratio: 315 / 364; border-radius: 10px; overflow: hidden; }
+.ab-who { display: flex; gap: 12px; align-items: flex-end; }
+.ab-photo { display: block; width: 104px; flex-shrink: 0; height: auto; aspect-ratio: 315 / 364; border-radius: 10px; overflow: hidden; }
 .ab-id h1 { margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; }
 .ab-id p { margin: 4px 0 0; font-size: 16px; color: var(--muted); }
 .ab-links { display: flex; flex-direction: column; border-top: 1px solid var(--ink); }
