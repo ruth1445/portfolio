@@ -96,6 +96,8 @@ body, .site-shell { font-family: var(--font); }
 .ab-tip strong { color: var(--ink); }
 .ab-key-item:hover .ab-tip, .ab-key-item:focus .ab-tip, .ab-key-item:focus-within .ab-tip { opacity: 1; visibility: visible; transform: none; }
 
+.ab-foot { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 16px; padding: 10px 44px 14px; border-top: 1px solid var(--rule); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+
 /* ---------- laboratory: index + preview ---------- */
 .lx-page { position: relative; z-index: 2; padding: 56px 44px 104px; color: var(--ink); }
 .lx-intro { margin: 0 0 48px; max-width: 820px; font-size: clamp(22px, 2.4vw, 34px); line-height: 1.15; letter-spacing: -0.025em; font-weight: 500; }
