@@ -53,10 +53,10 @@ body, .site-shell { font-family: var(--font); }
 .ab-stop strong { display: block; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
 .ab-stop span:not(.ab-node) { display: block; font-size: 12.5px; color: var(--muted); }
 
-.ab-places { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.ab-places { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .ab-place { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1.5px solid var(--ink); border-radius: 14px; transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms ease, border-color 220ms ease; transform-origin: center; }
 .ab-place:hover { transform: translateY(-2px) rotate(-1.6deg); border-color: rgba(35,32,26,.82); box-shadow: 0 10px 28px rgba(51,255,68,.16), 0 0 20px rgba(51,255,68,.10); }
-.ab-place-map { display: block; height: 96px; margin-bottom: 8px; background: var(--neon); -webkit-mask: var(--map) center / contain no-repeat; mask: var(--map) center / contain no-repeat; }
+.ab-place-map { display: block; height: 150px; margin-bottom: 6px; background: var(--neon); -webkit-mask: var(--map) center / contain no-repeat; mask: var(--map) center / contain no-repeat; }
 .ab-place strong { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
 .ab-place span:not(.ab-place-map) { font-size: 12px; color: var(--muted); }
 
@@ -81,7 +81,7 @@ body, .site-shell { font-family: var(--font); }
 @media (prefers-reduced-motion: reduce) {
   .ab-cursor-spark { display: none; }
 }
-.ab-key { display: flex; flex-wrap: wrap; gap: 10px 32px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--ink); }
+.ab-key { display: flex; flex-wrap: wrap; gap: 6px 32px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--ink); }
 .ab-key-item { position: relative; display: flex; align-items: center; gap: 8px; padding: 6px 0; cursor: help; outline: none; }
 .ab-swatch { width: 16px; height: 16px; border-radius: 4px; }
 .ab-key-item--local .ab-swatch { background: var(--green-dark); }
