@@ -146,16 +146,20 @@ body, .site-shell { font-family: var(--font); }
 
 /* ---------- phones and small tablets ---------- */
 @media (max-width: 860px) {
-  .ab-page { grid-template-columns: 1fr; margin-top: 18px; }
-  .ab-side { position: static; min-height: 0; border-right: 0; border-bottom: 1px solid var(--ink); padding: 28px 20px 32px; display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px 18px; align-items: center; }
-  .ab-links, .ab-interests { grid-column: 1 / -1; }
+  .ab-page { grid-template-columns: 1fr; min-height: 0; margin-top: 8px; }
+  .ab-side { border-right: 0; border-bottom: 1px solid var(--ink); padding: 24px 20px 28px; justify-content: flex-start; gap: 20px; }
+  .ab-who { align-items: center; }
+  .ab-photo { width: 112px; }
+  .ab-reach { gap: 14px; }
   .ab-links { flex-direction: row; flex-wrap: wrap; gap: 8px; border-top: 0; }
   .ab-links a { padding: 8px 14px; border: 1.5px solid var(--ink); border-radius: 999px; gap: 6px; font-size: 15px; }
   .ab-id h1 { font-size: 26px; }
-  .ab-main { padding: 32px 20px 72px; gap: 44px; border-left: 0; min-height: 0; }
+  .ab-section--titles { padding-top: 0; }
+  .ab-main { padding: 28px 20px 48px; gap: 32px; min-height: 0; }
   .ab-places { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .ab-place strong { font-size: 22px; }
-  .ab-place-map { height: 76px; }
+  .ab-place-map { height: 120px; }
+  .ab-foot { padding: 12px 20px 20px; }
   .ab-key { position: relative; }
   .ab-key-item { position: static; }
   .ab-tip { left: 0; right: 0; width: auto; bottom: calc(100% + 6px); }
