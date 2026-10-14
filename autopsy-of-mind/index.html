@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>autopsy of mind</title>
+<style>
+@font-face{font-family:'Marlboro';src:url(assets/Marlboro.ttf) format('truetype');font-display:swap}
+html,body{margin:0;background:#000;font-family:'Marlboro',sans-serif;color:#e6e6e6}
+
+/* soft film grain inside the title letters, refreshed 10x a second like the scan */
+.grainy{background-image:url(assets/grain-soft.png);background-size:128px 128px;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:grain-step 1s steps(10) infinite}
+/* subtle scan-line warp on the title (filter defined in the inline <svg> below) */
+h1.scanned{filter:url(#scan-warp)}
+/* instagram-story style box: follows the text, breaks with each line */
+.story-box{background-color:#f4f1ec;background-image:url(assets/grain-light.png);background-size:140px 140px;padding:0.22em 0.5em;border-radius:0.3em;-webkit-box-decoration-break:clone;box-decoration-break:clone;animation:grain-step 1s steps(10) infinite}
+@keyframes grain-step{from{background-position:0 0}to{background-position:1730px 977px}}
+@media (prefers-reduced-motion:reduce){.grainy,.story-box{animation:none}}
+
+/* the whole hero is laid out on a 1440 x 900 grid and scaled to fit the window */
+.page{position:relative;min-height:100vh;overflow:hidden;background:#000;display:flex;align-items:center;justify-content:center}
+.stage{--u:min(calc(100vw / 1440), calc(100vh / 900));position:relative;width:calc(var(--u) * 1440);height:calc(var(--u) * 900);display:flex;align-items:center}
+.brain-col{position:relative;flex:0 0 auto;width:calc(var(--u) * 827);height:calc(var(--u) * 900);transition:filter .7s ease}
+#mri{position:absolute;left:50%;top:50%;width:calc(var(--u) * 912);height:calc(var(--u) * 1029);transform:translate(-50%,-50%);touch-action:pan-y;cursor:crosshair}
+.text-col{flex:1 1 auto;min-width:0;height:calc(var(--u) * 900);box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0 calc(var(--u) * 56) 0 calc(var(--u) * 24)}
+.text-stack{display:flex;flex-direction:column;gap:calc(var(--u) * 36)}
+.text-col h1{margin:0;font-weight:400;font-size:calc(var(--u) * 150);line-height:.95;height:calc(var(--u) * 238)}
+.title{display:block;background-color:#dccbb0;-webkit-text-stroke:0.02em #dccbb0}
+.text-col p{margin:0;max-width:19em;font-size:calc(var(--u) * 29.5);line-height:1.75;color:#141414}
+
+/* palette picker */
+.palette{position:absolute;top:28px;right:clamp(20px,4vw,64px);z-index:2;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:14px}
+.palette-label{font-family:'Marlboro',sans-serif;font-size:18px;letter-spacing:.02em;color:#b5aea3}
+.swatches{display:flex;flex-wrap:wrap;gap:4px}
+.swatch{width:44px;height:44px;padding:8px;box-sizing:border-box;border-radius:999px;border:1.5px solid #2e2e2e;background:transparent;cursor:pointer;display:flex}
+.swatch[aria-pressed="true"]{border-color:#fff}
+.swatch span{display:flex;width:100%;height:100%;border-radius:999px;overflow:hidden}
+.swatch i{flex:1 1 0}
+
+@media (max-width:760px){
+  .stage{--u:calc(100vw / 860);width:100vw;height:auto;flex-direction:column;padding-bottom:48px}
+  .brain-col{width:100vw;height:calc(var(--u) * 900)}
+  .text-col{width:auto;height:auto;padding:0 20px}
+  .text-col h1{font-size:64px;height:auto}
+  .text-col p{font-size:19px}
+  .palette{top:16px;right:16px;left:16px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="palette">
+    <span class="palette-label" id="palette-label"></span>
+    <div class="swatches" id="swatches"></div>
+  </div>
+
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute;width:0;height:0">
+    <filter id="scan-warp" x="-5%" y="-10%" width="110%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.06" numOctaves="2" seed="3" result="lines">
+        <animate attributeName="seed" values="3;8;13;21;34;55;89;144;233;377" dur="1s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="lines" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <main class="stage">
+    <div class="brain-col" id="brain-col">
+      <canvas id="mri" role="img" aria-label="False-color MRI brain scan that slowly oozes apart into five amoeba-like pieces under the cursor and flows back together"></canvas>
+    </div>
+    <div class="text-col">
+      <div class="text-stack">
+        <h1 class="scanned"><span class="title grainy">autopsy</span><span class="title grainy">of mind</span></h1>
+        <p><span class="story-box">dissecting 6 years worth of journal data to understand who I am and to inspect my growth</span></p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// MRI scan: palettes, amoeba split on hover, 10 fps scan-style rendering.
+// ---------------------------------------------------------------------------
+class DCLogic {
+  constructor() { this.props = {}; this.state = {}; }
+  setState(patch) { Object.assign(this.state, patch); if (this.componentDidUpdate) this.componentDidUpdate(); renderUI(); }
+}
+
+var MRI_SCHEMES = [
+  { id: 'spectral', name: 'damselfly', src: 'assets/scan-damselfly.png', glow: 'rgba(110,198,230,0.45)',
+    stops: ['#3b2793', '#552cc8', '#ce5bc3', '#ffe23d', '#6dc6e6'], words: ['#b9a8e6', '#e4b6d8', '#e9dcae'] },
+  { id: 'ember', name: 'triumph of pan', src: 'assets/scan-ember.png', glow: 'rgba(255,140,60,0.4)',
+    stops: ['#6a0e06', '#d4300e', '#ff7a1a', '#ffe066', '#4f8ef0'], words: ['#e6b49c', '#e8d4a4', '#a9c4a0'] },
+  { id: 'moss', name: 'patmos', src: 'assets/scan-moss.png', glow: 'rgba(230,199,106,0.35)',
+    stops: ['#3a2212', '#7a3b1c', '#3fae55', '#f3e6c0', '#e6c76a'], words: ['#cbb69c', '#b6cfa9', '#e6dcc4'] },
+  { id: 'bronze', name: 'homer', src: 'assets/scan-bronze.png', glow: 'rgba(58,168,224,0.42)',
+    stops: ['#4a2a6a', '#9a5a2a', '#c08040', '#d8f4ff', '#3aa8e0'], words: ['#d4b490', '#bcaad8', '#a8cbe0'] },
+  { id: 'chartreuse', name: 'contusion', src: 'assets/scan-chartreuse.png', glow: 'rgba(200,216,42,0.35)',
+    stops: ['#6a7a0a', '#c8d82a', '#ff3b30', '#fff6e0', '#1e7a34'], words: ['#d6dea2', '#e6b2aa', '#a9cdb0'] },
+  { id: 'orchid', name: 'sea snail', src: 'assets/scan-orchid.png', glow: 'rgba(155,79,208,0.45)',
+    stops: ['#5a2e70', '#b07a9a', '#d0a070', '#fffaf0', '#9b4fd0'], words: ['#c8aadb', '#e2ccb4', '#efe3d6'] },
+  { id: 'signal', name: 'locomotion', src: 'assets/scan-signal.png', glow: 'rgba(42,90,232,0.5)',
+    stops: ['#0c1e8a', '#d01818', '#22c25a', '#b8ff8a', '#2a5ae8'], words: ['#e4aaa8', '#acd5b6', '#a9b8e6'] },
+  { id: 'embroidery', name: 'Warhol', src: 'assets/scan-embroidery.png', glow: 'rgba(44,196,232,0.42)',
+    stops: ['#7a2a9a', '#f2b21c', '#ff2f7d', '#9ad636', '#2cc4e8'], words: ['#f0d6a0', '#e8adc8', '#bfe0a2'] },
+  { id: 'halo', name: 'age toning', src: 'assets/scan-halo.png', glow: 'rgba(47,107,255,0.7)',
+    stops: ['#0d2a33', '#3fbfcf', '#f0a64a', '#fff0d0', '#2f6bff'], words: ['#aee0e6', '#f1cba2', '#adbff5'] },
+];
+// Scan image is 528 x 616; the canvas adds MRI_PAD of room on every side for the pieces to drift into.
+var MRI_W = 528, MRI_H = 616, MRI_PAD = 80, MRI_CX = 264, MRI_CY = 308;
+var MRI_FW = MRI_W + MRI_PAD * 2, MRI_FH = MRI_H + MRI_PAD * 2;
+// Five amoeba-like pieces: nuclei (relative to the scan's centre), unevenly placed.
+// mag = how far each piece oozes out when the scan comes apart; dir = which way.
+var MRI_CELLS = [
+  { x: -110, y: -190, mag: 60 }, { x: 150, y: -130, mag: 66 }, { x: -175, y: 70, mag: 64 },
+  { x: 95, y: 175, mag: 72 }, { x: 15, y: -15, mag: 18, dx: 0.3, dy: -0.95 }
+].map(function (c) {
+  var l = Math.sqrt(c.x * c.x + c.y * c.y) || 1;
+  return { x: c.x, y: c.y, mag: c.mag, dx: c.dx ?? c.x / l, dy: c.dy ?? c.y / l, ox: 0, oy: 0, vx: 0, vy: 0, fx: 0, fy: 0, sc: 1, br: 1 };
+});
+
+class Component extends DCLogic {
+  state = { scheme: null };
+  cv = null;
+  imgs = {};
+  src = {};
+  raf = 0;
+  mx = 0;
+  my = 0;
+  over = false;
+  spread = 0;
+  spreadV = 0;
+  hovered = -1;
+  wipe = 1;
+  prevId = null;
+  shownId = null;
+  res = 1;
+  ema = 10;
+  lastStep = -1;
+  lastOver = false;
+  last = 0;
+  t0 = 0;
+  cells = MRI_CELLS;
+
+  // React may detach and re-attach the same canvas on a re-render (e.g. a palette switch).
+  // Don't tear down or resize on that: resizing a canvas wipes it, which showed as a blank flash.
+  setCanvas = (el) => {
+    var self = this;
+    if (el) {
+      clearTimeout(this.detachT);
+      if (el !== this.cv) { this.cv = el; this.ctx = el.getContext('2d'); this.alloc(); }
+      this.lastStep = -1;
+      this.start();
+    } else {
+      this.detachT = setTimeout(function () {
+        if (self.cv && !self.cv.isConnected) { cancelAnimationFrame(self.raf); self.raf = 0; self.cv = null; }
+      }, 0);
+    }
+  };
+
+  onMove = (e) => {
+    if (!this.cv) return;
+    var r = this.cv.getBoundingClientRect();
+    this.mx = (e.clientX - r.left) / r.width * MRI_FW - MRI_PAD - MRI_CX;
+    this.my = (e.clientY - r.top) / r.height * MRI_FH - MRI_PAD - MRI_CY;
+    // a fresh hover on a whole scan gets a fresh set of cuts
+    if (!this.over && this.spread < 0.06) this.reshuffle();
+    this.over = true;
+    var best = 1e12, h = -1;
+    for (var k = 0; k < this.cells.length; k++) {
+      var c = this.cells[k], ex = this.mx - c.x, ey = this.my - c.y, d = ex * ex + ey * ey;
+      if (d < best) { best = d; h = k; }
+    }
+    this.hovered = h;
+  };
+
+  // new random amoeba cuts: five nuclei (one near the middle) and a new noise field for the cut lines
+  reshuffle() {
+    var C = this.cells, pts = [], tries = 0;
+    var a0 = Math.random() * Math.PI * 2;
+    pts.push({ x: (Math.random() - 0.5) * 80, y: (Math.random() - 0.5) * 90, mid: true });
+    for (var i = 0; i < 4; i++) {
+      var ang = a0 + i * Math.PI / 2 + (Math.random() - 0.5) * 1.1;
+      var rad = 140 + Math.random() * 80;
+      pts.push({ x: Math.cos(ang) * rad * 0.88, y: Math.sin(ang) * rad });
+    }
+    for (var k = 0; k < C.length && k < pts.length; k++) {
+      var c = C[k], p = pts[k], l = Math.sqrt(p.x * p.x + p.y * p.y) || 1;
+      c.x = p.x; c.y = p.y;
+      if (p.mid) { var am = Math.random() * Math.PI * 2; c.dx = Math.cos(am); c.dy = Math.sin(am); c.mag = 12 + Math.random() * 10; }
+      else { c.dx = p.x / l; c.dy = p.y / l; c.mag = 55 + Math.random() * 22; }
+    }
+    if (this.ngrid) for (var g = 0; g < this.ngrid.length; g++) this.ngrid[g] = Math.random() * 2 - 1;
+  }
+
+  onLeave = () => { this.over = false; this.hovered = -1; };
+
+  componentDidMount() {
+    var self = this;
+    // gaussian-ish grain table, re-sampled at a random offset every frame
+    this.ngrid = new Float32Array(2 * 12 * 12);
+    for (var gq = 0; gq < this.ngrid.length; gq++) this.ngrid[gq] = Math.random() * 2 - 1;
+    this.noise = new Uint8Array(262144);
+    for (var i = 0; i < 262144; i++) this.noise[i] = Math.max(0, Math.min(255, ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 2.4 * 128 + 128)) | 0;
+    this.shownId = this.curKey();
+    this.loadImg(this.shownId, function () { MRI_SCHEMES.forEach(function (s) { self.loadImg(s.id); }); });
+    this.t0 = performance.now();
+    this.start();
+  }
+
+  componentWillUnmount() { cancelAnimationFrame(this.raf); this.raf = 0; this.cv = null; }
+
+  componentDidUpdate() {
+    var self = this, k = this.curKey();
+    if (k !== this.shownId) {
+      this.wantId = k;
+      this.loadImg(k, function () { self.applyWant(); });
+    }
+  }
+
+  // switch palettes only once the new scan's pixels are ready, so the old one stays on screen meanwhile
+  applyWant() {
+    var k = this.wantId;
+    if (!k || k === this.shownId || !this.src[k]) return;
+    this.prevId = this.shownId;
+    this.shownId = k;
+    this.wantId = null;
+    this.wipe = 0;
+    this.lastStep = -1;
+  }
+
+  curKey() { return this.state.scheme || this.props.scheme || 'spectral'; }
+
+  scheme(id) {
+    var k = id || this.curKey();
+    for (var i = 0; i < MRI_SCHEMES.length; i++) if (MRI_SCHEMES[i].id === k) return MRI_SCHEMES[i];
+    return MRI_SCHEMES[0];
+  }
+
+  loadImg(id, then) {
+    var self = this;
+    if (this.imgs[id]) { if (then) then(); return; }
+    var im = new Image();
+    im.decoding = 'async';
+    this.imgs[id] = im;
+    im.onload = function () {
+      try {
+        var c = document.createElement('canvas'); c.width = MRI_W; c.height = MRI_H;
+        var x = c.getContext('2d');
+        // soften it the way a scan reads: down to ~60% and back up
+        var s2 = document.createElement('canvas'); s2.width = 317; s2.height = 370;
+        var x2 = s2.getContext('2d'); x2.imageSmoothingQuality = 'high';
+        x2.drawImage(im, 0, 0, 317, 370);
+        x.clearRect(0, 0, MRI_W, MRI_H); x.imageSmoothingQuality = 'high';
+        x.drawImage(s2, 0, 0, MRI_W, MRI_H);
+        self.src[id] = new Uint32Array(x.getImageData(0, 0, MRI_W, MRI_H).data.buffer);
+      } catch (err) { self.src[id] = null; }
+      if (then) then();
+    };
+    im.onerror = function () { if (then) then(); };
+    im.src = this.scheme(id).src;
+  }
+
+  alloc() {
+    if (!this.cv) return;
+    var OW = Math.round(MRI_FW * this.res), OH = Math.round(MRI_FH * this.res);
+    this.OW = OW; this.OH = OH;
+    if (this.cv.width !== OW || this.cv.height !== OH) { this.cv.width = OW; this.cv.height = OH; }
+    this.img = this.ctx.createImageData(OW, OH);
+    this.out = new Uint32Array(this.img.data.buffer);
+    this.rowY = new Float32Array(OH); this.colX = new Float32Array(OW);
+    this.GW = (OW >> 2) + 2; this.GH = (OH >> 2) + 2;
+    this.WX = new Float32Array(this.GW * this.GH); this.WY = new Float32Array(this.GW * this.GH);
+  }
+
+  start() {
+    if (this.raf || !this.cv) return;
+    var self = this;
+    this.last = performance.now();
+    var loop = function (now) {
+      if (!self.cv) { self.raf = 0; return; }
+      var dt = Math.min(2.5, (now - self.last) / 16.667);
+      self.last = now;
+      self.tick(dt, now);
+      self.raf = requestAnimationFrame(loop);
+    };
+    this.raf = requestAnimationFrame(loop);
+  }
+
+  tick(dt, now) {
+    var t = (now - this.t0) / 1000, C = this.cells, k, c;
+    var target = this.over ? 1 : 0;
+    this.spreadV = (this.spreadV + (target - this.spread) * 0.022 * dt) * Math.pow(0.86, dt);
+    this.spread += this.spreadV * dt;
+    var sp = this.spread < 0 ? 0 : this.spread;
+    for (k = 0; k < C.length; k++) {
+      c = C[k];
+      var tx = c.dx * c.mag * sp, ty = c.dy * c.mag * sp;
+      if (k === this.hovered) {
+        var ax = c.x - this.mx, ay = c.y - this.my, al = Math.sqrt(ax * ax + ay * ay);
+        if (al < 10) { ax = c.dx; ay = c.dy; al = 1; }
+        tx += ax / al * 30; ty += ay / al * 30;
+      }
+      c.vx = (c.vx + (tx - c.ox) * 0.05 * dt) * Math.pow(0.77, dt);
+      c.vy = (c.vy + (ty - c.oy) * 0.05 * dt) * Math.pow(0.77, dt);
+      c.ox += c.vx * dt; c.oy += c.vy * dt;
+    }
+    if (this.wipe < 1) this.wipe = Math.min(1, this.wipe + 0.03 * dt);
+
+    // Stop-motion, like an MRI cine: the picture only changes 10 times a second, each frame held, hard cuts between.
+    // Motion is worked out smoothly underneath, but only shown on those frames.
+    if (this.wantId) this.applyWant();
+    var step = Math.floor(t * 10);
+    if (step === this.lastStep && this.over === this.lastOver) return;
+    this.lastStep = step; this.lastOver = this.over;
+    for (k = 0; k < C.length; k++) {
+      c = C[k];
+      var h = k === this.hovered ? 1.5 : 1, j = 0.4 + sp * 0.8;
+      // each frame is a slightly different 'slice' of every piece
+      c.fx = c.ox + (Math.random() - 0.5) * 3 * j * h;
+      c.fy = c.oy + (Math.random() - 0.5) * 3 * j * h;
+      c.sc = 1 + (Math.random() - 0.5) * (0.006 + sp * 0.025) * h;
+      c.br = 1 + (Math.random() - 0.5) * (0.05 + sp * 0.1) * h;
+    }
+    var t1 = performance.now();
+    this.render(step / 10);
+    this.ema = this.ema * 0.8 + (performance.now() - t1) * 0.2;
+    if (this.ema > 40 && this.res > 0.6) { this.res -= 0.15; this.ema = 20; this.alloc(); }
+  }
+
+  render(t) {
+    var ctx = this.ctx, cur = this.src[this.shownId];
+    var C = this.cells, K = C.length, k;
+    if (!cur) {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, this.OW, this.OH);
+      var im = this.imgs[this.shownId];
+      if (im && im.complete && im.naturalWidth) ctx.drawImage(im, MRI_PAD * this.res, MRI_PAD * this.res, MRI_W * this.res, MRI_H * this.res);
+      return;
+    }
+    var prevSrc = (this.wipe < 1 && this.prevId) ? this.src[this.prevId] : null;
+    var res = this.res, OW = this.OW, OH = this.OH, out = this.out, noise = this.noise;
+    var rowY = this.rowY, colX = this.colX;
+    var sp = this.spread < 0 ? 0 : this.spread;
+    var ox, oy, v;
+    for (oy = 0; oy < OH; oy++) rowY[oy] = oy / res - MRI_PAD - MRI_CY;
+    for (ox = 0; ox < OW; ox++) colX[ox] = ox / res - MRI_PAD - MRI_CX;
+    // amoeba cut lines: a smooth noise field bends the boundaries into blobs, and slowly flows
+    var GW = this.GW, GH = this.GH, WX = this.WX, WY = this.WY, NG = this.ngrid, G = 12;
+    var amp = 34 + sp * 6, drift = t * 0.018, gi, gj;
+    for (gj = 0; gj < GH; gj++) {
+      for (gi = 0; gi < GW; gi++) {
+        var u = (gi * 4 / OW + drift) * G, w = (gj * 4 / OH - drift * 0.7) * G;
+        var i0 = Math.floor(u), j0 = Math.floor(w), fu = u - i0, fw = w - j0;
+        fu = fu * fu * (3 - 2 * fu); fw = fw * fw * (3 - 2 * fw);
+        i0 = ((i0 % G) + G) % G; j0 = ((j0 % G) + G) % G;
+        var i1 = (i0 + 1) % G, j1 = (j0 + 1) % G, gidx = gj * GW + gi;
+        for (var ch = 0; ch < 2; ch++) {
+          var base = ch * G * G;
+          var val = (NG[base + j0 * G + i0] * (1 - fu) + NG[base + j0 * G + i1] * fu) * (1 - fw) + (NG[base + j1 * G + i0] * (1 - fu) + NG[base + j1 * G + i1] * fu) * fw;
+          if (ch === 0) WX[gidx] = val * amp; else WY[gidx] = val * amp;
+        }
+      }
+    }
+    var CX = new Float32Array(K), CY = new Float32Array(K), OXa = new Float32Array(K), OYa = new Float32Array(K), SC = new Float32Array(K), BR = new Float32Array(K);
+    for (k = 0; k < K; k++) {
+      var fx = C[k].fx ?? C[k].ox, fy = C[k].fy ?? C[k].oy;
+      CX[k] = C[k].x + fx; CY[k] = C[k].y + fy; OXa[k] = fx; OYa[k] = fy; SC[k] = C[k].sc || 1; BR[k] = C[k].br || 1;
+    }
+    var gapBase = sp * 0.4, glowK = sp * 0.3;
+    var mx = this.mx, my = this.my, rep = this.over ? 14 * sp : 0, RR = 70 * 70, invR2 = 1 / (36 * 36);
+    var wipeRow = this.wipe * OH;
+    var nOff = (Math.random() * 262144) | 0, nMask = 262143;
+    var grain = 0.34, floorK = 0.5;
+    var ivx = 1 / (MRI_W * 0.62), ivy = 1 / (MRI_H * 0.62);
+    var o = 0;
+
+    for (oy = 0; oy < OH; oy++) {
+      var py = rowY[oy], growBase = (oy >> 2) * GW;
+      var sh = (!prevSrc || oy < wipeRow) ? cur : prevSrc;
+      var vy2 = py * ivy; vy2 *= vy2;
+      for (ox = 0; ox < OW; ox++, o++) {
+        var n = noise[(o * 7 + nOff) & nMask];
+        var px = colX[ox], qy0 = py, inside = false, c = 0, m = 1e9, k1 = 0;
+        if (rep > 0.2) {
+          var ex = px - mx, ey = qy0 - my, e2 = ex * ex + ey * ey;
+          if (e2 < RR) {
+            var e = Math.sqrt(e2) + 0.001, f = rep * Math.exp(-e2 * invR2) * (e / (e + 12));
+            px -= ex / e * f; qy0 -= ey / e * f;
+          }
+        }
+        var gx = growBase + (ox >> 2), wx = px + WX[gx], wy = qy0 + WY[gx];
+        var b1 = 1e12, b2 = 1e12;
+        for (k = 0; k < K; k++) {
+          var ddx = wx - CX[k], ddy = wy - CY[k], d = ddx * ddx + ddy * ddy;
+          if (d < b1) { b2 = b1; b1 = d; k1 = k; } else if (d < b2) b2 = d;
+        }
+        if (gapBase > 0.002) {
+          var e1 = Math.sqrt(b1);
+          m = Math.sqrt(b2) - e1 * (1 + gapBase);
+        }
+        if (m > 0) {
+          var s = SC[k1], nx0 = C[k1].x, ny0 = C[k1].y;
+          var sx = (nx0 + (px - OXa[k1] - nx0) * s + MRI_CX) | 0, sy = (ny0 + (qy0 - OYa[k1] - ny0) * s + MRI_CY) | 0;
+          if (sx >= 0 && sy >= 0 && sx < MRI_W && sy < MRI_H) { c = sh[sy * MRI_W + sx]; inside = (c >>> 24) > 8; }
+        }
+        if (inside) {
+          // tissue: soft scan image + per-frame grain (signal-dependent, like MRI noise)
+          var a = c >>> 24, gl = BR[k1];
+          if (m < 5 && glowK > 0.01) { gl += glowK * (1 - m / 5); if (m < 1) a *= m; }
+          var nz = (n - 128) * grain;
+          var r = (c & 255) * gl + nz, g = ((c >> 8) & 255) * gl + nz, b = ((c >> 16) & 255) * gl + nz;
+          a += nz * 0.6;
+          r = r < 0 ? 0 : r > 255 ? 255 : r; g = g < 0 ? 0 : g > 255 ? 255 : g;
+          b = b < 0 ? 0 : b > 255 ? 255 : b; a = a < 0 ? 0 : a > 255 ? 255 : a;
+          out[o] = ((a << 24) | (b << 16) | (g << 8) | r) >>> 0;
+        } else {
+          // noise floor around and between the pieces, fading out toward the frame edge
+          var vx2 = px * ivx, vg = 1 - (vx2 * vx2 + vy2);
+          if (vg > 0) {
+            var q = n * vg, al = (q * q) / 255 * floorK;
+            out[o] = al < 1 ? 0 : (((al | 0) << 24) | 0x00d8d8d8) >>> 0;
+          } else out[o] = 0;
+        }
+      }
+    }
+    ctx.putImageData(this.img, 0, 0);
+
+    // scanner refresh band, stepped with the frames
+    ctx.globalCompositeOperation = 'source-atop';
+    var period = 3.6, sy2 = ((t % period) / period) * (OH + 120 * res) - 60 * res;
+    var grd = ctx.createLinearGradient(0, sy2 - 60 * res, 0, sy2 + 4 * res);
+    grd.addColorStop(0, 'rgba(255,255,255,0)');
+    grd.addColorStop(0.85, 'rgba(255,255,255,0.06)');
+    grd.addColorStop(1, 'rgba(255,255,255,0.18)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, sy2 - 60 * res, OW, 64 * res);
+    if (prevSrc) { ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.fillRect(0, wipeRow - 1, OW, 2); }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  renderVals() {
+    var self = this, sc = this.scheme();
+    return {
+      setCanvas: this.setCanvas,
+      onMove: this.onMove,
+      onLeave: this.onLeave,
+      schemeName: sc.name,
+      w1: sc.words[0], w2: sc.words[1], w3: sc.words[2], canvasFilter: 'drop-shadow(0 0 22px ' + (sc.glow || 'rgba(0,0,0,0)') + ')',
+      schemes: MRI_SCHEMES.map(function (m) {
+        return {
+          name: m.name,
+          pressed: m.id === sc.id ? 'true' : 'false',
+          ring: m.id === sc.id ? '#ffffff' : '#2e2e2e',
+          stops: m.stops.map(function (c) { return { c: c }; }),
+          pick: function () { self.setState({ scheme: m.id }); }
+        };
+      })
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Wiring: canvas events + palette buttons
+// ---------------------------------------------------------------------------
+const mri = new Component();
+mri.props = { scheme: 'spectral' };   // starting palette
+const canvas = document.getElementById('mri');
+canvas.addEventListener('pointermove', mri.onMove);
+canvas.addEventListener('pointerdown', mri.onMove);
+canvas.addEventListener('pointerleave', mri.onLeave);
+canvas.addEventListener('pointercancel', mri.onLeave);
+mri.componentDidMount();
+mri.setCanvas(canvas);
+
+const swatchWrap = document.getElementById('swatches');
+const label = document.getElementById('palette-label');
+const buttons = MRI_SCHEMES.map(function (s) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'swatch';
+  b.setAttribute('aria-label', s.name + ' palette');
+  const strip = document.createElement('span');
+  s.stops.forEach(function (c) { const i = document.createElement('i'); i.style.background = c; strip.appendChild(i); });
+  b.appendChild(strip);
+  b.addEventListener('click', function () { mri.setState({ scheme: s.id }); });
+  swatchWrap.appendChild(b);
+  return b;
+});
+
+function renderUI() {
+  const v = mri.renderVals();
+  document.getElementById('brain-col').style.filter = v.canvasFilter;
+  label.textContent = v.schemeName;
+  v.schemes.forEach(function (s, i) { buttons[i].setAttribute('aria-pressed', s.pressed); });
+}
+renderUI();
+</script>
+</body>
+</html>
