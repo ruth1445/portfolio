@@ -657,15 +657,15 @@ const PLACEHOLDER = '#lab-projects';
 //   code, demo, writeup: links shown as buttons
 //   sections: [{ h: 'the problem', body: '...' }, ...]
 const PROJECTS = [
-  { cat: 'projects', title: 'thought-opsy', blurb: 'autopsy of thought: a longitudinal data-science and qualitative study of six years of journal writing, tracing how beliefs about happiness, belonging, identity and purpose evolved.', href: './autopsy-of-mind/', demo: 'https://ruth1445.github.io/portie/autopsy-of-mind/', tag: 'data science', image: './autopsy-of-mind/thumb.jpg' },
-  { cat: 'projects', title: 'eta estimator', blurb: 'quantified transit prediction error across routes, time periods, and weather to surface 6+ minute failure cases.', href: PLACEHOLDER, tag: 'data science', image: './1.jpg' },
-  { cat: 'projects', title: 'langpal 11labs pipeline', blurb: 'built an end-to-end voice loop with elevenlabs stt/tts, gemini, supabase, fastapi, and a flutter app.', href: PLACEHOLDER, tag: 'ai engineering', image: './2.jpg' },
-  { cat: 'projects', title: 'rational metareasoning', blurb: 'replicated value-of-computation style reasoning to decide when extra deliberation is worth the cost.', href: PLACEHOLDER, tag: 'research', image: './3.jpg' },
-  { cat: 'projects', title: 'micro', blurb: 'replicated an expert-router setup with mlflow tracking, faster training, and module-level routing diagnostics.', href: PLACEHOLDER, tag: 'ml systems', image: './4.jpg' },
-  { cat: 'projects', title: 'monosemanticity', blurb: 'trained sparse autoencoders on language-model activations to study interpretable features and superposition.', href: PLACEHOLDER, tag: 'interpretability', image: './5.jpg' },
-  { cat: 'projects', title: 'societal impacts research paper', blurb: 'co-authored an nbea paper using an nlp pipeline over 8k+ reddit posts to study chatbot perception and bias.', href: PLACEHOLDER, tag: 'nlp research', image: './6.jpg' },
-  { cat: 'projects', title: 'does a growth mindset nudge boost achievement?', blurb: 'analyzed whether a short growth-mindset intervention shifts achievement outcomes using a causal/statistical lens.', href: PLACEHOLDER, tag: 'statistics', image: './7.jpg' },
-  { cat: 'projects', title: 'harmonies', blurb: 'a small web experiment in layered sound, language, and visual rhythm.', href: 'https://ruth1445.github.io/harmonies/', tag: 'creative code', image: './9.jpg' },
+  { cat: 'projects', title: 'thought-opsy', blurb: 'autopsy of thought: a longitudinal data-science and qualitative study of six years of journal writing, tracing how beliefs about happiness, belonging, identity and purpose evolved.', href: './autopsy-of-mind/', demo: 'https://ruth1445.github.io/portie/autopsy-of-mind/', tag: 'data science', image: './N.jpg' },
+  { cat: 'projects', title: 'eta estimator', blurb: 'quantified transit prediction error across routes, time periods, and weather to surface 6+ minute failure cases.', href: PLACEHOLDER, tag: 'data science', image: './C.jpg' },
+  { cat: 'projects', title: 'langpal 11labs pipeline', blurb: 'built an end-to-end voice loop with elevenlabs stt/tts, gemini, supabase, fastapi, and a flutter app.', href: PLACEHOLDER, tag: 'ai engineering', image: './D.jpg' },
+  { cat: 'projects', title: 'rational metareasoning', blurb: 'replicated value-of-computation style reasoning to decide when extra deliberation is worth the cost.', href: PLACEHOLDER, tag: 'research', image: './E.jpg' },
+  { cat: 'projects', title: 'micro', blurb: 'replicated an expert-router setup with mlflow tracking, faster training, and module-level routing diagnostics.', href: PLACEHOLDER, tag: 'ml systems', image: './F.jpg' },
+  { cat: 'projects', title: 'monosemanticity', blurb: 'trained sparse autoencoders on language-model activations to study interpretable features and superposition.', href: PLACEHOLDER, tag: 'interpretability', image: './H.jpg' },
+  { cat: 'projects', title: 'societal impacts research paper', blurb: 'co-authored an nbea paper using an nlp pipeline over 8k+ reddit posts to study chatbot perception and bias.', href: PLACEHOLDER, tag: 'nlp research', image: './I.jpg' },
+  { cat: 'projects', title: 'does a growth mindset nudge boost achievement?', blurb: 'analyzed whether a short growth-mindset intervention shifts achievement outcomes using a causal/statistical lens.', href: PLACEHOLDER, tag: 'statistics', image: './J.jpg' },
+  { cat: 'projects', title: 'harmonies', blurb: 'a small web experiment in layered sound, language, and visual rhythm.', href: 'https://ruth1445.github.io/harmonies/', tag: 'creative code', image: './K.jpg' },
 ];
 PROJECTS.forEach((p) => { p.slug = p.slug || p.title.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); });
 
@@ -913,7 +913,7 @@ class Component extends DCLogic {
       shotStyle: 'display:block; width:100%; aspect-ratio:1.66 / 1; background:rgba(255,255,255,.34); overflow:hidden;',
       noImg: !p.image,
       borderStyle: 'projects' === cat ? '--project-border:#ff8fb3;' : 'passion' === cat ? '--project-border:#7db7ff;' : '--project-border:#83dd8a;',
-      thumbStyle: p.image ? '--project-image:url("' + p.image + '");' + (p.image === './8.jpg' ? 'background-size:auto 100%;background-position:center center;' : '') : '',
+      thumbStyle: p.image ? '--project-image:url("' + p.image + '");background-size:contain;background-position:center center;background-repeat:no-repeat;' : '',
       target: p.href && /^https?:/.test(p.href) ? '_blank' : '',
       rel: p.href && /^https?:/.test(p.href) ? 'noopener noreferrer' : '',
     }));
