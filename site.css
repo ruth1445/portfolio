@@ -259,3 +259,7 @@ a.it-tile:hover { color: var(--ink); transform: translateY(-3px); }
   .lx-page .lx-thumb { width: 44px; height: 44px; }
   .lx-page .lx-row.is-active:not(:hover) { background: transparent; }
 }
+
+/* Laboratory introduction: readable mixed-case editorial sans, distinct from the uppercase index headings. */
+.lx-page .lx-intro { font-family: 'Trebuchet MS', 'Inter Tight', sans-serif; text-transform: none; letter-spacing: -0.012em; font-size: clamp(16px, 1.65vw, 22px); line-height: 1.55; font-weight: 400; color: var(--ink); }
+.lx-page .lx-intro-second { display: block; margin-top: 1em; }
