@@ -414,7 +414,7 @@
           <div class="lx-h-row"><h2 class="lx-h" id="lx-writing">writing</h2><a class="lx-more" href="https://substack.com/@heyruthieee" target="_blank" rel="noopener noreferrer">substack ↗</a></div>
           <div class="lx-table" role="list">
             <sc-for list="{{ writing }}" as="w" hint-placeholder-count="2">
-              <a class="lx-row lx-row--writing" role="listitem" href="{{ w.href }}" target="_blank" rel="noopener noreferrer">
+              <a class="lx-row lx-row--writing" role="listitem" href="{{ w.href }}" target="_blank" rel="noopener noreferrer" onMouseEnter="{{ w.show }}" onFocus="{{ w.show }}">
                 <span class="lx-title">{{ w.title }}</span>
                 <span class="lx-arrow" aria-hidden="true">↗</span>
               </a>
@@ -671,7 +671,7 @@ PROJECTS.forEach((p) => { p.slug = p.slug || p.title.replace(/[^a-z0-9]+/g, '-')
 
 // Writing: add essays here as { title, sub, date, href }.
 const WRITING = [
-  { title: 'learning from people', sub: 'interview series on public yuzu', date: 'ongoing', href: 'https://publicyuzu.org/#/' },
+  { title: 'learning from people', sub: 'interview series on public yuzu', date: 'ongoing', href: 'https://publicyuzu.org/#/', image: './M.jpg' },
 ];
 
 // Other interests: fill these in as you go; empty fields show a simple placeholder tile.
@@ -685,7 +685,7 @@ const INTERESTS = {
 };
 
 class Component extends DCLogic {
-  state = { page: 'home', hover: null, slide: 0, barAR: null, listMode: false, card: null, labHi: 0 };
+  state = { page: 'home', hover: null, slide: 0, barAR: null, listMode: false, card: null, labHi: 0, labWritingHover: false };
 
   componentDidMount() {
     this._onChipClick = (ev) => {
@@ -940,10 +940,10 @@ class Component extends DCLogic {
       href: '#p/' + pr.slug,
       open: openProject(pr.slug),
       cls: 'lx-row' + (i === labHi ? ' is-active' : ''),
-      show: () => { if (this.state.labHi !== i) this.setState({ labHi: i }); },
+      show: () => { if (this.state.labHi !== i || this.state.labWritingHover) this.setState({ labHi: i, labWritingHover: false }); },
     }));
-    const labCur = PROJECTS[labHi];
-    const writing = WRITING;
+    const writing = WRITING.map((w) => ({ ...w, show: () => { if (!this.state.labWritingHover) this.setState({ labWritingHover: true }); } }));
+    const labCur = this.state.labWritingHover ? WRITING[0] : PROJECTS[labHi];
 
     const pjIdx = Math.max(0, PROJECTS.findIndex((x) => x.slug === this.state.project));
     const pjSrc = PROJECTS[pjIdx];
