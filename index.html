@@ -788,7 +788,7 @@ class Component extends DCLogic {
       });
       return {
         key: c.key,
-        href: '#' + c.key,
+        href: c.key === 'about' ? './about/' : '#' + c.key,
         caption: c.caption,
         captionStyle: `position:absolute; left:50%; bottom:calc(100% + 14px); transform:translateX(-50%) translateY(${on ? '0' : '6px'}); opacity:${on ? 1 : 0}; pointer-events:none; white-space:nowrap; color:#23201A; font-family:'Inter Tight','Helvetica Neue',Helvetica,sans-serif; font-size:15px; font-weight:700; letter-spacing:-0.01em; text-transform:lowercase; transition:opacity 320ms ease, transform 320ms cubic-bezier(.2,.9,.2,1);`,
         letters,
