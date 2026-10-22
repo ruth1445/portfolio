@@ -1,0 +1,18 @@
+/* ---------- 2. places ---------- */
+.s2 .panel{background:var(--ink);color:var(--ivory)}
+.s2 .stage{background:var(--ivory)}
+/* places: her composition, with the barrel turning in the open space on the right */
+.places{position:relative;background:#24489C url(../img/places.jpg) center top / cover no-repeat;
+  aspect-ratio:1640 / 892}
+.places .pl-wheel{position:absolute;left:56.5%;top:8%;width:37%}
+.places .win{perspective:3200px}
+.places .fade{display:none}
+/* here each face is a print the width of the column, captioned beneath like the grid */
+.places .lb{flex-direction:column;align-items:stretch;gap:0}
+.places .lb .pic{flex:0 0 auto;width:100%;height:calc(var(--h) - 46px);border-radius:1px;position:relative}
+.places .lb .pic img{filter:grayscale(1) contrast(1.04) brightness(1.08)}
+/* printed like the grid: shadows to a mid blue, highlights to paper white */
+.places .lb .pic::after{content:'';position:absolute;inset:0;background:#3E7AC6;mix-blend-mode:screen}
+.places .lb .tx{height:46px;display:flex;align-items:baseline;justify-content:space-between;padding-top:12px}
+.places .lb .tx b{order:2;margin:0;color:rgba(226,238,251,.7)}
+.places .lb .tx em{order:1;color:#E2EEFB}
