@@ -1,0 +1,10 @@
+/* ---------- 4. the split ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr}
+.split .l{background:#FBF9F2;padding:52px 44px 56px}
+.split .r{background:var(--yel);padding:52px 44px 56px}
+.split .fl{column-count:2;column-gap:28px;font-size:13px;line-height:1.44;text-align:justify;
+  hyphens:auto;color:#111}
+.split .fl p{margin:0 0 11px}
+.split h3{margin:0 0 6px;font-family:var(--ser);font-size:25px;line-height:1;font-weight:400}
+.split .run{display:flex;justify-content:space-between;font-family:var(--mn);font-size:7.5px;
+  letter-spacing:.18em;text-transform:uppercase;opacity:.46;margin-bottom:22px}
