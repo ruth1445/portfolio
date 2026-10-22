@@ -1031,6 +1031,7 @@ class Component extends DCLogic {
 const portfolio = new Component();
 const route = () => {
   const hash = location.hash.slice(1);
+  if (hash === 'about') { location.replace('./about/'); return; }
   const isProj = /^p\/[a-z0-9-]+$/.test(hash) && PROJECTS.some((x) => 'p/' + x.slug === hash);
   const page = isProj ? hash : ['about', 'interests', 'lab', 'contact'].includes(hash) ? hash : /^(lab-|projects-|passion-|writing-)/.test(hash) ? 'lab' : 'home';
   document.body.dataset.page = isProj ? 'project' : page;
