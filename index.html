@@ -746,6 +746,7 @@ class Component extends DCLogic {
   }
 
   set(page) {
+    if (page === 'about') { location.href = './about/'; return; }
     const hash = page === 'home' ? '#top' : '#' + page;
     if (location.hash !== hash) history.pushState(null, '', hash);
     document.body.dataset.page = page;
