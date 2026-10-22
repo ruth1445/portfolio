@@ -1,0 +1,8 @@
+/* placement mode */
+body.editing .sh{cursor:grab;outline:1px dashed rgba(255,80,80,.9);outline-offset:3px}
+body.editing .sh:active{cursor:grabbing}
+.hud{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:90;display:none;
+  background:#111;color:#F2F0E9;font-family:var(--gr);font-size:13px;letter-spacing:0;
+  text-transform:none;padding:9px 14px;border:1px solid #444}
+body.editing .hud{display:block}
+.hud b{font-weight:400;color:#FF6A5A}
