@@ -1,0 +1,21 @@
+/* ---------- 5. languages ---------- */
+.s5 .panel{background:var(--pnk);color:#0A0A0A}
+.s5 .stage{background:var(--grn);color:#0A0A0A}
+.mbox{background:var(--pnk);padding:14px;max-width:760px}
+.mwrap{position:relative}
+#world .muted{fill:rgba(10,10,10,.13)}
+#world .local{fill:#0A0A0A}
+#world .easy{fill:var(--pnk)}
+#world .getby{fill:rgba(10,10,10,.64)}
+#world path{stroke:var(--grn);stroke-width:.5}
+.wm{display:block;width:100%;height:auto}
+.key{display:flex;gap:24px;margin-top:12px;flex-wrap:wrap}
+.ki{display:flex;align-items:center;gap:8px;font-family:var(--gr);font-size:13px;letter-spacing:0;
+  text-transform:none}
+.ki i{width:10px;height:10px;border-radius:50%;display:block}
+.k1 i{background:#0A0A0A} .k2 i{background:var(--pnk)}
+.k3 i{background:rgba(10,10,10,.64)}
+.pk{background:var(--pnk);padding:12px 14px 14px;font-size:9.6px;line-height:1.5;margin-top:16px;
+  max-width:760px}
+.pk h4{margin:0 0 5px;font-size:10px;font-weight:600}
+.pk p{margin:0}
