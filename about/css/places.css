@@ -16,3 +16,7 @@
 .places .lb .tx{height:46px;display:flex;align-items:baseline;justify-content:space-between;padding-top:12px}
 .places .lb .tx b{order:2;margin:0;color:rgba(226,238,251,.7)}
 .places .lb .tx em{order:1;color:#E2EEFB}
+/* her caption, written under the barrel */
+.places .pl-cap{position:absolute;right:6.5%;top:74%;margin:0;font-family:'Pinyon Script',cursive;
+  font-size:clamp(30px,3.6vw,56px);line-height:1;color:#E2EEFB;transform:rotate(-3deg);
+  transform-origin:right center;pointer-events:none}
