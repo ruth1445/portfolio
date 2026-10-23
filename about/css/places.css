@@ -2,8 +2,8 @@
 .s2 .panel{background:var(--ink);color:var(--ivory)}
 .s2 .stage{background:var(--ivory)}
 /* places: her composition, with the barrel turning in the open space on the right */
-.places{position:relative;background:#24489C url(../img/places.jpg) center top / cover no-repeat;
-  aspect-ratio:1640 / 892}
+.places{position:relative;background:#24489C url(../img/places.jpg) left top / cover no-repeat;
+  height:max(650px, calc(100vw * 892 / 1640))}
 .places .pl-wheel{position:absolute;left:56.5%;top:8%;width:37%}
 .places .win{perspective:3200px}
 .places .fade{display:none}
