@@ -7,7 +7,7 @@
 <link rel="icon" href="../assets/ruth-sharon-favicon.png?v=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;600&family=Pinyon+Script&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;600&family=Pinyon+Script&family=Playfair+Display:wght@400&display=swap">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/head.css">
@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="css/split.css">
 <link rel="stylesheet" href="css/languages.css">
 <link rel="stylesheet" href="css/github.css">
+<link rel="stylesheet" href="css/titles.css">
 </head>
 <body>
 <div class="bar"><a href="../">Ruth Sharon</a>
@@ -37,18 +38,20 @@
 
 <!-- 3 : the scan -->
 <section class="scan">
+  <h2 class="btl" data-pad="34" style="left:34px;color:#F4EFE0">Lorem ipsum</h2>
   <div class="leaves">
     <img class="doc" data-k="hw-arm" src="img/arm.webp" alt="Titles I've held, handwritten" draggable="false"
-      style="--r:-5deg;left:calc(50% - 450px);bottom:-10px;width:305px">
+      style="--r:-5deg;left:calc(50% - 360px);bottom:-10px;width:305px">
     <img class="doc" data-k="hw-elbow" src="img/elbow.webp" alt="Bachelor of Engineering, handwritten" draggable="false"
-      style="--r:3.5deg;left:calc(50% - 118px);bottom:-64px;width:300px">
+      style="--r:3.5deg;left:calc(50% - 28px);bottom:-64px;width:300px">
     <img class="doc" data-k="hw-hand" src="img/hand.webp" alt="Other interests, handwritten" draggable="false"
-      style="--r:-2.5deg;left:calc(50% + 212px);bottom:-12px;width:340px">
+      style="--r:-2.5deg;left:calc(50% + 302px);bottom:-12px;width:340px">
   </div>
 </section>
 
 <!-- 6 -->
 <section class="s6 full">
+  <h2 class="btl" data-on="#cal svg text.leg" style="left:var(--gb);color:#1F2328">Lorem ipsum</h2>
   <div class="stage">
     <div class="ghw">
       <div class="ghbox">
@@ -60,6 +63,7 @@
 
 <!-- 4 -->
 <section class="split">
+  <h2 class="btl" data-on=".split .l .more .t" style="left:clamp(28px,4vw,64px);color:#111">Lorem ipsum</h2>
   <div class="l">
     <p class="say">When you read biographies of people who&rsquo;ve done great work, it&rsquo;s remarkable how much luck is involved. They discover what to work on as a result of a chance meeting, or by reading a book they happen to pick up. So you need to make yourself a big target for luck, and the way to do that is to be curious. Try lots of things, meet lots of people, read lots of books, ask lots of questions.</p>
     <a class="more" href="quotes/"><span class="t">and more quotes I live by</span><span aria-hidden="true">&#8599;</span></a>
@@ -72,6 +76,7 @@
 
 <!-- 2 -->
 <section class="s2 full places">
+  <h2 class="btl" data-pad="36" style="left:3.35%;color:#E2EEFB">Lorem ipsum</h2>
   <div class="pl-wheel">
     <div data-c="wheel" data-h="300" data-pw="0" data-fs="28" data-wh="470" data-bands="17"></div>
     <p class="pl-cap">places I&rsquo;ve called home</p>
@@ -80,6 +85,7 @@
 
 <!-- 5 -->
 <section class="s5 full">
+  <h2 class="btl" data-on=".s5 .ki" style="right:44px;color:#E9DFCB">Lorem ipsum</h2>
   <div class="stage">
     <div class="mwrap" id="mb"><svg class="wm" viewBox="0 -125 960 545"><use href="#world"></use></svg></div>
     <div class="foot5">
@@ -277,5 +283,6 @@
 <script src="js/map.js"></script>
 <script src="js/fuse.js"></script>
 <script src="js/year.js"></script>
+<script src="js/titles.js"></script>
 </body>
 </html>
