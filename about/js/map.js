@@ -18,12 +18,8 @@
   /* [lat, lon, strength 1-3] */
   var HOT=[
     [24.7,46.7,3],   // arabic: riyadh
-    [30.0,31.2,2],   // arabic: cairo
-    [28.6,77.2,3],   // hindi: delhi
-    [10.0,76.3,3],   // malayalam: kerala
-    [17.4,78.5,2],   // telugu: hyderabad
-    [31.5,74.3,1],   // urdu: lahore
-    [13.1,80.3,1],   // tamil: chennai
+    [28.6,77.2,3],   // hindi, urdu: delhi
+    [10.0,76.3,3],   // malayalam, tamil, telugu: kerala
     [51.5,-0.1,3],   // english: london
     [40.5,-74.4,3],  // english: new jersey
     [-33.9,151.2,2]  // english: sydney
@@ -102,26 +98,26 @@
     paint(base.getContext('2d')); last=-1;
   }
 
-  var PER=2.6, FPS=12;
+  var PER=3.4, FPS=12;
   function frame(t){
     size();
     ctx.drawImage(base,0,0);
     var hs=HOT.map(function(p,i){var xy=at(p[0],p[1]);
-      return {q:(xy[0]-VB[0])/CU, r:(xy[1]-VB[1])/CU, s:p[2], ph:((t/PER)+i*.37)%1}});
-    var dot=cs*.36;
+      return {q:(xy[0]-VB[0])/CU, r:(xy[1]-VB[1])/CU, s:p[2], ph:((t/PER)+i*.29)%1}});
+    var dot=cs*.3;
     ctx.fillStyle='rgb('+RING.join(',')+')';
     for(var r=0;r<ROWS;r++)for(var q=0;q<COLS;q++){
       var v=0;
       for(var k=0;k<hs.length;k++){
-        var h=hs[k], dx=q+.5-h.q, dy=r+.5-h.r, dist=Math.sqrt(dx*dx+dy*dy), maxR=4+h.s*5.5;
-        if(dist<1.1){v=Math.max(v,1);continue}
-        for(var n=0;n<2;n++){                       // two rings out at a time
+        var h=hs[k], dx=q+.5-h.q, dy=r+.5-h.r, dist=Math.sqrt(dx*dx+dy*dy), maxR=3+h.s*2.6;
+        if(dist<.8){v=Math.max(v,.9);continue}
+        for(var n=0;n<1;n++){                       // one ring out at a time
           var ph=(h.ph+n*.5)%1, rad=ph*maxR, band=Math.abs(dist-rad);
-          if(band<.55&&dist<=maxR) v=Math.max(v,(1-ph)*(.45+.18*h.s));
+          if(band<.5&&dist<=maxR) v=Math.max(v,(1-ph)*(1-ph)*(.5+.15*h.s));
         }
       }
       if(v<.12) continue;
-      var lv=v>.66?1:v>.38?.62:.32;                  // three steps of brightness, pixel style
+      var lv=v>.66?.9:v>.38?.55:.28;                  // three steps of brightness, pixel style
       ctx.globalAlpha=lv;
       ctx.beginPath(); ctx.arc((q+.5)*cs,(r+.5)*cs,dot,0,6.2832); ctx.fill();
     }
