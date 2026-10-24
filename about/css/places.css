@@ -17,5 +17,3 @@
 .places .lb .tx b{order:2;margin:0;color:rgba(226,238,251,.7)}
 .places .lb .tx em{order:1;color:#E2EEFB}
 /* her caption, written under the barrel on a level baseline */
-.places .pl-cap{margin:22px 0 0;text-align:right;font-family:'Pinyon Script',cursive;
-  font-size:clamp(30px,3.4vw,52px);line-height:1;color:#E2EEFB;pointer-events:none}
