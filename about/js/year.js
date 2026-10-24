@@ -29,7 +29,7 @@
     }
     ['Mon','Wed','Fri'].forEach(function(n,i){
       lab+='<text x="0" y="'+(TOP+(1+i*2)*P+9)+'" font-size="12" fill="#1F2328">'+n+'</text>'});
-    var W=LEFT+cols*P-(P-CS), LY=TOP+7*P+22, H=LY+CS;   /* room under the grid for the block title */
+    var W=LEFT+cols*P-(P-CS), LY=TOP+7*P+8, H=LY+CS;
     /* legend, inside the same drawing so it grows with the grid */
     var x=W-31, leg='<text x="'+W+'" y="'+(LY+9)+'" font-size="12" fill="#59636E" text-anchor="end">More</text>';
     for(var k=4;k>=0;k--){x-=CS+(k===4?2:3);
