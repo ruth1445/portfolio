@@ -871,7 +871,7 @@ class Component extends DCLogic {
       };
     });
 
-    const pageBg = (p === 'lab' || p.startsWith('p/')) ? '#F4EFE0' : '#FAF9F6';
+    const pageBg = '#FAF9F6';
     const bgStyle = `position:fixed; inset:0; z-index:0; pointer-events:none; background:${pageBg}; transition:background 900ms cubic-bezier(.2,.9,.2,1), filter 900ms cubic-bezier(.2,.9,.2,1);`;
     const crumbs =
       p === 'about'
