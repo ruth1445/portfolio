@@ -1,6 +1,6 @@
 /* ---------- 1. the head ---------- */
 .head{padding:58px 34px 150px;background:var(--ivory)}
 .head .in{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:240px 1fr 1fr;gap:28px}
-.head h1{margin:0;font-size:13.5px;line-height:1.42;font-weight:600}
-.head .col{font-size:12.4px;line-height:1.46}
+.head h1{margin:0;font-family:'Playfair Display',Georgia,serif;font-size:17px;line-height:1.3;font-weight:600}
+.head .col{font-family:'Playfair Display',Georgia,serif;font-size:13px;line-height:1.5}
 .head .col p{margin:0 0 12px}
