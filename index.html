@@ -649,7 +649,8 @@ const PLACEHOLDER = '#lab-projects';
 // The page is: title, a short intro, links, then figures (a square with a black outline, writing under it).
 // Optional fields for that page:
 //   intro: the few lines under the title
-//   figures: [{ image: './x.jpg', text: '...' }, ...]   (leave image out for an empty square)
+//   figures: [{ image: './x.jpg', text: '...' }, ...]   (leave image out for an empty square;
+//            the lab thumbnails are never used here, they have nothing to do with the projects)
 //   code, demo, writeup: links shown under the intro
 // Anything left out shows lorem ipsum for now.
 const PROJECTS = [
@@ -955,7 +956,7 @@ class Component extends DCLogic {
     ];
     const pj = {
       intro: pjSrc.intro || LOREM_INTRO,
-      figures: (pjSrc.figures || [{ image: pjSrc.image }, {}]).map((f, k) => ({ image: f.image || '', text: f.text || LOREM_FIG[k % LOREM_FIG.length] })),
+      figures: (pjSrc.figures || [{}, {}]).map((f, k) => ({ image: f.image || '', text: f.text || LOREM_FIG[k % LOREM_FIG.length] })),
       title: pjSrc.title,
       blurb: pjSrc.blurb,
       image: pjSrc.image,
