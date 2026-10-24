@@ -8,7 +8,9 @@
 .split .more{align-self:flex-end;margin-top:auto;padding-top:clamp(28px,3vw,44px);
   font-family:var(--ser);font-style:italic;font-size:clamp(18px,1.5vw,23px);line-height:1;color:#111;
   display:inline-flex;align-items:baseline;gap:.28em}
-.split .more span{font-style:normal;font-family:var(--gr);font-size:.78em;transition:transform .25s ease}
-.split .more:hover span{transform:translate(2px,-2px)}
-.split .more:hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.split .more .t{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.split .l .say{font-size:clamp(22px,2.14vw,34px);line-height:1.2}
+.split .more span:not(.t){font-style:normal;font-family:var(--gr);font-size:.78em;transition:transform .25s ease}
+.split .more:hover span:not(.t){transform:translate(2px,-2px)}
+.split .more:hover .t{text-decoration-thickness:2px}
 @media (max-width:760px){.split{grid-template-columns:1fr}}
