@@ -87,7 +87,7 @@
     for(var i=0;i<262144;i++) noise[i]=Math.max(0,Math.min(255,((Math.random()+Math.random()+Math.random())/3-.5)*2.4*128+128))|0;
     var grey=hex(g.COL[0]);
 
-    var stamp=null,stampS=0,S=0,OW=0,OH=0,img,out,F,RW,GW,BW,WS,lastStep=-1,raf=0,seen=true,dead=false,io=null,t0=performance.now();
+    var stamp=null,edge=null,stampS=0,S=0,OW=0,OH=0,img,out,F,RW,GW,BW,WS,lastStep=-1,raf=0,seen=true,dead=false,io=null,t0=performance.now();
 
     function alloc(){
       var cssW=cv.clientWidth||CW, s=cssW/CW*Math.min(window.devicePixelRatio||1,2);
@@ -113,11 +113,13 @@
         /* one square's coverage, worked out once per size and stamped for every grey day */
         var sw=Math.ceil(2*hh)+2;
         if(!stamp||stampS!==S){
-          stamp=new Float32Array(sw*sw); stampS=S;
+          stamp=new Float32Array(sw*sw); edge=new Float32Array(sw*sw); stampS=S;
           for(y=0;y<sw;y++)for(x=0;x<sw;x++){
             var qx=Math.abs(x+.5-sw/2)-(hh-rr), qy=Math.abs(y+.5-sw/2)-(hh-rr), mx=qx>0?qx:0, my=qy>0?qy:0;
             var sd=Math.sqrt(mx*mx+my*my)+Math.min(Math.max(qx,qy),0)-rr;
             stamp[y*sw+x]=sd>.5?0:Math.min(1,.5-sd);
+            /* a hairline round each grey square so the grid still reads on the pale print */
+            edge[y*sw+x]=Math.max(0,1-Math.abs(sd+.6*S)/(.6*S));
           }
         }
         var gk=255*(ga<1?.55+.45*ga:1), gn=grain*.35;
@@ -130,7 +132,7 @@
               o=y*OW+x; var n=noise[(o*7+nOff)&mask];
               if(n<cut) continue;
               var a=gk*cov, nz=(n-128)*gn;
-              var r=grey[0]+nz,gg=grey[1]+nz,b=grey[2]+nz;
+              var e=edge[j*sw+i2]*.16, r=grey[0]+(31-grey[0])*e+nz,gg=grey[1]+(35-grey[1])*e+nz,b=grey[2]+(40-grey[2])*e+nz;
               r=r<0?0:r>255?255:r; gg=gg<0?0:gg>255?255:gg; b=b<0?0:b>255?255:b;
               out[o]=((a<<24)|(b<<16)|(gg<<8)|r)>>>0;
             }
