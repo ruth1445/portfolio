@@ -4,3 +4,4 @@
 .ghw{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif;color:#1F2328}
 .ghbox{background:none;border:0;padding:0}
 #cal svg{display:block;width:100%;height:auto}
+#cal.alive svg rect[data-date]{visibility:hidden}
