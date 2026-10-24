@@ -1,18 +1,17 @@
 /* ---------- 5. languages ---------- */
-/* red poster ground; worn white, chrome and black chrome for how well i'd get on */
-.s5.full{background:#DE0812 url(../img/red-ground.jpg) center / cover no-repeat;color:#FBFAF7}
+/* deep red ground, the world in soft beige pixels, rings pulsing from where my languages live */
+.s5.full{background:#A00000;color:#E9DFCB}
 .s5 .stage{background:none}
 .mwrap{position:relative}
-#world .muted{fill:rgba(255,236,236,.16)}
-#world .local{fill:url(#worn)}
-#world .easy{fill:url(#chrome)}
-#world .getby{fill:url(#blackchrome)}
-#world path{stroke:#B3000B;stroke-width:.45}
-.wm{display:block;width:100%;height:auto;filter:drop-shadow(0 1px 0 rgba(90,0,4,.25))}
+.mwrap.pix .wm{visibility:hidden}
+#world .muted{fill:#8A0505}
+#world .local{fill:#D4C9B2}
+#world .easy{fill:#958A78}
+#world .getby{fill:#6F6556}
+#world path{stroke:#A00000;stroke-width:.45}
+.wm{display:block;width:100%;height:auto}
 .key{display:flex;gap:24px;margin-top:14px;flex-wrap:wrap}
 .ki{display:flex;align-items:center;gap:8px;font-family:var(--gr);font-size:13px;letter-spacing:0;
-  text-transform:none;color:#FBFAF7}
-.ki i{width:11px;height:11px;border-radius:50%;display:block}
-.k1 i{background:#FBFAF7}
-.k2 i{background:linear-gradient(135deg,#FFFFFF 0%,#C9CCD1 22%,#6E737A 40%,#F4F5F7 48%,#9DA2A8 60%,#E9EBEE 78%,#7C8188 100%)}
-.k3 i{background:linear-gradient(135deg,#4A4D52 0%,#0B0B0C 25%,#9A9EA4 45%,#1A1B1D 52%,#050505 75%,#5B5F64 90%,#121214 100%)}
+  text-transform:none;color:#E9DFCB}
+.ki i{width:11px;height:11px;border-radius:3px;display:block}
+.k1 i{background:#D4C9B2} .k2 i{background:#958A78} .k3 i{background:#6F6556}
