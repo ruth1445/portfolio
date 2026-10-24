@@ -15,6 +15,7 @@
 
   function place(){
     T.forEach(function(t){
+      if(!t.dataset.on&&!t.dataset.pad) return;
       var sec=t.parentElement, sr=sec.getBoundingClientRect(), line;
       if(t.dataset.on){ var el=document.querySelector(t.dataset.on); if(!el) return; line=baseOf(el); }
       else line=sr.bottom-(+t.dataset.pad||34);
