@@ -3,7 +3,7 @@
 .s2 .stage{background:var(--ivory)}
 /* places: her composition, with the barrel turning in the open space on the right */
 .places{position:relative;background:#24489C url(../img/places.jpg) left top / cover no-repeat;
-  height:max(650px, calc(100vw * 892 / 1640))}
+  height:max(560px, calc(100vw * 802 / 1640))}   /* ends just under her photo grid, same gap as its left margin */
 .places .pl-wheel{position:absolute;left:56.5%;top:8%;width:37%}
 .places .win{perspective:3200px}
 .places .fade{display:none}
