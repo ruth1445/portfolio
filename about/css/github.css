@@ -1,5 +1,5 @@
 /* the year, as github draws it */
-.s6.full .stage{padding:var(--gb)}
+.s6.full .stage{padding:var(--gb);background:#F7DBC4 url(../img/year-bg.jpg) center / cover no-repeat}
 .s6{--gb:clamp(28px,5vw,80px)}
 .ghw{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif;color:#1F2328}
 .ghbox{background:none;border:0;padding:0}
