@@ -7,12 +7,13 @@
 <script src="./support.js"></script>
 <link rel="stylesheet" href="./about-restored.css?v=7">
   <link rel="stylesheet" href="./site.css?v=5">
+  <link rel="stylesheet" href="./lab.css?v=1">
 <link rel="icon" type="image/png" sizes="256x256" href="./assets/ruth-sharon-favicon.png?v=1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,500&amp;family=Playfair+Display:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
 
 <style>
   html { scroll-behavior: smooth; }
@@ -423,35 +424,28 @@
         </section>
       </div>
       <aside class="lx-preview" aria-live="polite">
-        <img src="{{ labCur.image }}" alt="{{ labCur.title }} preview">
+        <div class="lx-sq"><img src="{{ labCur.image }}" alt="{{ labCur.title }} preview"></div>
+        <p class="lx-cap">{{ labCur.title }}</p>
       </aside>
     </div>
   </main>
   </sc-if>
 
   <sc-if value="{{ isProject }}">
-  <main class="pj-page" aria-label="{{ pj.title }}">
-    <div class="pj-hero">
-      <img class="pj-cover" src="{{ pj.image }}" alt="">
-      <div class="pj-tab"><h1>{{ pj.title }}</h1></div>
+  <main class="pj-simple" aria-label="{{ pj.title }}">
+    <h1 class="pjs-title">{{ pj.title }}</h1>
+    <p class="pjs-lede">{{ pj.intro }}</p>
+    <div class="pjs-links">
+      <sc-for list="{{ pj.links }}" as="lk" hint-placeholder-count="1"><a href="{{ lk.href }}" target="_blank" rel="noopener noreferrer"><span>{{ lk.label }}</span><i aria-hidden="true">&#8599;</i></a></sc-for>
     </div>
-    <div class="pj-body">
-      <div class="pj-intro">
-        <p>{{ pj.blurb }}</p>
-        <div class="pj-actions">
-          <sc-for list="{{ pj.links }}" as="lk" hint-placeholder-count="1"><a class="{{ lk.cls }}" href="{{ lk.href }}" target="_blank" rel="noopener noreferrer">{{ lk.label }} ↗</a></sc-for>
+    <sc-for list="{{ pj.figures }}" as="fig" hint-placeholder-count="2">
+      <figure class="pjs-fig">
+        <div class="pjs-sq">
+          <sc-if value="{{ fig.image }}"><img src="{{ fig.image }}" alt="" loading="lazy"></sc-if>
         </div>
-      </div>
-      <sc-if value="{{ pj.hasMeta }}">
-      <dl class="pj-meta">
-        <sc-for list="{{ pj.meta }}" as="m" hint-placeholder-count="2"><div><dt>{{ m.k }}</dt><dd>{{ m.v }}</dd></div></sc-for>
-      </dl>
-      </sc-if>
-      <sc-for list="{{ pj.sections }}" as="sec" hint-placeholder-count="0">
-        <section class="pj-section"><h2>{{ sec.h }}</h2><div><p>{{ sec.body }}</p></div></section>
-      </sc-for>
-
-    </div>
+        <figcaption>{{ fig.text }}</figcaption>
+      </figure>
+    </sc-for>
   </main>
   </sc-if>
 
@@ -652,10 +646,12 @@ const LAB_CATS = [
 ];
 const PLACEHOLDER = '#lab-projects';
 // Projects shown in the laboratory. Each gets its own page at #p/<slug>.
-// Optional fields for that page (leave out anything you don't have yet — empty parts stay hidden):
-//   role, when, stack: short strings shown in the details row
-//   code, demo, writeup: links shown as buttons
-//   sections: [{ h: 'the problem', body: '...' }, ...]
+// The page is: title, a short intro, links, then figures (a square with a black outline, writing under it).
+// Optional fields for that page:
+//   intro: the few lines under the title
+//   figures: [{ image: './x.jpg', text: '...' }, ...]   (leave image out for an empty square)
+//   code, demo, writeup: links shown under the intro
+// Anything left out shows lorem ipsum for now.
 const PROJECTS = [
   { cat: 'projects', title: 'thought-opsy', blurb: 'autopsy of thought: a longitudinal data-science and qualitative study of six years of journal writing, tracing how beliefs about happiness, belonging, identity and purpose evolved.', href: './autopsy-of-mind/', demo: 'https://ruth1445.github.io/portie/autopsy-of-mind/', tag: 'data science', image: './L.jpg' },
   { cat: 'projects', title: 'eta estimator', blurb: 'quantified transit prediction error across routes, time periods, and weather to surface 6+ minute failure cases.', href: PLACEHOLDER, tag: 'data science', image: './C.jpg' },
@@ -875,7 +871,7 @@ class Component extends DCLogic {
       };
     });
 
-    const pageBg = '#FAF9F6';
+    const pageBg = (p === 'lab' || p.startsWith('p/')) ? '#F4EFE0' : '#FAF9F6';
     const bgStyle = `position:fixed; inset:0; z-index:0; pointer-events:none; background:${pageBg}; transition:background 900ms cubic-bezier(.2,.9,.2,1), filter 900ms cubic-bezier(.2,.9,.2,1);`;
     const crumbs =
       p === 'about'
@@ -952,7 +948,14 @@ class Component extends DCLogic {
     const pjLinks = [
       ['code', pjSrc.code], ['live demo', pjSrc.demo], ['read the write-up', pjSrc.writeup], ['view project', !pjSrc.code && !pjSrc.demo && !pjSrc.writeup ? pjSrc.href : null],
     ].filter(([, u]) => ext(u)).map(([label, href], i) => ({ label, href, cls: 'pj-btn' + (i === 0 ? ' pj-btn--main' : '') }));
+    const LOREM_INTRO = 'Lorem ipsum lorem ipsum ipsum lorem, ipsum lorem lorem ipsum ipsum lorem ipsum. Ipsum lorem lorem ipsum lorem ipsum ipsum lorem lorem.';
+    const LOREM_FIG = [
+      'Lorem ipsum ipsum lorem ipsum lorem lorem ipsum. Ipsum lorem ipsum ipsum lorem lorem ipsum lorem ipsum ipsum lorem, lorem ipsum lorem ipsum ipsum lorem ipsum. Lorem lorem ipsum ipsum lorem ipsum.',
+      'Ipsum lorem lorem ipsum ipsum lorem ipsum lorem. Lorem ipsum ipsum lorem ipsum lorem lorem ipsum ipsum lorem ipsum lorem lorem. Ipsum ipsum lorem ipsum lorem.',
+    ];
     const pj = {
+      intro: pjSrc.intro || LOREM_INTRO,
+      figures: (pjSrc.figures || [{ image: pjSrc.image }, {}]).map((f, k) => ({ image: f.image || '', text: f.text || LOREM_FIG[k % LOREM_FIG.length] })),
       title: pjSrc.title,
       blurb: pjSrc.blurb,
       image: pjSrc.image,
