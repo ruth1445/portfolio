@@ -29,12 +29,12 @@
     }
     ['Mon','Wed','Fri'].forEach(function(n,i){
       lab+='<text x="0" y="'+(TOP+(1+i*2)*P+9)+'" font-size="12" fill="#1F2328">'+n+'</text>'});
-    var W=LEFT+cols*P-(P-CS), LY=TOP+7*P+8, H=LY+CS;
+    var W=LEFT+cols*P-(P-CS), LY=TOP+7*P+22, H=LY+CS;   /* room under the grid for the block title */
     /* legend, inside the same drawing so it grows with the grid */
     var x=W-31, leg='<text x="'+W+'" y="'+(LY+9)+'" font-size="12" fill="#59636E" text-anchor="end">More</text>';
     for(var k=4;k>=0;k--){x-=CS+(k===4?2:3);
       leg+='<rect x="'+x+'" y="'+LY+'" width="'+CS+'" height="'+CS+'" rx="2" ry="2" fill="'+COL[k]+'" stroke="rgba(31,35,40,.05)" stroke-width="1"/>'}
-    leg+='<text x="'+(x-5)+'" y="'+(LY+9)+'" font-size="12" fill="#59636E" text-anchor="end">Less</text>';
+    leg+='<text class="leg" x="'+(x-5)+'" y="'+(LY+9)+'" font-size="12" fill="#59636E" text-anchor="end">Less</text>';
     el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Noto Sans,Helvetica,Arial,sans-serif">'+lab+sv+leg+'</svg>';
     if(window.ghFuse) window.ghFuse(el,{W:W,H:H,cols:cols,cells:cells,LEFT:LEFT,TOP:TOP,P:P,CS:CS,COL:COL});
   }
