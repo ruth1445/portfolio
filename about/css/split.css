@@ -1,10 +1,14 @@
 /* ---------- 4. the split ---------- */
 .split{display:grid;grid-template-columns:1fr 1fr}
-.split .l{background:#FBF9F2;padding:52px 44px 56px}
-.split .r{background:var(--yel);padding:52px 44px 56px}
-.split .fl{column-count:2;column-gap:28px;font-size:13px;line-height:1.44;text-align:justify;
-  hyphens:auto;color:#111}
-.split .fl p{margin:0 0 11px}
-.split h3{margin:0 0 6px;font-family:var(--ser);font-size:25px;line-height:1;font-weight:400}
-.split .run{display:flex;justify-content:space-between;font-family:var(--mn);font-size:7.5px;
-  letter-spacing:.18em;text-transform:uppercase;opacity:.46;margin-bottom:22px}
+.split .l,.split .r{display:flex;flex-direction:column;padding:clamp(44px,5vw,76px) clamp(28px,4vw,64px) clamp(36px,4vw,56px)}
+.split .l{background:#FBF9F2}
+.split .r{background:var(--yel)}
+.split .say{margin:0;font-family:var(--ser);font-weight:400;font-size:clamp(19px,1.72vw,27px);
+  line-height:1.24;letter-spacing:-.003em;color:#111;text-wrap:pretty}
+.split .more{align-self:flex-end;margin-top:auto;padding-top:clamp(28px,3vw,44px);
+  font-family:var(--ser);font-style:italic;font-size:clamp(18px,1.5vw,23px);line-height:1;color:#111;
+  display:inline-flex;align-items:baseline;gap:.28em}
+.split .more span{font-style:normal;font-family:var(--gr);font-size:.78em;transition:transform .25s ease}
+.split .more:hover span{transform:translate(2px,-2px)}
+.split .more:hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
