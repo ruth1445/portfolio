@@ -1,53 +1,9 @@
-/* ---------- 3. THE SCAN ----------
-   what a scan actually is: white paper and black type. the scanner blows the
-   paper out to white and the type comes back a little heavy and soft. what gives
-   it away is the paper as an object: edges that are not ruled straight, grey
-   where a sheet lifts off the glass, a slight keystone, and a few specks. */
-.scan{background:#0B0B0B;height:auto;min-height:0;overflow:visible;position:relative;z-index:3;
-  padding-top:var(--top,206px);padding-bottom:44px}
-.scan .slips{position:absolute;left:0;right:0;top:-34px;height:calc(var(--top,206px) + 34px);z-index:4}
-
-.sh{position:relative;overflow:visible;
-  filter:drop-shadow(0 1px 1px rgba(0,0,0,.45)) drop-shadow(0 5px 9px rgba(0,0,0,.32))}
-/* the sheet itself, cut to an irregular outline by script */
-.sh > .paper{position:absolute;inset:0;background:#FDFDFB;overflow:hidden}
-/* type and pictures as the scanner returns them: heavier, slightly soft */
-.paper > .ink{position:relative;z-index:1;width:100%;height:100%;background:#FDFDFB;
-  filter:blur(.32px) contrast(1.62);color:#0A0A0A}
-/* where the sheet lifts off the glass the lamp falls off; set per sheet by script */
-.paper > .lift{position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:multiply}
-/* dust on the platen: a handful of distinct marks, never a texture */
-.paper > .spk{position:absolute;inset:0;z-index:3;pointer-events:none}
-.paper > .spk i{position:absolute;background:#111;border-radius:50%}
-.paper > .spk i.h{border-radius:1px}
-
-.slip{position:absolute;bottom:-58px;z-index:1}
-.slip .ink{padding:11px}
-.slip span{display:block;font-family:var(--mn);font-size:8px;letter-spacing:.14em;color:#222}
-.slip em{display:block;margin-top:2px;font-style:normal;font-family:var(--ser);
-  font-size:16px;line-height:1.05}
-.clip{position:absolute;bottom:-58px;z-index:1}
-.clip .ink{display:flex;flex-direction:column;padding:5px 5px 4px}
-.clip img{display:block;width:100%;flex:1 1 auto;min-height:0;object-fit:cover;
-  filter:grayscale(1) contrast(1.08)}
-.clip b{flex:0 0 auto;margin-top:4px;font-weight:400;font-family:var(--mn);font-size:5px;
-  letter-spacing:.1em;text-transform:uppercase;color:#333}
-
-/* four loose A4 sheets laid on the platen */
-.leaves{position:relative;z-index:5;height:548px}
-/* the real scans, cut by the background remover and left the shape it gave */
-.doc{position:absolute;display:block;height:auto;-webkit-user-drag:none;user-select:none;
-  filter:drop-shadow(0 1px 1px rgba(0,0,0,.5)) drop-shadow(0 6px 12px rgba(0,0,0,.42))}
-body.editing .doc{cursor:grab;outline:1px dashed rgba(255,80,80,.9);outline-offset:3px}
-.leaf{flex:0 1 302px;aspect-ratio:1 / 1.414}
-.leaf .ink{padding:26px 26px}
-.leaf .rh{display:flex;justify-content:space-between;font-family:var(--mn);font-size:5.6px;
-  letter-spacing:.16em;text-transform:uppercase;color:#444;margin-bottom:12px}
-.leaf .tp{font-size:7.2px;line-height:1.52;text-align:justify;hyphens:auto}
-.leaf .tp p{margin:0 0 7px}
-.leaf h4{margin:10px 0 4px;font-size:7.6px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
-.leaf .pl{margin:9px 0;border:1px solid #222;padding:3px}
-.leaf .pl img{display:block;width:100%;filter:grayscale(1) contrast(1.08)}
-.bars{display:none}
-.glass{display:none}
-.glassg{display:none}
+/* ---------- 3. the handwritten pages ----------
+   three loose pages rising out of the base of a short black band. the band clips
+   them at the bottom and lets them run over the opening above. */
+.scan{position:relative;z-index:3;background:#0B0B0B;height:380px;clip-path:inset(-800px 0 0 0)}
+.scan .leaves{position:absolute;inset:0}
+.scan .doc{position:absolute;display:block;height:auto;user-select:none;-webkit-user-drag:none;
+  transform:rotate(var(--r,0deg));
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.45)) drop-shadow(0 8px 14px rgba(0,0,0,.42))}
+body.editing .scan .doc{cursor:grab;outline:1px dashed rgba(255,80,80,.9);outline-offset:3px}
