@@ -12,7 +12,7 @@
   function draw(year, level){
     var jan1=Date.UTC(year,0,1), dec31=Date.UTC(year,11,31);
     var start=jan1-new Date(jan1).getUTCDay()*DAY;
-    var cols=Math.floor((dec31-start)/DAY/7)+1, sv='', lab='', seen={};
+    var cols=Math.floor((dec31-start)/DAY/7)+1, sv='', lab='', seen={}, cells=[];
     for(var c=0;c<cols;c++){
       var sun=new Date(start+c*7*DAY);
       if(sun.getUTCFullYear()===year && !seen[sun.getUTCMonth()]){
@@ -22,6 +22,7 @@
       for(var r=0;r<7;r++){
         var t=start+(c*7+r)*DAY; if(t<jan1||t>dec31) continue;
         var d=iso(t), v=level(d);
+        cells.push({x:LEFT+c*P,y:TOP+r*P,lv:v});
         sv+='<rect data-date="'+d+'" x="'+(LEFT+c*P)+'" y="'+(TOP+r*P)+'" width="'+CS+'" height="'+CS+'" rx="2" ry="2" fill="'+COL[v]+
             '" stroke="rgba(31,35,40,.05)" stroke-width="1"/>';
       }
@@ -35,6 +36,7 @@
       leg+='<rect x="'+x+'" y="'+LY+'" width="'+CS+'" height="'+CS+'" rx="2" ry="2" fill="'+COL[k]+'" stroke="rgba(31,35,40,.05)" stroke-width="1"/>'}
     leg+='<text x="'+(x-5)+'" y="'+(LY+9)+'" font-size="12" fill="#59636E" text-anchor="end">Less</text>';
     el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Noto Sans,Helvetica,Arial,sans-serif">'+lab+sv+leg+'</svg>';
+    if(window.ghFuse) window.ghFuse(el,{W:W,H:H,cols:cols,cells:cells,LEFT:LEFT,TOP:TOP,P:P,CS:CS,COL:COL});
   }
 
   function snapshot(){
