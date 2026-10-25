@@ -7,7 +7,7 @@
 <script src="./support.js"></script>
 <link rel="stylesheet" href="./about-restored.css?v=7">
   <link rel="stylesheet" href="./site.css?v=6">
-  <link rel="stylesheet" href="./lab.css?v=2">
+  <link rel="stylesheet" href="./lab.css?v=4">
 <link rel="icon" type="image/png" sizes="256x256" href="./assets/ruth-sharon-favicon.png?v=1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -477,10 +477,26 @@
   <sc-if value="{{ isProject }}">
   <main class="pj-simple" aria-label="{{ pj.title }}">
     <h1 class="pjs-title">{{ pj.title }}</h1>
-    <p class="pjs-lede">{{ pj.intro }}</p>
-    <div class="pjs-links">
-      <sc-for list="{{ pj.links }}" as="lk" hint-placeholder-count="1"><a href="{{ lk.href }}" target="_blank" rel="noopener noreferrer"><span>{{ lk.label }}</span><i aria-hidden="true">&#8599;</i></a></sc-for>
-    </div>
+    <section class="pjs-fig pjs-hero">
+      <div class="pjs-text">
+        <p class="pjs-lede">{{ pj.intro }}</p>
+        <sc-if value="{{ pj.hasTimeline }}">
+        <div class="pjs-timeline">
+          <p class="pjs-tl-label">timeline:</p>
+          <sc-for list="{{ pj.timeline }}" as="t" hint-placeholder-count="3"><p>{{ t }}</p></sc-for>
+        </div>
+        </sc-if>
+        <div class="pjs-links">
+          <sc-for list="{{ pj.links }}" as="lk" hint-placeholder-count="1"><a href="{{ lk.href }}" target="_blank" rel="noopener noreferrer"><span>{{ lk.label }}</span><i aria-hidden="true">&#8599;</i></a></sc-for>
+        </div>
+      </div>
+      <div class="pjs-media">
+        <div class="pjs-sq">
+          <sc-if value="{{ pj.lead.image }}"><img src="{{ pj.lead.image }}" alt=""></sc-if>
+          <sc-if value="{{ pj.lead.video }}"><video src="{{ pj.lead.video }}" autoplay muted loop playsinline></video></sc-if>
+        </div>
+      </div>
+    </section>
     <sc-for list="{{ pj.figures }}" as="fig" hint-placeholder-count="2">
       <figure class="pjs-fig">
         <figcaption>{{ fig.text }}</figcaption>
@@ -700,12 +716,16 @@ const PLACEHOLDER = '#lab-projects';
 //   code, demo, writeup: links shown under the intro
 // Anything left out shows lorem ipsum for now.
 const PROJECTS = [
-  { cat: 'projects', title: 'thought-opsy', blurb: 'autopsy of thought: a longitudinal data-science and qualitative study of six years of journal writing, tracing how beliefs about happiness, belonging, identity and purpose evolved.', href: './autopsy-of-mind/', demo: 'https://ruth1445.github.io/portie/autopsy-of-mind/', tag: 'data science', image: './L.jpg' },
+  { cat: 'projects', title: 'thought-opsy', blurb: 'autopsy of thought: a longitudinal data-science and qualitative study of six years of journal writing, tracing how beliefs about happiness, belonging, identity and purpose evolved.', href: './autopsy-of-mind/', demo: 'https://ruth1445.github.io/portie/autopsy-of-mind/', tag: 'data science', image: './L.jpg',
+    intro: 'Growth of any kind is very important to me. I had several questions about my own growth . Is it actually exponential? What patterns are native to my style of growth? How best can I (quantitatively, at least) measure it? How useful would creating a feedback loop be for my own growth? To answer these questions, I analyzed 76 months (over 6 years) of my own journal data.',
+    timeline: ['Oct 4th - Since my journal was entirely on an Instagram account, I exported all of the comments from Meta.', 'Oct 5th - I realized comments do not include the captions themselves (and that is where my journal entry would often start) and start a new export for all media.', 'I separate the post captions and start cleaning it.', 'Oct 6th- I figure out how to match caption and its comments.'] },
   { cat: 'projects', title: 'eta estimator', blurb: 'quantified transit prediction error across routes, time periods, and weather to surface 6+ minute failure cases.', href: PLACEHOLDER, tag: 'data science', image: './C.jpg' },
   { cat: 'projects', title: 'langpal 11labs pipeline', blurb: 'built an end-to-end voice loop with elevenlabs stt/tts, gemini, supabase, fastapi, and a flutter app.', href: PLACEHOLDER, tag: 'ai engineering', image: './D.jpg' },
   { cat: 'projects', title: 'rational metareasoning', blurb: 'replicated value-of-computation style reasoning to decide when extra deliberation is worth the cost.', href: PLACEHOLDER, tag: 'research', image: './E.jpg', figures: [{ image: './lab-pics/rational-metareasoning/RAM.jpg' }, { video: './lab-pics/rational-metareasoning/ram.mp4' }] },
   { cat: 'projects', title: 'micro', blurb: 'replicated an expert-router setup with mlflow tracking, faster training, and module-level routing diagnostics.', href: PLACEHOLDER, tag: 'ml systems', image: './F.jpg', figures: [{ image: './lab-pics/micro/micro.jpg' }, { image: './lab-pics/micro/micro2.jpg' }] },
-  { cat: 'projects', title: 'monosemanticity', blurb: 'trained sparse autoencoders on language-model activations to study interpretable features and superposition.', href: PLACEHOLDER, tag: 'interpretability', image: './H.jpg', figures: [{ image: './lab-pics/monosemanticity/interp.jpg' }] },
+  { cat: 'projects', title: 'monosemanticity', blurb: 'trained sparse autoencoders on language-model activations to study interpretable features and superposition.', href: PLACEHOLDER, tag: 'interpretability', image: './H.jpg', figures: [{ image: './lab-pics/monosemanticity/interp.jpg' }],
+    intro: 'For my final project of my master\'s degree, I decided to explore interpretability. I loved Anthropic\'s research papers on the topic. I read three papers and decided to replicate the research with the resources I have.',
+    timeline: [] },
   { cat: 'projects', title: 'societal impacts research paper', blurb: 'co-authored an nbea paper using an nlp pipeline over 8k+ reddit posts to study chatbot perception and bias.', href: PLACEHOLDER, tag: 'nlp research', image: './I.jpg' },
   { cat: 'projects', title: 'does a growth mindset nudge boost achievement?', blurb: 'analyzed whether a short growth-mindset intervention shifts achievement outcomes using a causal/statistical lens.', href: PLACEHOLDER, tag: 'statistics', image: './J.jpg', figures: [{ image: './lab-pics/growth-mindset-nudge/growth_Nudge.jpg' }] },
   { cat: 'projects', title: 'harmonies', blurb: 'a small web experiment in layered sound, language, and visual rhythm.', href: 'https://ruth1445.github.io/harmonies/', tag: 'creative code', image: './K.jpg' },
@@ -1017,7 +1037,11 @@ class Component extends DCLogic {
     ];
     const pj = {
       intro: pjSrc.intro || LOREM_INTRO,
-      figures: (pjSrc.figures || [{}, {}]).map((f, k) => ({ image: f.image || '', video: f.video || '', text: f.text || LOREM_FIG[k % LOREM_FIG.length] })),
+      timeline: pjSrc.timeline || [],
+      hasTimeline: Array.isArray(pjSrc.timeline),
+      // the first picture sits beside the write-up; the rest follow as figures
+      lead: ((f) => ({ image: f.image || '', video: f.video || '' }))((pjSrc.figures || [])[0] || {}),
+      figures: (pjSrc.figures ? pjSrc.figures.slice(1) : [{}]).map((f, k) => ({ image: f.image || '', video: f.video || '', text: f.text || LOREM_FIG[k % LOREM_FIG.length] })),
       title: pjSrc.title,
       blurb: pjSrc.blurb,
       image: pjSrc.image,
