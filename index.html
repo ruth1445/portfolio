@@ -728,7 +728,10 @@ const PROJECTS = [
     timeline: [] },
   { cat: 'projects', title: 'societal impacts research paper', blurb: 'co-authored an nbea paper using an nlp pipeline over 8k+ reddit posts to study chatbot perception and bias.', href: PLACEHOLDER, tag: 'nlp research', image: './I.jpg' },
   { cat: 'projects', title: 'does a growth mindset nudge boost achievement?', blurb: 'analyzed whether a short growth-mindset intervention shifts achievement outcomes using a causal/statistical lens.', href: PLACEHOLDER, tag: 'statistics', image: './J.jpg', figures: [{ image: './lab-pics/growth-mindset-nudge/growth_Nudge.jpg' }] },
-  { cat: 'projects', title: 'harmonies', blurb: 'a small web experiment in layered sound, language, and visual rhythm.', href: 'https://ruth1445.github.io/harmonies/', tag: 'creative code', image: './K.jpg' },
+  { cat: 'projects', title: 'harmonies', blurb: 'a small web experiment in layered sound, language, and visual rhythm.', href: 'https://ruth1445.github.io/harmonies/', tag: 'creative code', image: './K.jpg',
+    demo: 'https://ruth1445.github.io/harmonies/',
+    intro: 'I picked up a copy of *Harmonies of the World* by Johannes Kepler with no intention of using it as anything other than a reference book. I ended up reading the whole thing once I realized how engaging it really was. Kepler manages to tie concepts of astronomy, music theory, and geometry together so beautifully. I tried visualizing his idea of harmonies in different things of the universe. I went one step ahead and also explored the sonification of objects given said harmony.',
+    figures: [{ image: './lab-pics/harmonies/harmonies.jpg' }] },
 ];
 PROJECTS.forEach((p) => { p.slug = p.slug || p.title.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); });
 
