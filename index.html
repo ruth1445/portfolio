@@ -479,7 +479,7 @@
     <h1 class="pjs-title">{{ pj.title }}</h1>
     <section class="pjs-fig pjs-hero">
       <div class="pjs-text">
-        <p class="pjs-lede">{{ pj.intro }}</p>
+        <p class="pjs-lede"><sc-for list="{{ pj.introParts }}" as="seg"><sc-if value="{{ seg.it }}"><em>{{ seg.t }}</em></sc-if><sc-if value="{{ seg.plain }}">{{ seg.t }}</sc-if></sc-for></p>
         <sc-if value="{{ pj.hasTimeline }}">
         <div class="pjs-timeline">
           <p class="pjs-tl-label">timeline:</p>
@@ -1037,6 +1037,8 @@ class Component extends DCLogic {
     ];
     const pj = {
       intro: pjSrc.intro || LOREM_INTRO,
+      // *words between asterisks* in an intro are set in italics
+      introParts: (pjSrc.intro || LOREM_INTRO).split('*').map((t, k) => ({ t, it: k % 2 === 1, plain: k % 2 === 0 })).filter((x) => x.t),
       timeline: pjSrc.timeline || [],
       hasTimeline: Array.isArray(pjSrc.timeline),
       // the first picture sits beside the write-up; the rest follow as figures
