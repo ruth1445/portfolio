@@ -6,7 +6,7 @@
 <title>Ruth Sharon</title>
 <script src="./support.js"></script>
 <link rel="stylesheet" href="./about-restored.css?v=7">
-  <link rel="stylesheet" href="./site.css?v=5">
+  <link rel="stylesheet" href="./site.css?v=6">
   <link rel="stylesheet" href="./lab.css?v=2">
 <link rel="icon" type="image/png" sizes="256x256" href="./assets/ruth-sharon-favicon.png?v=1">
 
@@ -29,7 +29,7 @@
   .site-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 18px;
   }
   .site-logo-link {
     display: inline-flex;
@@ -46,33 +46,66 @@
     display: inline-flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 7px;
+    gap: 14px;
     min-height: 28px;
-    font-family: inherit;
-    font-size: clamp(11px, .95vw, 13px);
-    font-weight: 600;
+    font-family: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 10.5px;
+    font-weight: 500;
     line-height: 1;
-    letter-spacing: .01em;
-    color: rgba(35, 32, 26, .72);
-    text-transform: lowercase;
+    letter-spacing: .2em;
+    color: #9A9384;
+    text-transform: uppercase;
   }
   .site-crumbs a,
   .site-crumbs span {
     color: inherit;
+    transition: color .2s ease;
   }
   .site-crumbs a:hover {
-    color: #33ff44;
+    color: #23201A;
   }
+  /* the page you're on: bold black; everything before it stays grey */
+  .site-crumbs [aria-current="page"] {
+    color: #23201A;
+    font-weight: 600;
+  }
+  /* the thin bar on every page except home (same as the about and quotes pages) */
+  .site-bar {
+    position: fixed; left: 0; right: 0; top: 0; z-index: 50; height: 38px;
+    display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 18px;
+    background: rgba(250, 249, 246, .9); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(23, 22, 15, .16);
+  }
+  .site-bar-space { height: 38px; flex: none; }
+  .site-bar .site-crumbs { min-height: 0; }
+  .site-bar-logo { display: block; line-height: 0; margin-right: 4px; }
+  .site-bar-logo img { display: block; width: 26px; height: 26px; object-fit: contain; }
+  .site-bar-links {
+    display: flex; gap: 22px; font-family: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 10.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; line-height: 1;
+  }
+  .site-bar-links a { color: #9A9384; transition: color .2s ease; }
+  .site-bar-links a:hover { color: #23201A; }
+  /* separator: a short hairline instead of a ">" */
   .site-crumb-sep {
-    font-weight: 700;
-    color: rgba(35, 32, 26, .48);
+    display: block;
+    width: 22px;
+    height: 1px;
+    overflow: hidden;
+    font-size: 0;
+    color: transparent;
+    background: #23201A;
+    opacity: .35;
   }
+  .site-crumb-sep:first-child { display: none; }
   @media (max-width: 700px) {
     .home-card { transform: none !important; transform-origin: center !important; }
     .site-header { padding: 22px 24px 0 !important; }
-    .site-brand { gap: 8px; }
+    .site-brand { gap: 12px; }
     .site-logo-img { width: clamp(50px, 18vw, 70px); }
-    .site-crumbs { font-size: 11px; gap: 5px; }
+    .site-crumbs { font-size: 9.5px; gap: 10px; letter-spacing: .16em; }
+    .site-crumb-sep { width: 14px; }
+    .site-bar-links { font-size: 9.5px; letter-spacing: .16em; gap: 14px; }
   }
 
   /* Laboratory folder view */
@@ -209,26 +242,36 @@
   <div style="{{ bgStyle }}"></div>
 
 
+  <sc-if value="{{ isHomeHeader }}">
   <div class="site-header" style="position: relative; z-index: 2; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: 30px 44px 0;">
     <div class="site-brand">
       <a class="site-logo-link" href="#top" onClick="{{ goHome }}" aria-label="ruth sharon home">
         <img class="site-logo-img" src="./assets/logo-spiral.png" alt="ruth sharon">
       </a>
-      <sc-if value="{{ hasCrumbs }}">
-      <nav class="site-crumbs" aria-label="page breadcrumb">
-        <sc-for list="{{ crumbs }}" as="crumb" hint-placeholder-count="2">
-          <span class="site-crumb-sep" aria-hidden="true">&gt;</span>
-          <sc-if value="{{ crumb.href }}">
-          <a href="{{ crumb.href }}" onClick="{{ crumb.onClick }}">{{ crumb.label }}</a>
-          </sc-if>
-          <sc-if value="{{ crumb.current }}">
-          <span aria-current="page">{{ crumb.label }}</span>
-          </sc-if>
-        </sc-for>
-      </nav>
-      </sc-if>
     </div>
   </div>
+  </sc-if>
+
+  <sc-if value="{{ hasCrumbs }}">
+  <div class="site-bar">
+    <nav class="site-crumbs" aria-label="page breadcrumb">
+      <a class="site-bar-logo" href="#top" onClick="{{ goHome }}" aria-label="ruth sharon home"><img src="./assets/logo-spiral.png" alt=""></a>
+      <sc-for list="{{ crumbs }}" as="crumb" hint-placeholder-count="2">
+        <span class="site-crumb-sep" aria-hidden="true">&gt;</span>
+        <sc-if value="{{ crumb.href }}">
+        <a href="{{ crumb.href }}" onClick="{{ crumb.onClick }}">{{ crumb.label }}</a>
+        </sc-if>
+        <sc-if value="{{ crumb.current }}">
+        <span aria-current="page">{{ crumb.label }}</span>
+        </sc-if>
+      </sc-for>
+    </nav>
+    <nav class="site-bar-links" aria-label="elsewhere">
+      <a href="./assets/RuthSharon__Resume.pdf">resume</a><a href="https://github.com/ruth1445">github</a><a href="mailto:ruth.sharon@rutgers.edu">email</a>
+    </nav>
+  </div>
+  <div class="site-bar-space" aria-hidden="true"></div>
+  </sc-if>
 
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <div onPointerDown="{{ onDown }}" onPointerUp="{{ onUp }}" onWheel="{{ onWheel }}" style="position: absolute; inset: 0; z-index: 1; overflow: hidden; touch-action: pan-y;">
@@ -745,11 +788,26 @@ class Component extends DCLogic {
     clearInterval(this._raf);
   }
 
+  // Browser history is kept to at most two entries for this page: home underneath, and the
+  // page you're on above it. Moving around inside the site swaps the top entry instead of
+  // stacking a new one, and pressing back steps up one level (project -> laboratory -> home)
+  // rather than replaying every page visited. See the popstate handler at the bottom.
   set(page) {
     if (page === 'about') { location.href = './about/'; return; }
-    const hash = page === 'home' ? '#top' : '#' + page;
-    if (location.hash !== hash) history.pushState(null, '', hash);
-    document.body.dataset.page = page;
+    const onTop = !!(history.state && history.state.app);
+    if (page === 'home') {
+      if (onTop) { this._goingHome = true; history.back(); return; }
+      history.replaceState({ base: 1 }, '', HOME_URL);
+    } else if (onTop) {
+      history.replaceState({ app: 1 }, '', '#' + page);
+    } else {
+      history.pushState({ app: 1 }, '', '#' + page);
+    }
+    this.show(page);
+  }
+
+  show(page) {
+    document.body.dataset.page = page.startsWith('p/') ? 'project' : page;
     document.title = 'Ruth Sharon';
     this.setState({ page, hover: null, project: page.startsWith('p/') ? page.slice(2) : this.state.project });
     window.scrollTo(0, 0);
@@ -1015,6 +1073,7 @@ class Component extends DCLogic {
       },
       isHome: p === 'home',
       hasCrumbs: crumbs.length > 0,
+      isHomeHeader: crumbs.length === 0,
       crumbs,
       isInner: p !== 'home' && p !== 'lab',
       isAbout: p === 'about',
@@ -1036,18 +1095,59 @@ class Component extends DCLogic {
   }
 }
 const portfolio = new Component();
-const route = () => {
-  const hash = location.hash.slice(1);
-  if (hash === 'about') { location.replace('./about/'); return; }
-  const isProj = /^p\/[a-z0-9-]+$/.test(hash) && PROJECTS.some((x) => 'p/' + x.slug === hash);
-  const page = isProj ? hash : ['about', 'interests', 'lab', 'contact'].includes(hash) ? hash : /^(lab-|projects-|passion-|writing-)/.test(hash) ? 'lab' : 'home';
-  document.body.dataset.page = isProj ? 'project' : page;
-  portfolio.setState({ page, hover: null, project: isProj ? hash.slice(2) : portfolio.state.project });
-  window.scrollTo(0, 0);
+const HOME_URL = location.pathname + location.search;
+// which page a hash points at ('home' when it isn't a page)
+const pageFromHash = (hash) => {
+  if (hash === 'about') return 'about';
+  if (/^p\/[a-z0-9-]+$/.test(hash) && PROJECTS.some((x) => 'p/' + x.slug === hash)) return hash;
+  if (['interests', 'lab', 'contact'].includes(hash)) return hash;
+  if (/^(lab-|projects-|passion-|writing-)/.test(hash)) return 'lab';
+  return 'home';
 };
-route();
+const isPageHash = (hash) => hash === '' || hash === 'top' || pageFromHash(hash) !== 'home';
+// one level up from a page
+const parentOf = (page) => (page.startsWith('p/') ? 'lab' : page === 'interests' ? 'about' : 'home');
+
+// first load
+(() => {
+  const page = pageFromHash(location.hash.slice(1));
+  if (page === 'about') { location.replace('./about/'); return; }
+  if (history.state && history.state.app && page !== 'home') { portfolio.show(page); return; } // a reload
+  history.replaceState({ base: 1 }, '', HOME_URL);
+  if (page !== 'home') history.pushState({ app: 1 }, '', '#' + page);
+  portfolio.show(page);
+})();
 portfolio.mount(document.querySelector('x-dc'));
-window.addEventListener('hashchange', route);
+
+window.addEventListener('popstate', (e) => {
+  const st = e.state || {};
+  if (st.app) { portfolio.show(pageFromHash(location.hash.slice(1))); return; } // forward button
+  if (!st.base) { // a plain #link the browser followed on its own: fold it back in
+    const page = pageFromHash(location.hash.slice(1));
+    history.replaceState(page === 'home' ? { base: 1 } : { app: 1 }, '', page === 'home' ? HOME_URL : '#' + page);
+    portfolio.show(page);
+    return;
+  }
+  // back: step up one level from the page that was showing
+  const cur = portfolio.state.page;
+  if (portfolio._goingHome || cur === 'home') { portfolio._goingHome = false; portfolio.show('home'); return; }
+  const up = parentOf(cur);
+  if (up === 'about') { location.href = './about/'; return; }
+  if (up === 'home') { portfolio.show('home'); return; }
+  history.pushState({ app: 1 }, '', '#' + up);
+  portfolio.show(up);
+});
+
+// in-site #links without their own click handler go through the same path
+document.addEventListener('click', (ev) => {
+  if (ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+  const a = ev.target && ev.target.closest && ev.target.closest('a[href^="#"]');
+  if (!a) return;
+  const hash = a.getAttribute('href').slice(1);
+  if (!isPageHash(hash)) return;
+  ev.preventDefault();
+  portfolio.set(pageFromHash(hash));
+});
 </script>
 <noscript>Please enable JavaScript to browse the portfolio. Contact: <a href="mailto:ruth.sharon@rutgers.edu">ruth.sharon@rutgers.edu</a>.</noscript>
 </body>

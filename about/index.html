@@ -7,8 +7,8 @@
 <link rel="icon" href="../assets/ruth-sharon-favicon.png?v=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;600&family=Pinyon+Script&family=Playfair+Display:wght@400;600&display=swap">
-<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&family=Pinyon+Script&family=Playfair+Display:wght@400;600&display=swap">
+<link rel="stylesheet" href="css/base.css?v=2">
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/head.css">
 <link rel="stylesheet" href="css/places.css">
@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="css/titles.css">
 </head>
 <body>
-<div class="bar"><a href="../">Ruth Sharon</a>
+<div class="bar"><div class="crumbs"><a class="logo" data-up href="../" aria-label="home"><img src="../assets/logo-spiral.png" alt=""></a><span aria-current="page">about</span></div>
   <nav><a href="../assets/RuthSharon__Resume.pdf">resume</a><a href="https://github.com/ruth1445">github</a><a href="mailto:ruth.sharon@rutgers.edu">email</a></nav></div>
 
 <!-- 1 -->
@@ -282,5 +282,16 @@
 <script src="js/fuse.js"></script>
 <script src="js/year.js"></script>
 <script src="js/titles.js"></script>
+<script>
+// "up" links (to the page one level above): if that page is the one you came from, step back to it
+// instead of adding a new history entry, so the back button doesn't replay pages
+document.addEventListener('click', function (e) {
+  var a = e.target.closest && e.target.closest('a[data-up]');
+  if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || !document.referrer) return;
+  var to = new URL(a.getAttribute('href'), location.href), from = new URL(document.referrer);
+  var norm = function (p) { return p.replace(/index\.html$/, ''); };
+  if (from.origin === to.origin && norm(from.pathname) === norm(to.pathname) && history.length > 1) { e.preventDefault(); history.back(); }
+});
+</script>
 </body>
 </html>

@@ -17,3 +17,16 @@ section{position:relative;display:block}
   border-bottom:1px solid rgba(23,22,15,.16);mix-blend-mode:normal}
 .bar nav{display:flex;gap:18px;color:var(--mid)}
 .bar nav a:hover{color:var(--ink)}
+
+/* breadcrumb in the bar: same style as the main site (small tracked capitals, hairline between,
+   the page you're on bold black, the rest grey) */
+.bar .crumbs{display:flex;align-items:center;gap:14px;font-family:var(--gr);font-size:10.5px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:#9A9384;line-height:1}
+.bar .crumbs a{transition:color .2s ease}
+.bar .crumbs a:hover{color:var(--ink)}
+.bar .crumbs [aria-current="page"]{color:var(--ink);font-weight:600}
+.bar .crumbs .sep{display:block;width:22px;height:1px;background:var(--ink);opacity:.35}
+.bar .crumbs .logo{display:block;line-height:0;margin-right:4px}
+.bar .crumbs .logo img{display:block;width:26px;height:26px;object-fit:contain}
+.bar nav{font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#9A9384;gap:22px}
+@media (max-width:700px){.bar .crumbs,.bar nav{font-size:9.5px;letter-spacing:.16em}.bar .crumbs{gap:10px}.bar nav{gap:14px}.bar .crumbs .sep{width:14px}}

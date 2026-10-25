@@ -11,7 +11,7 @@
 }
 body, .site-shell { font-family: var(--font); }
 .site-crumbs { font-family: var(--font); font-weight: 500; }
-.site-crumbs a:hover { color: var(--green-dark); }
+.site-crumbs a:hover { color: var(--ink); }
 
 /* ---------- about: profile sidebar ---------- */
 .ab-page {
