@@ -1,16 +1,17 @@
 /* ---------- 3. the handwritten pages ----------
    three loose pages rising out of the base of a short black band. the band clips
    them at the bottom and lets them run over the opening above. */
-.scan{position:relative;z-index:3;background:#0B0B0B;height:380px;clip-path:inset(-800px 0 0 0)}
-.scan .leaves{position:absolute;inset:0}
-.scan .doc{position:absolute;display:block;height:auto;user-select:none;-webkit-user-drag:none;
+.scan{position:relative;z-index:3;background:#0B0B0B;height:380px}
+/* the clipping box reaches far up into the block above, so the pages show in full there,
+   but is cut at the base and at the sides of the screen */
+.scan .leaves{position:absolute;left:0;right:0;bottom:0;top:-800px;overflow:hidden;pointer-events:none}
+.scan .pile{position:absolute;inset:0;transform-origin:78% 100%}
+.scan .doc{position:absolute;display:block;height:auto;user-select:none;-webkit-user-drag:none;pointer-events:auto;
   transform:rotate(var(--r,0deg));
   filter:drop-shadow(0 1px 1px rgba(0,0,0,.45)) drop-shadow(0 8px 14px rgba(0,0,0,.42))}
 body.editing .scan .doc{cursor:grab;outline:1px dashed rgba(255,80,80,.9);outline-offset:3px}
-.scan{overflow-x:clip}
 /* on narrower screens the pages shrink toward the right so the title keeps its corner */
-.scan .leaves{transform-origin:78% 100%}
-@media (max-width:1520px){.scan .leaves{transform:scale(.93)}}
-@media (max-width:1320px){.scan .leaves{transform:scale(.86)}}
-@media (max-width:1140px){.scan .leaves{transform:scale(.74)}}
-@media (max-width:900px){.scan .leaves{transform:scale(.6)}}
+@media (max-width:1520px){.scan .pile{transform:scale(.93)}}
+@media (max-width:1320px){.scan .pile{transform:scale(.86)}}
+@media (max-width:1140px){.scan .pile{transform:scale(.74)}}
+@media (max-width:900px){.scan .pile{transform:scale(.6)}}
