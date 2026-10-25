@@ -7,7 +7,7 @@
 <script src="./support.js"></script>
 <link rel="stylesheet" href="./about-restored.css?v=7">
   <link rel="stylesheet" href="./site.css?v=6">
-  <link rel="stylesheet" href="./lab.css?v=4">
+  <link rel="stylesheet" href="./lab.css?v=5">
 <link rel="icon" type="image/png" sizes="256x256" href="./assets/ruth-sharon-favicon.png?v=1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -491,7 +491,7 @@
         </div>
       </div>
       <div class="pjs-media">
-        <div class="pjs-sq">
+        <div class="{{ pj.lead.boxCls }}">
           <sc-if value="{{ pj.lead.image }}"><img src="{{ pj.lead.image }}" alt=""></sc-if>
           <sc-if value="{{ pj.lead.video }}"><video src="{{ pj.lead.video }}" autoplay muted loop playsinline></video></sc-if>
         </div>
@@ -501,7 +501,7 @@
       <figure class="pjs-fig">
         <figcaption>{{ fig.text }}</figcaption>
         <div class="pjs-media">
-          <div class="pjs-sq">
+          <div class="{{ fig.boxCls }}">
             <sc-if value="{{ fig.image }}"><img src="{{ fig.image }}" alt="" loading="lazy"></sc-if>
             <sc-if value="{{ fig.video }}"><video src="{{ fig.video }}" autoplay muted loop playsinline></video></sc-if>
           </div>
@@ -1040,8 +1040,8 @@ class Component extends DCLogic {
       timeline: pjSrc.timeline || [],
       hasTimeline: Array.isArray(pjSrc.timeline),
       // the first picture sits beside the write-up; the rest follow as figures
-      lead: ((f) => ({ image: f.image || '', video: f.video || '' }))((pjSrc.figures || [])[0] || {}),
-      figures: (pjSrc.figures ? pjSrc.figures.slice(1) : [{}]).map((f, k) => ({ image: f.image || '', video: f.video || '', text: f.text || LOREM_FIG[k % LOREM_FIG.length] })),
+      lead: ((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq' + (f.image || f.video ? '' : ' is-empty') }))((pjSrc.figures || [])[0] || {}),
+      figures: (pjSrc.figures ? pjSrc.figures.slice(1) : [{}]).map((f, k) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq' + (f.image || f.video ? '' : ' is-empty'), text: f.text || LOREM_FIG[k % LOREM_FIG.length] })),
       title: pjSrc.title,
       blurb: pjSrc.blurb,
       image: pjSrc.image,
