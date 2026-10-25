@@ -48,20 +48,27 @@ body[data-page="lab"] .lx-cap { margin: 0; font-family: 'Playfair Display', Geor
 
 /* ---------- a project ---------- */
 .pj-simple {
-  position: relative; z-index: 2; width: min(100% - 40px, 820px); margin: 0 auto; padding: clamp(56px, 7vw, 96px) 0 120px;
+  position: relative; z-index: 2; width: min(100% - 40px, 1180px); margin: 0 auto; padding: clamp(56px, 7vw, 96px) 0 120px;
   color: #17160F; font-family: 'Playfair Display', Georgia, serif; animation: pageFloatIn 600ms cubic-bezier(.2,.9,.2,1) both;
 }
-.pjs-title { margin: 0; font-weight: 400; font-size: clamp(30px, 3.1vw, 48px); line-height: 1.05; letter-spacing: -.012em; }
-.pjs-lede { margin: 22px 0 0; max-width: 640px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.55; }
-.pjs-links { display: flex; flex-wrap: wrap; gap: 22px; margin: 18px 0 0; }
+.pjs-title { margin: 0; text-align: center; font-weight: 400; font-size: clamp(30px, 3.1vw, 48px); line-height: 1.05; letter-spacing: -.012em; }
+.pjs-lede { margin: 22px auto 0; max-width: 640px; text-align: center; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.55; }
+.pjs-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; margin: 18px 0 0; }
 .pjs-links:empty { display: none; }
 .pjs-links a { display: inline-flex; align-items: baseline; gap: .3em; color: #17160F; font-style: italic; font-size: 18px; }
 .pjs-links a span { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 .pjs-links a i { font-style: normal; font-family: 'Inter Tight', Helvetica, Arial, sans-serif; font-size: .78em; transition: transform .25s ease; }
 .pjs-links a:hover { color: #17160F; }
 .pjs-links a:hover i { transform: translate(2px, -2px); }
-.pjs-fig { margin: clamp(48px, 6vw, 72px) 0 0; }
-.pjs-sq { aspect-ratio: 1; border: 1.5px solid #17160F; background: #FBF9F2; overflow: hidden; }
-.pjs-sq img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.pjs-fig figcaption { margin: 16px 0 0; max-width: 680px; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.6; }
+/* each figure: writing in the left half, the picture centred in the right half */
+.pjs-fig { margin: clamp(64px, 8vw, 112px) 0 0; display: grid; grid-template-columns: 1fr 1fr; align-items: center; column-gap: clamp(32px, 5vw, 72px); }
+.pjs-fig figcaption { margin: 0; max-width: 460px; justify-self: center; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.6; }
+.pjs-media { display: flex; justify-content: center; align-items: center; }
+.pjs-sq { width: min(100%, 480px); aspect-ratio: 1; border: 1.5px solid #17160F; background: #FBF9F2; overflow: hidden; }
+.pjs-sq img, .pjs-sq video { display: block; width: 100%; height: 100%; object-fit: contain; }
+@media (max-width: 760px) {
+  .pjs-fig { grid-template-columns: 1fr; row-gap: 20px; }
+  .pjs-fig .pjs-media { order: -1; }
+  .pjs-fig figcaption { justify-self: start; max-width: none; }
+}
 body[data-page="lab"] .lx-page .lx-preview, body[data-page="lab"] .lx-page .lx-cap { text-transform: none; letter-spacing: 0; }
