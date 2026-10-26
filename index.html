@@ -483,6 +483,7 @@
               </a>
             </sc-for>
           </div>
+          <p class="lx-writing-intro">{{ writingIntro }}</p>
         </section>
       </div>
       <aside class="lx-preview" aria-live="polite">
@@ -1109,6 +1110,7 @@ class Component extends DCLogic {
       labRows,
       labCur,
       writing,
+      writingIntro: WRITING[0].intro,
       pj,
       it,
       isProject: p.startsWith('p/'),
