@@ -73,7 +73,7 @@
      Once the page scrolls it pulls in from the sides and top and gains a thin black outline,
      so it floats off the page (see the scroll listener at the bottom). */
   .site-bar {
-    position: fixed; left: 0; right: 0; top: 0; z-index: 50; height: 72px;
+    position: fixed; left: 0; right: 0; top: 0; z-index: 50; height: 52px;
     display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 22px;
     background: #6B5A45 url("./assets/header-venus.jpg") center 33% / cover no-repeat;
     border: 1px solid transparent;
@@ -82,13 +82,13 @@
   .site-bar::before { content: ""; position: absolute; inset: 0; background: rgba(23, 22, 15, .38); pointer-events: none; }
   .site-bar > * { position: relative; }
   .site-bar.is-floating { left: 14px; right: 14px; top: 12px; border-color: #17160F; }
-  .site-bar-space { height: 72px; flex: none; }
+  .site-bar-space { height: 52px; flex: none; }
   .site-bar .site-crumbs { min-height: 0; color: rgba(250, 249, 246, .78); }
   .site-bar .site-crumbs a:hover, .site-bar .site-crumbs [aria-current="page"] { color: #FAF9F6; }
   .site-bar .site-crumbs [aria-current="page"] { font-weight: 700; }
   .site-bar .site-crumb-sep { background: #FAF9F6; opacity: .6; }
   .site-bar-logo { display: block; line-height: 0; margin-right: 4px; }
-  .site-bar-logo img { display: block; width: 34px; height: 34px; object-fit: contain; }
+  .site-bar-logo img { display: block; width: auto; height: 32px; }
   .site-bar-links {
     display: flex; gap: 22px; font-family: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 10.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; line-height: 1;
@@ -115,10 +115,10 @@
     .site-crumbs { font-size: 9.5px; gap: 10px; letter-spacing: .16em; }
     .site-crumb-sep { width: 14px; }
     .site-bar-links { font-size: 9.5px; letter-spacing: .16em; gap: 14px; }
-    .site-bar { height: 60px; padding: 0 14px; }
-    .site-bar-space { height: 60px; }
+    .site-bar { height: 46px; padding: 0 14px; }
+    .site-bar-space { height: 46px; }
     .site-bar.is-floating { left: 8px; right: 8px; top: 8px; }
-    .site-bar-logo img { width: 28px; height: 28px; }
+    .site-bar-logo img { width: auto; height: 28px; }
   }
   /* phones: the breadcrumb stays on one line; the outside links step aside to make room */
   @media (max-width: 520px) {
@@ -274,7 +274,7 @@
   <sc-if value="{{ hasCrumbs }}">
   <div class="site-bar">
     <nav class="site-crumbs" aria-label="page breadcrumb">
-      <a class="site-bar-logo" href="#top" onClick="{{ goHome }}" aria-label="ruth sharon home"><img src="./assets/logo-spiral.png" alt=""></a>
+      <a class="site-bar-logo" href="#top" onClick="{{ goHome }}" aria-label="ruth sharon home"><img src="./assets/logo-pin.png" alt=""></a>
       <sc-for list="{{ crumbs }}" as="crumb" hint-placeholder-count="2">
         <span class="site-crumb-sep" aria-hidden="true">&gt;</span>
         <sc-if value="{{ crumb.href }}">
