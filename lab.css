@@ -73,12 +73,18 @@ body[data-page="lab"] .lx-page .lx-writing-intro {
 .pjs-text { justify-self: center; width: 100%; max-width: 460px; }
 .pjs-hero { margin-top: clamp(40px, 5vw, 72px); }
 .pjs-hero .pjs-lede, .pjs-hero .pjs-timeline { max-width: none; }
+/* Projects without a genuine image get a full-width text layout, not a blank square. */
+.pjs-hero--no-media { grid-template-columns: minmax(0, 1fr); }
+.pjs-hero--no-media .pjs-text { justify-self: center; max-width: 760px; }
+.pjs-fig--image-only { grid-template-columns: minmax(0, 1fr); }
+.pjs-fig--image-only .pjs-media { grid-column: 1; }
+
 .pjs-fig figcaption { margin: 0; max-width: 460px; justify-self: center; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.6; }
 .pjs-media { display: flex; justify-content: center; align-items: center; }
-/* the outline hugs the picture at its own shape; only a missing picture shows as an empty square */
+/* The outline hugs each genuine image or video at its own shape. */
 .pjs-sq { display: inline-block; max-width: 100%; border: 1.5px solid #17160F; line-height: 0; }
 .pjs-sq img, .pjs-sq video { display: block; max-width: 100%; max-height: 78vh; width: auto; height: auto; }
-.pjs-sq.is-empty { display: block; width: min(100%, 480px); aspect-ratio: 1; background: #FBF9F2; }
+
 @media (max-width: 760px) {
   .pjs-fig { grid-template-columns: 1fr; row-gap: 20px; }
   .pjs-fig .pjs-media { order: -1; }
