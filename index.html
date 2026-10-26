@@ -497,7 +497,7 @@
   <sc-if value="{{ isProject }}">
   <main class="pj-simple" aria-label="{{ pj.title }}">
     <h1 class="pjs-title">{{ pj.title }}</h1>
-    <section class="pjs-fig pjs-hero">
+    <section class="{{ pj.heroCls }}">
       <div class="pjs-text">
         <p class="pjs-lede"><sc-for list="{{ pj.introParts }}" as="seg"><sc-if value="{{ seg.it }}"><em>{{ seg.t }}</em></sc-if><sc-if value="{{ seg.plain }}">{{ seg.t }}</sc-if></sc-for></p>
         <sc-if value="{{ pj.hasTimeline }}">
@@ -510,16 +510,18 @@
           <sc-for list="{{ pj.links }}" as="lk" hint-placeholder-count="1"><a href="{{ lk.href }}" target="_blank" rel="noopener noreferrer"><span>{{ lk.label }}</span><i aria-hidden="true">&#8599;</i></a></sc-for>
         </div>
       </div>
+      <sc-if value="{{ pj.hasLead }}">
       <div class="pjs-media">
         <div class="{{ pj.lead.boxCls }}">
           <sc-if value="{{ pj.lead.image }}"><img src="{{ pj.lead.image }}" alt=""></sc-if>
           <sc-if value="{{ pj.lead.video }}"><video src="{{ pj.lead.video }}" autoplay muted loop playsinline></video></sc-if>
         </div>
       </div>
+      </sc-if>
     </section>
     <sc-for list="{{ pj.figures }}" as="fig" hint-placeholder-count="2">
-      <figure class="pjs-fig">
-        <figcaption>{{ fig.text }}</figcaption>
+      <figure class="{{ fig.cls }}">
+        <sc-if value="{{ fig.text }}"><figcaption>{{ fig.text }}</figcaption></sc-if>
         <div class="pjs-media">
           <div class="{{ fig.boxCls }}">
             <sc-if value="{{ fig.image }}"><img src="{{ fig.image }}" alt="" loading="lazy"></sc-if>
@@ -734,7 +736,7 @@ const PLACEHOLDER = '#lab-projects';
 //   figures: [{ image: './x.jpg', text: '...' }, ...]   (leave image out for an empty square;
 //            the lab thumbnails are never used here, they have nothing to do with the projects)
 //   code, demo, writeup: links shown under the intro
-// Anything left out shows lorem ipsum for now.
+// Missing project content stays absent; never render filler text or empty media.
 const PROJECTS = [
   { cat: 'projects', title: 'thought-opsy', blurb: 'autopsy of thought: a longitudinal data-science and qualitative study of six years of journal writing, tracing how beliefs about happiness, belonging, identity and purpose evolved.', href: './autopsy-of-mind/', demo: 'https://ruth1445.github.io/portie/autopsy-of-mind/', tag: 'data science', image: './L.jpg',
     intro: "Some time ago, I realized I could barely remember what occupied my mind just five months earlier. I wanted to believe my growth was exponential, but I had no way of proving it. Fortunately, I had been documenting my thoughts on Instagram for over six years. I exported 76 months of journal entries and began examining them for changes in my beliefs, interests, and ideas of happiness and belonging. I used statistics where I could, but I am equally interested in the changes that cannot be reduced to numbers.",
@@ -1071,20 +1073,20 @@ class Component extends DCLogic {
     const pjLinks = [
       ['code', pjSrc.code], ['live demo', pjSrc.demo], ['read the write-up', pjSrc.writeup], ['view project', !pjSrc.code && !pjSrc.demo && !pjSrc.writeup ? pjSrc.href : null],
     ].filter(([, u]) => ext(u)).map(([label, href], i) => ({ label, href, cls: 'pj-btn' + (i === 0 ? ' pj-btn--main' : '') }));
-    const LOREM_INTRO = 'Lorem ipsum lorem ipsum ipsum lorem, ipsum lorem lorem ipsum ipsum lorem ipsum. Ipsum lorem lorem ipsum lorem ipsum ipsum lorem lorem.';
-    const LOREM_FIG = [
-      'Lorem ipsum ipsum lorem ipsum lorem lorem ipsum. Ipsum lorem ipsum ipsum lorem lorem ipsum lorem ipsum ipsum lorem, lorem ipsum lorem ipsum ipsum lorem ipsum. Lorem lorem ipsum ipsum lorem ipsum.',
-      'Ipsum lorem lorem ipsum ipsum lorem ipsum lorem. Lorem ipsum ipsum lorem ipsum lorem lorem ipsum ipsum lorem ipsum lorem lorem. Ipsum ipsum lorem ipsum lorem.',
-    ];
+    // Only display media that genuinely belongs to a project; don't invent extra figures.
+    const projectMedia = (pjSrc.figures || []).filter((f) => f && (f.image || f.video));
+    const projectIntro = pjSrc.intro || pjSrc.blurb || '';
     const pj = {
-      intro: pjSrc.intro || LOREM_INTRO,
+      intro: projectIntro,
       // *words between asterisks* in an intro are set in italics
-      introParts: (pjSrc.intro || LOREM_INTRO).split('*').map((t, k) => ({ t, it: k % 2 === 1, plain: k % 2 === 0 })).filter((x) => x.t),
+      introParts: projectIntro.split('*').map((t, k) => ({ t, it: k % 2 === 1, plain: k % 2 === 0 })).filter((x) => x.t),
       timeline: pjSrc.timeline || [],
-      hasTimeline: Array.isArray(pjSrc.timeline),
-      // the first picture sits beside the write-up; the rest follow as figures
-      lead: ((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq' + (f.image || f.video ? '' : ' is-empty') }))((pjSrc.figures || [])[0] || {}),
-      figures: (pjSrc.figures ? pjSrc.figures.slice(1) : [{}]).map((f, k) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq' + (f.image || f.video ? '' : ' is-empty'), text: f.text || LOREM_FIG[k % LOREM_FIG.length] })),
+      hasTimeline: Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0,
+      hasLead: projectMedia.length > 0,
+      heroCls: 'pjs-fig pjs-hero' + (projectMedia.length ? '' : ' pjs-hero--no-media'),
+      // the first real image sits beside the write-up; subsequent images follow below
+      lead: ((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq' }))(projectMedia[0] || {}),
+      figures: projectMedia.slice(1).map((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq', text: f.text || '', cls: 'pjs-fig' + (f.text ? '' : ' pjs-fig--image-only') })),
       title: pjSrc.title,
       blurb: pjSrc.blurb,
       image: pjSrc.image,
