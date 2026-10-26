@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426 300">
+  <!-- two heavy "66"-shaped opening quote marks; used as a mask on the about page quote blocks -->
+  <path id="q" d="M2 195C2 112 52 30 168 2L172 11C120 31 93 62 96 88C97 94 100 96 104 95A100 100 0 0 1 202 195A100 100 0 0 1 2 195Z"/>
+  <use href="#q" x="222"/>
+</svg>
