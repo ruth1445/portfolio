@@ -7,7 +7,7 @@
 <link rel="icon" href="../../assets/ruth-sharon-favicon.png?v=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&display=swap">
 <style>
 :root{--ivory:#FAF9F6;--ink:#17160F;--mid:rgba(23,22,15,.6);
   --ser:'Instrument Serif',Georgia,serif;--gr:'Inter Tight',Helvetica,Arial,sans-serif}
@@ -32,6 +32,20 @@ a{color:inherit;text-decoration:none}
 .bar .crumbs .logo img{display:block;width:26px;height:26px;object-fit:contain}
 .bar nav{font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#9A9384;gap:22px}
 @media (max-width:700px){.bar .crumbs,.bar nav{font-size:9.5px;letter-spacing:.16em}.bar .crumbs{gap:10px}.bar nav{gap:14px}.bar .crumbs .sep{width:14px}}
+/* the painted bar: same as the main site, floats off the page once you scroll */
+.bar{height:72px;padding:0 22px;border:1px solid transparent;-webkit-backdrop-filter:none;backdrop-filter:none;
+  background:#6B5A45 url("../../assets/header-venus.jpg") center 33%/cover no-repeat;
+  transition:left .5s cubic-bezier(.2,.9,.2,1),right .5s cubic-bezier(.2,.9,.2,1),top .5s cubic-bezier(.2,.9,.2,1),border-color .35s ease}
+.bar::before{content:"";position:absolute;inset:0;background:rgba(23,22,15,.38);pointer-events:none}
+.bar>*{position:relative}
+.bar.is-floating{left:14px;right:14px;top:12px;border-color:#17160F}
+.bar .crumbs,.bar nav{color:rgba(250,249,246,.78)}
+.bar .crumbs a:hover,.bar nav a:hover,.bar .crumbs [aria-current="page"]{color:#FAF9F6}
+.bar .crumbs [aria-current="page"]{font-weight:700}
+.bar .crumbs .sep{background:#FAF9F6;opacity:.6}
+.bar .crumbs .logo img{width:34px;height:34px}
+@media (max-width:700px){.bar{height:60px;padding:0 14px}.bar.is-floating{left:8px;right:8px;top:8px}.bar .crumbs .logo img{width:28px;height:28px}}
+@media (max-width:520px){.bar nav{display:none}.bar .crumbs{white-space:nowrap}}
 main{max-width:1240px;margin:0 auto;padding:clamp(110px,12vw,170px) clamp(22px,5vw,72px) clamp(90px,10vw,150px)}
 .q{margin:0 0 clamp(64px,8vw,120px);font-family:var(--ser);font-weight:400;color:#111;text-wrap:pretty}
 .q p{margin:0}
@@ -73,6 +87,12 @@ document.addEventListener('click', function (e) {
   var norm = function (p) { return p.replace(/index\.html$/, ''); };
   if (from.origin === to.origin && norm(from.pathname) === norm(to.pathname) && history.length > 1) { e.preventDefault(); history.back(); }
 });
+</script>
+<script>
+// the bar floats off the page once you scroll
+(function () { var bar = document.querySelector('.bar'); if (!bar) return;
+  var f = function () { bar.classList.toggle('is-floating', (window.scrollY || 0) > 4); };
+  window.addEventListener('scroll', f, { passive: true }); f(); })();
 </script>
 </body>
 </html>
