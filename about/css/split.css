@@ -14,3 +14,12 @@
 .split .more:hover span:not(.t){transform:translate(2px,-2px)}
 .split .more:hover .t{text-decoration-thickness:2px}
 @media (max-width:760px){.split{grid-template-columns:1fr}}
+
+/* a big pair of opening quote marks sitting in each block, a shade darker than the block,
+   their tails cropped off by the block's top edge (never spilling into the block above) */
+.split .l,.split .r{position:relative;overflow:hidden;isolation:isolate}
+.split .l::before,.split .r::before{content:"";position:absolute;z-index:-1;pointer-events:none;
+  top:0;left:clamp(14px,2.4vw,40px);width:min(62%,520px);aspect-ratio:426/300;transform:translateY(-11%);
+  -webkit-mask:url("../img/quote-marks.svg") no-repeat 0 0/100% 100%;mask:url("../img/quote-marks.svg") no-repeat 0 0/100% 100%}
+.split .l::before{background:#E4DCC9}
+.split .r::before{background:#D6C400}
