@@ -69,23 +69,32 @@
     color: #23201A;
     font-weight: 600;
   }
-  /* the thin bar on every page except home (same as the about and quotes pages) */
+  /* the bar on every page except home: a strip of the painting with light type on it.
+     Once the page scrolls it pulls in from the sides and top and gains a thin black outline,
+     so it floats off the page (see the scroll listener at the bottom). */
   .site-bar {
-    position: fixed; left: 0; right: 0; top: 0; z-index: 50; height: 38px;
-    display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 18px;
-    background: rgba(250, 249, 246, .9); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-    border-bottom: 1px solid rgba(23, 22, 15, .16);
+    position: fixed; left: 0; right: 0; top: 0; z-index: 50; height: 72px;
+    display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 22px;
+    background: #6B5A45 url("./assets/header-venus.jpg") center 33% / cover no-repeat;
+    border: 1px solid transparent;
+    transition: left .5s cubic-bezier(.2,.9,.2,1), right .5s cubic-bezier(.2,.9,.2,1), top .5s cubic-bezier(.2,.9,.2,1), border-color .35s ease;
   }
-  .site-bar-space { height: 38px; flex: none; }
-  .site-bar .site-crumbs { min-height: 0; }
+  .site-bar::before { content: ""; position: absolute; inset: 0; background: rgba(23, 22, 15, .38); pointer-events: none; }
+  .site-bar > * { position: relative; }
+  .site-bar.is-floating { left: 14px; right: 14px; top: 12px; border-color: #17160F; }
+  .site-bar-space { height: 72px; flex: none; }
+  .site-bar .site-crumbs { min-height: 0; color: rgba(250, 249, 246, .78); }
+  .site-bar .site-crumbs a:hover, .site-bar .site-crumbs [aria-current="page"] { color: #FAF9F6; }
+  .site-bar .site-crumbs [aria-current="page"] { font-weight: 700; }
+  .site-bar .site-crumb-sep { background: #FAF9F6; opacity: .6; }
   .site-bar-logo { display: block; line-height: 0; margin-right: 4px; }
-  .site-bar-logo img { display: block; width: 26px; height: 26px; object-fit: contain; }
+  .site-bar-logo img { display: block; width: 34px; height: 34px; object-fit: contain; }
   .site-bar-links {
     display: flex; gap: 22px; font-family: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 10.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; line-height: 1;
   }
-  .site-bar-links a { color: #9A9384; transition: color .2s ease; }
-  .site-bar-links a:hover { color: #23201A; }
+  .site-bar-links a { color: rgba(250, 249, 246, .78); transition: color .2s ease; }
+  .site-bar-links a:hover { color: #FAF9F6; }
   /* separator: a short hairline instead of a ">" */
   .site-crumb-sep {
     display: block;
@@ -106,6 +115,16 @@
     .site-crumbs { font-size: 9.5px; gap: 10px; letter-spacing: .16em; }
     .site-crumb-sep { width: 14px; }
     .site-bar-links { font-size: 9.5px; letter-spacing: .16em; gap: 14px; }
+    .site-bar { height: 60px; padding: 0 14px; }
+    .site-bar-space { height: 60px; }
+    .site-bar.is-floating { left: 8px; right: 8px; top: 8px; }
+    .site-bar-logo img { width: 28px; height: 28px; }
+  }
+  /* phones: the breadcrumb stays on one line; the outside links step aside to make room */
+  @media (max-width: 520px) {
+    .site-bar-links { display: none; }
+    .site-bar .site-crumbs { flex-wrap: nowrap; min-width: 0; white-space: nowrap; }
+    .site-bar .site-crumbs [aria-current="page"] { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   }
 
   /* Laboratory folder view */
@@ -834,6 +853,7 @@ class Component extends DCLogic {
     document.title = 'Ruth Sharon';
     this.setState({ page, hover: null, project: page.startsWith('p/') ? page.slice(2) : this.state.project });
     window.scrollTo(0, 0);
+    document.querySelector('.site-bar')?.classList.remove('is-floating');
   }
 
   renderVals() {
@@ -1167,6 +1187,16 @@ window.addEventListener('popstate', (e) => {
   portfolio.show(up);
 });
 
+// the bar floats once anything on the page has scrolled
+const floatBar = (ev) => {
+  const bar = document.querySelector('.site-bar');
+  if (!bar) return;
+  const t = ev && ev.target;
+  const y = Math.max(window.scrollY || 0, t && t.nodeType === 1 ? t.scrollTop : 0);
+  bar.classList.toggle('is-floating', y > 4);
+};
+document.addEventListener('scroll', floatBar, { capture: true, passive: true });
+window.addEventListener('popstate', () => requestAnimationFrame(() => floatBar()));
 // in-site #links without their own click handler go through the same path
 document.addEventListener('click', (ev) => {
   if (ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
