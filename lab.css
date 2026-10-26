@@ -40,6 +40,11 @@ body[data-page="lab"] .lx-preview { gap: 14px; }
 body[data-page="lab"] .lx-sq { aspect-ratio: 1; border: 1.5px solid #17160F; background: #FBF9F2; overflow: hidden; }
 body[data-page="lab"] .lx-page .lx-preview img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; border-radius: 0; display: block; }
 body[data-page="lab"] .lx-cap { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: 17px; line-height: 1.4; color: #17160F; }
+body[data-page="lab"] .lx-page .lx-writing-intro {
+  max-width: 52ch; margin: 16px 0 0; font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px; line-height: 1.55; color: #403B33;
+}
+
 @media (max-width: 700px) {
   body[data-page="lab"] .lx-page { padding: 36px 20px 72px; }
   body[data-page="lab"] .lx-page .lx-thumb { border-radius: 0; border: 1.5px solid #17160F; width: 52px; height: 52px; }
