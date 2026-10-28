@@ -537,7 +537,7 @@
         <div class="pjs-report-heading">
           <h2 id="pjs-report-heading">Research Report:</h2>
         </div>
-        <iframe class="pjs-report-frame" src="{{ pj.zineSrc }}" title="Page-turning monosemanticity research report" loading="lazy"></iframe>
+        <iframe class="pjs-report-frame" src="{{ pj.zineSrc }}" title="{{ pj.zineTitle }}" loading="lazy"></iframe>
       </section>
     </sc-if>
   </main>
@@ -747,8 +747,8 @@ const PLACEHOLDER = '#lab-projects';
 //   code, demo, writeup: links shown under the intro
 // Missing project content stays absent; never render filler text or empty media.
 const PROJECTS = [
-  { cat: 'projects', title: 'thought-opsy', blurb: 'autopsy of thought: a longitudinal data-science and qualitative study of six years of journal writing, tracing how beliefs about happiness, belonging, identity and purpose evolved.', href: './autopsy-of-mind/', demo: 'https://ruth1445.github.io/portfolio/autopsy-of-mind/', tag: 'data science', image: './L.jpg',
-    intro: "Some time ago, I realized I could barely remember what occupied my mind just five months earlier. I wanted to believe my growth was exponential, but I had no way of proving it. Fortunately, I had been documenting my thoughts on Instagram for over six years. I exported 76 months of journal entries and began examining them for changes in my beliefs, interests, and ideas of happiness and belonging. I used statistics where I could, but I am equally interested in the changes that cannot be reduced to numbers.",
+  { cat: 'projects', title: 'thoughtopsy', slug: 'thought-opsy', blurb: 'a longitudinal study of six years of journal writing, separating measured changes in the record from provisional interpretations of personal growth.', href: './autopsy-of-mind/', demo: 'https://ruth1445.github.io/portfolio/autopsy-of-mind/', tag: 'data science', image: './L.jpg', zine: true, zineSrc: './thoughtopsy-report/', zineTitle: 'Thoughtopsy research report', reportPdf: './thoughtopsy-report/thoughtopsy_research.pdf',
+    intro: "Some time ago, I realized I could barely remember what occupied my mind just five months earlier. I wanted to believe my growth was exponential, but I had no way of proving it. Fortunately, I had been documenting my thoughts on Instagram for over six years. I exported 76 months of journal entries and began examining them for changes in my beliefs, interests, and ideas of happiness and belonging. I used statistics where I could, but I am equally interested in the changes that cannot be reduced to numbers. The project now also includes an evidence-grounded private reasoning agent and a formal research report. One distinction runs through all of it: a change in the way I write is not automatically a change in who I am.",
     timeline: [
       "Oct 4–7, 2026 — I exported my Instagram comments, then realized the post captions were missing. I exported those separately too, since many journal entries began in the caption and continued in the comments.",
       "Oct 8 — I built a chronological, source-preserving archive: 15,534 normalized events, including 14,816 confirmed journal events. I kept the original text separate from any cleaning or corrections.",
@@ -757,10 +757,12 @@ const PROJECTS = [
       "Oct 11 — I discovered that Meta's export did not give me a reliable way to match historical comments to their parent posts. Rather than attaching everything to the nearest caption, I kept uncertain matches separate.",
       "Oct 12–13 — I examined 76 months of writing frequency, entry length, timing and language before attempting to explain any psychological change. Between 2023 and 2024, median event length rose from 12 to 20 words while median events per burst fell from four to two.",
       "Oct 12–13 — I added semantic representations, sentiment measures, candidate change points and growth-related proxy tests. A change in writing habits is not necessarily a change in the person doing the writing, so I treated those as different questions.",
-      "Oct 14–19 — I started identifying beliefs and possible changes in them, including 44 candidate beliefs and 18 provisional transformations. I also reconciled quoted evidence against original captions and comments rather than relying on snippets alone.",
+      "Oct 14–19 — I proposed 44 candidate beliefs and 18 possible transformations, examining recurring tensions in relationships, work, faith, happiness and identity. These interpretations are exploratory; original surrounding context has not yet been fully verified.",
       "Oct 19 — I wrote a protocol for finding predictions about my future in the journal, distinguishing long-term expectations from immediate plans and everyday future-tense remarks.",
       "After Oct 19 — Candidate extraction produced 2,812 unreviewed prediction spans from 2,546 journal events. These are possible predictions to check, not 2,812 things I demonstrably believed or correctly predicted.",
-      "Later exploratory stages — I examined recurring traits, apparent growth patterns, contradictions and five possible explanations for them. I then added independent validation checks. None of these models by itself proves that I grew."
+      "Oct 20–21 — I compared five competing explanatory models and audited 52 claims: 30 were code-verified, 10 remained supported only by secondary analysis, and 12 still required primary-source review. The results did not establish a single model of growth.",
+      "Oct 28 — I began turning the longitudinal study into Thoughtopsy, a private reasoning agent that retrieves past writing, proposes counterexamples and explains uncertainty instead of pretending to predict my future.",
+      "Oct 28 — I drafted a LaTeX research paper and five reproducible figures from the existing Steps 1–11 results. The paper distinguishes measured changes in journaling from provisional claims about belief change and leaves forecast accuracy unassessed."
     ] },
   { cat: 'projects', title: 'eta estimator', blurb: 'quantified transit prediction error across routes, time periods, and weather to surface 6+ minute failure cases.', href: PLACEHOLDER, tag: 'data science', image: './C.jpg',
     code: 'https://github.com/ruth1445/eta-optimization',
@@ -1117,7 +1119,8 @@ class Component extends DCLogic {
       note: pjSrc.note || '',
       hasNote: Boolean(pjSrc.note),
       hasZine: Boolean(pjSrc.zine),
-      zineSrc: './report-zine/',
+      zineSrc: pjSrc.zineSrc || './report-zine/',
+      zineTitle: pjSrc.zineTitle || 'Page-turning monosemanticity research report',
       meta: [['role', pjSrc.role], ['when', pjSrc.when], ['stack', pjSrc.stack]].filter(([, v]) => v).map(([k, v]) => ({ k, v })),
       sections: pjSrc.sections || [],
       hasMeta: !!(pjSrc.role || pjSrc.when || pjSrc.stack),
