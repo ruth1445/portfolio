@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Towards Monosemanticity | research report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink: #17160f; --muted: #716b61; --paper: #fffefa; --ground: #f3f0e9; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: var(--ground); color: var(--ink); font-family: "Inter Tight", Helvetica, sans-serif; }
+    .zine { display: flex; flex-direction: column; min-height: 100vh; padding: 20px 24px 16px; gap: 14px; }
+    .top, .bottom { width: min(100%, 960px); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+    .eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .16em; }
+    .top a, .bottom a { font-family: "Instrument Serif", Georgia, serif; font-size: 17px; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+    .reading-area { flex: 1; min-height: 350px; display: flex; align-items: center; justify-content: center; position: relative; padding: 4px 52px; }
+    .paper-wrap { position: relative; max-width: 100%; perspective: 1400px; filter: drop-shadow(0 16px 19px rgba(40, 30, 20, .15)); }
+    #page { display: block; max-width: 100%; height: auto; background: var(--paper); border: 1px solid #d5cfc2; }
+    .turn-sheet { position: absolute; inset: 0; background-color: var(--paper); background-position: center; background-size: 100% 100%; border: 1px solid #c9c2b7; pointer-events: none; backface-visibility: hidden; }
+    .turn-sheet.next { transform-origin: left center; animation: turn-next .54s cubic-bezier(.5,.07,.2,1) both; }
+    .turn-sheet.prev { transform-origin: right center; animation: turn-prev .54s cubic-bezier(.5,.07,.2,1) both; }
+    @keyframes turn-next { 0% { transform: rotateY(0); opacity: 1; } 80% { opacity: .85; } 100% { transform: rotateY(-110deg); opacity: 0; } }
+    @keyframes turn-prev { 0% { transform: rotateY(0); opacity: 1; } 80% { opacity: .85; } 100% { transform: rotateY(110deg); opacity: 0; } }
+    .edge { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 54px; display: flex; align-items: center; justify-content: center; background: none; border: none; color: var(--ink); font-size: 30px; font-family: "Instrument Serif", Georgia, serif; cursor: pointer; transition: transform .2s ease; }
+    .edge:hover:not(:disabled) { transform: translateY(-50%) scale(1.14); }
+    .edge:disabled { opacity: .23; cursor: default; }
+    #prev { left: 0; } #next { right: 0; }
+    .bottom { border-top: 1px solid #d0c9bd; padding-top: 10px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+    #count { font-size: 13px; color: var(--ink); letter-spacing: .13em; font-variant-numeric: tabular-nums; }
+    #status { font-size: 12px; color: var(--muted); min-height: 1em; }
+    .help { margin: 0; white-space: nowrap; }
+    .error { padding: 20px; max-width: 440px; text-align: center; color: var(--muted); line-height: 1.65; }
+    .error a { color: var(--ink); }
+    @media (max-width: 620px) {
+      .zine { padding: 14px 10px; gap: 8px; }
+      .reading-area { padding: 2px 34px; min-height: 220px; }
+      .edge { width: 32px; font-size: 26px; }
+      .top a { font-size: 16px; }
+      .help { display: none; }
+      .eyebrow { font-size: 9px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .turn-sheet.next, .turn-sheet.prev { animation-duration: .01ms; }
+      .edge { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="zine">
+    <header class="top">
+      <span class="eyebrow">research notes / monosemanticity</span>
+      <a id="openPdf" href="https://raw.githubusercontent.com/ruth1445/interpretability/main/Ruth_Monosemanticity.pdf" target="_blank" rel="noopener noreferrer">full PDF ↗</a>
+    </header>
+    <div class="reading-area" id="area">
+      <button id="prev" class="edge" aria-label="Previous page" disabled>←</button>
+      <div id="paper" class="paper-wrap">
+        <canvas id="page" aria-label="Current page of the report"></canvas>
+      </div>
+      <button id="next" class="edge" aria-label="Next page" disabled>→</button>
+    </div>
+    <footer class="bottom">
+      <span id="status" role="status" aria-live="polite">Opening report…</span>
+      <strong id="count" aria-label="Page number">— / —</strong>
+      <p class="help">Use the arrows or ← → keys to turn pages</p>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script>
+    (() => {
+      const URL = 'https://raw.githubusercontent.com/ruth1445/interpretability/main/Ruth_Monosemanticity.pdf';
+      const byId = id => document.getElementById(id);
+      const canvas = byId('page'), paper = byId('paper'), area = byId('area');
+      const prev = byId('prev'), next = byId('next'), count = byId('count'), status = byId('status');
+      const state = { doc: null, page: 1, busy: false, task: null };
+      function controls() {
+        prev.disabled = !state.doc || state.busy || state.page <= 1;
+        next.disabled = !state.doc || state.busy || state.page >= state.doc.numPages;
+        count.textContent = state.doc ? String(state.page).padStart(2,'0') + ' / ' + String(state.doc.numPages).padStart(2,'0') : '— / —';
+      }
+      function failure(message) {
+        status.textContent = 'Viewer unavailable';
+        paper.innerHTML = '<div class="error">' + message + ' <a href="' + URL + '" target="_blank" rel="noopener noreferrer">Open the report PDF instead.</a></div>';
+        prev.disabled = next.disabled = true;
+      }
+      async function render(number) {
+        const page = await state.doc.getPage(number);
+        const viewport = page.getViewport({scale: 1});
+        const maxWidth = Math.max(160, Math.min(620, area.clientWidth - (innerWidth < 620 ? 80 : 125)));
+        const scale = maxWidth / viewport.width;
+        const pixelRatio = Math.min(2, window.devicePixelRatio || 1);
+        const target = page.getViewport({scale: scale * pixelRatio});
+        const off = document.createElement('canvas');
+        off.width = Math.round(target.width);
+        off.height = Math.round(target.height);
+        await page.render({canvasContext: off.getContext('2d'), viewport: target}).promise;
+        canvas.width = off.width;
+        canvas.height = off.height;
+        canvas.style.width = Math.round(target.width / pixelRatio) + 'px';
+        canvas.style.height = Math.round(target.height / pixelRatio) + 'px';
+        canvas.getContext('2d').drawImage(off, 0, 0);
+      }
+      async function go(pageNumber) {
+        if (!state.doc || state.busy || pageNumber < 1 || pageNumber > state.doc.numPages || pageNumber === state.page) return;
+        state.busy = true; controls(); status.textContent = 'Turning page…';
+        const sheet = document.createElement('div');
+        sheet.className = 'turn-sheet ' + (pageNumber > state.page ? 'next' : 'prev');
+        try {
+          sheet.style.backgroundImage = 'url("' + canvas.toDataURL('image/png') + '")';
+          paper.appendChild(sheet);
+          await render(pageNumber);
+          state.page = pageNumber;
+          status.textContent = '';
+        } catch (err) {
+          status.textContent = 'Could not turn page';
+        } finally {
+          setTimeout(() => sheet.remove(), 550);
+          state.busy = false;
+          controls();
+        }
+      }
+      prev.addEventListener('click', () => go(state.page - 1));
+      next.addEventListener('click', () => go(state.page + 1));
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(state.page + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(state.page - 1); }
+      });
+      let resizeTimeout = null;
+      addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => { if (state.doc && !state.busy) render(state.page).catch(() => {}); }, 180);
+      });
+      async function init() {
+        if (!window.pdfjsLib) { failure('The document reader could not load.'); return; }
+        try {
+          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+          const task = pdfjsLib.getDocument({url: URL, withCredentials: false});
+          state.doc = await task.promise;
+          await render(1);
+          status.textContent = '';
+          controls();
+        } catch (e) {
+          failure('The pages could not be loaded here.');
+        }
+      }
+      init();
+    })();
+  </script>
+</body>
+</html>
