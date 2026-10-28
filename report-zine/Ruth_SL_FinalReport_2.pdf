@@ -1,0 +1,519 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 4 0 R 5 0 R 6 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 11 0 R >> >> /Contents 7 0 R >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 11 0 R >> >> /Contents 8 0 R >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 11 0 R >> >> /Contents 9 0 R >>
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 11 0 R >> >> /Contents 10 0 R >>
+endobj
+7 0 obj
+<< /Length 3783 >>
+stream
+BT
+/F1 8.4 Tf
+11.4 TL
+53 750 Td
+(      Towards Monosemanticity: Decomposing Language Model) Tj
+T*
+(          Representations via Sparse Dictionary Learning) Tj
+T*
+(                                         Ruth Sharon Raju) Tj
+T*
+() Tj
+T*
+(                       16:954:534 Statistical Learning for Data Science) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(1     Introduction) Tj
+T*
+(1.1    Motivation) Tj
+T*
+(The future of AI safety depends on the decisions we make today. These decisions require us to) Tj
+T*
+(study the large language models of today in great detail. A good starting point is learning how) Tj
+T*
+(they internally represent meaning. The field of mechanistic interpretability research offers us this) Tj
+T*
+(opportunity, allowing us to break down neural networks into smaller components that are better) Tj
+T*
+(understood than the whole. However, their internal representations are difficult to interpret because) Tj
+T*
+(individual neurons are often polysemantic, responding to multiple unrelated concepts. This makes) Tj
+T*
+(neuron-level analysis an unreliable unit for understanding model behavior. In this project, I explore the) Tj
+T*
+(hypothesis that language models instead encode meaning in higher-dimensional directions of activation) Tj
+T*
+(space. By applying sparse dictionary learning to model activations, I aim to recover monosemantic) Tj
+T*
+(features that correspond to coherent concepts. This ensures a more interpretable inner view of language) Tj
+T*
+(models and it can further assist in debugging, alignment, and scientific insight.) Tj
+T*
+() Tj
+T*
+(1.2    Problem Statement) Tj
+T*
+(Let) Tj
+T*
+(                                              h\(l\) \(x\) in Rd                                          \(1\)) Tj
+T*
+(denote the activation vector at layer l for input token x. Given a corpus, we collect activations) Tj
+T*
+() Tj
+T*
+(                                        H = {hi }N) Tj
+T*
+(                                                 i=1 ,   hi in Rd .                                   \(2\)) Tj
+T*
+() Tj
+T*
+(    Since individual neurons \(coordinates of h\(l\) \(x\)\) in large language models are often polysemantic,) Tj
+T*
+(the problem addressed is finding a representation of the activation space that is more interpretable) Tj
+T*
+(than individual neurons. The goal is to obtain a higher-dimensional representation with clear semantic) Tj
+T*
+(interpretation.) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(2     Foundations of Interpretability) Tj
+T*
+(Recent work on interpretability was realized through a mechanistic perspective, where neural networks) Tj
+T*
+(are reverse-engineered by identifying the internal computations and structures that affect model be-) Tj
+T*
+(havior. [1] A central challenge motivating mechanistic interpretability is the problem of superposition) Tj
+T*
+([2]. Neural networks have limited representational capacity relative to the number of concepts they) Tj
+T*
+(must encode, models often store multiple features in overlapping directions of activation space, leading) Tj
+T*
+(to polysemanticity. Early progress in resolving superposition came from computational structures like) Tj
+T*
+(induction heads, in-context learning mechanisms, and transformer circuits. [3] However, this analysis) Tj
+T*
+(did not by itself scale to the full diversity of features. Further analyses then revealed how compo-) Tj
+T*
+(sition and superposition arise naturally during training and why disentangling features is difficult in) Tj
+T*
+(high-dimensional systems.) Tj
+T*
+(    The long-term goal is to also develop scalable methods for understanding models as they grow larger) Tj
+T*
+(and more capable. [4] Sparse dictionary learning through sparse autoencoders is a great approach in) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(                                                    1) Tj
+T*
+ET
+endstream
+endobj
+8 0 obj
+<< /Length 3789 >>
+stream
+BT
+/F1 8.4 Tf
+11.4 TL
+53 750 Td
+(this direction. By learning a set of sparse features that reconstruct model activations, separate latent) Tj
+T*
+(directions are allocated to distinct concepts.) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(3     Models, Methods, and Algorithms) Tj
+T*
+(3.1    Base Model and Corpus) Tj
+T*
+(The work starts by analyzing the internal representations of a pretrained GPT-2 model. Let f denote) Tj
+T*
+(the transformer and let h\(l\) \(x\) in Rd denote the hidden activation vector associated with input token) Tj
+T*
+(x at transformer block l. Throughout, d = 512.) Tj
+T*
+(   For the dataset, I curated a physics-heavy corpus in order to suggest a theme to the model to make) Tj
+T*
+(up for the inability to implement this experiment at the original scale. The corpus consists of 82,254) Tj
+T*
+(non empty lines or 758,635 characters. Each line is tokenized using the GPT-2 tokenizer with padding) Tj
+T*
+(and truncation enabled.) Tj
+T*
+() Tj
+T*
+(3.2    Activation Extraction via Forward Hooks) Tj
+T*
+(The goal is to learn a feature dictionary over the activation space of a specific internal component. In) Tj
+T*
+(the implementation, activations are extracted from the MLP output projection of a chosen transformer) Tj
+T*
+(block, i.e., the module model.h[l].mlp.c proj. Concretely, for a token sequence with length L, the) Tj
+T*
+(hooked module produces a tensor of activations) Tj
+T*
+() Tj
+T*
+(                                                A in RBxLxd ,                                         \(3\)) Tj
+T*
+() Tj
+T*
+(where B is the batch size. Each valid token position is treated as one data point for dictionary learning) Tj
+T*
+(by flattening across batch and sequence dimensions.) Tj
+T*
+(    Since batches are padded, padding positions are filtered out using the attention mask. Let m in) Tj
+T*
+({0, 1}BxL be the attention mask; the final activation dataset is) Tj
+T*
+() Tj
+T*
+(                                          H = {ai }N) Tj
+T*
+(                                                   i=1 ,   ai in Rd ,                                 \(4\)) Tj
+T*
+() Tj
+T*
+(where N counts only positions with m = 1. To control computational cost, we cap the number of) Tj
+T*
+(collected token activations at a fixed budget N <= T \(with T = 400,000 in our experiments\).) Tj
+T*
+() Tj
+T*
+(3.3    Token-Context Alignment for Feature Interpretation) Tj
+T*
+(For each retained activation vector ai , \(i\) the decoded token string and \(ii\) a short decoded context) Tj
+T*
+(window around that token are stored. Specifically, for a token at position t, I decoded a context) Tj
+T*
+(window of size +/-5 tokens:) Tj
+T*
+(                                   context\(t\) = decode\(xt-5:t+5 \).                                 \(5\)) Tj
+T*
+(This yields a list of records {\(tokeni , contexti \)}N                                       N) Tj
+T*
+(                                                    i=1 that is indexed identically to {ai }i=1 .) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(3.4    Sparse Autoencoder for Dictionary Learning) Tj
+T*
+(The sparse autoencoder maps an activation a in Rd to a latent feature vector z in Rk :) Tj
+T*
+() Tj
+T*
+(                                              z = ?\(We a + be \),                                     \(6\)) Tj
+T*
+() Tj
+T*
+(where We in Rkxd , be in Rk , and ? is a nonlinearity enforcing non-negativity \(ReLU in our implemen-) Tj
+T*
+(tation\). The decoder reconstructs the activation as) Tj
+T*
+() Tj
+T*
+(                                               ? = Wd z + bd ,                                      \(7\)) Tj
+T*
+() Tj
+T*
+(with Wd in Rdxk and bd in Rd . A latent space with k = 4096, corresponding to an 8x expansion) Tj
+T*
+(relative to d = 512, is used.) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(                                                      2) Tj
+T*
+ET
+endstream
+endobj
+9 0 obj
+<< /Length 3528 >>
+stream
+BT
+/F1 8.4 Tf
+11.4 TL
+53 750 Td
+(3.5    Training Objective and Optimization) Tj
+T*
+(The SAE is trained to minimize reconstruction error subject to sparsity in the latent code. For each) Tj
+T*
+(activation vector ai , the loss is) Tj
+T*
+(                                   L\(ai \) = ||ai - ?i ||22 + lambda||zi ||1 ,                            \(8\)) Tj
+T*
+(where lambda > 0 controls the sparsity-fidelity trade-off. Optimization is performed using mini-batch) Tj
+T*
+(gradient descent over the activation dataset H.) Tj
+T*
+() Tj
+T*
+(3.6    Ranking Tokens for a Learned Feature) Tj
+T*
+(After training, learned features are interpreted by identifying the tokens that most strongly activate a) Tj
+T*
+(given feature. Let zi,j denote the activation of feature j on token i. For each feature j, we rank tokens) Tj
+T*
+(by zi,j and inspect the top-K items:) Tj
+T*
+(                                                           K) Tj
+T*
+(                                     TopK\(j\) = arg        max         zi,j .                          \(9\)) Tj
+T*
+(                                                       iin{1,...,N }) Tj
+T*
+() Tj
+T*
+(The decoded token and its associated context are recorded for each selected index, enabling qualitative) Tj
+T*
+(assessment of whether feature j corresponds to a coherent semantic pattern.) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(4     Results and Interpretation) Tj
+T*
+() Tj
+T*
+( Feature ID      Top-Activating Tokens                                          Interpreted Concept) Tj
+T*
+(       8         black hole, event horizon, singularity, collapse               Black hole physics) Tj
+T*
+(      17         integral, derivative, matrix, eigenvalue                       Math notation) Tj
+T*
+(      42         energy, entropy, thermodynamic, system                         Physical systems) Tj
+T*
+(     109         if, then, thus, therefore                                      Logical structure) Tj
+T*
+(     256         quantum, wavefunction                                          Quantum mechanics) Tj
+T*
+() Tj
+T*
+(        Table 1: Table 4.1 Interpretation of features based on top-activating tokens) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(   Table 4.1 shows that several learned latent features correspond to coherent and domain-specific) Tj
+T*
+(concepts. The top-activating tokens for each feature exhibit clear semantic alignment which is evidence) Tj
+T*
+(that the sparse autoencoder has identified meaningful directions in the activation space.) Tj
+T*
+() Tj
+T*
+(           Feature ID      Activation Density       Mean Activation            Max Activation) Tj
+T*
+(                8                0.21%                   0.205                     1.80) Tj
+T*
+(                17               0.34%                   0.182                     1.62) Tj
+T*
+(                42               0.18%                   0.224                     1.91) Tj
+T*
+(               109               0.41%                   0.167                     1.48) Tj
+T*
+(               256               0.27%                   0.198                     1.73) Tj
+T*
+() Tj
+T*
+(                  Table 2: Table 4.2 Summary statistics for selected features) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(    Table 4.2 contains the activation statistics for the same set of features. Low activation densities) Tj
+T*
+(across features indicate sparse usage, while relatively high maximum activation values suggest strong) Tj
+T*
+(selectivity.) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(                                                   3) Tj
+T*
+ET
+endstream
+endobj
+10 0 obj
+<< /Length 4384 >>
+stream
+BT
+/F1 8.4 Tf
+11.4 TL
+53 750 Td
+(   5     Advantages and Limitations) Tj
+T*
+(   5.1    Advantages) Tj
+T*
+(   Large language models are trained almost entirely through text, and their internal representations are) Tj
+T*
+(   thus shaped primarily by textual regularities and abstractions. Feature-based interpretability methods) Tj
+T*
+(   that operate directly on token-level activations align well with this mode of learning.) Tj
+T*
+(       GPT-2 was used as the base model as it offered activation extraction without excess computa-) Tj
+T*
+(   tional cost, and despite its smaller scale, allowed for the scaling down of the implementation without) Tj
+T*
+(   inconvenience.) Tj
+T*
+() Tj
+T*
+(   5.2    Limitations) Tj
+T*
+(   A fundamental limitation of monosemanticity is that the presence of interpretable features does not) Tj
+T*
+(   guarantee reliable insight into a model's internal objectives. Moreover, monosemantic representations) Tj
+T*
+(   are learned with respect to observed activations and training data distributions. Features that appear) Tj
+T*
+(   benign or coherent under typical inputs may behave differently under distributional shift or adversarial) Tj
+T*
+(   prompting. Additionally, the assumption that internal representations can be cleanly decomposed into) Tj
+T*
+(   sparse, human-aligned features may not hold uniformly across all layers or models. [5]) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(   6     Conclusion) Tj
+T*
+(   This work explores sparse autoencoder-based dictionary learning as a tool formechanistic interpretabil-) Tj
+T*
+(   ity in transformer language models. By applying this method to GPT-2 activations, it is possible to) Tj
+T*
+(   recover interpretable, sparse features that correspond to coherent semantic concepts.) Tj
+T*
+(       These findings support the broader view that language models encode meaning in distributed) Tj
+T*
+(   activation patterns rather than individual neurons. While the present experiments are limited in) Tj
+T*
+(   scale, they reproduce key aspects of prior work. Future work could extend this approach to multiple) Tj
+T*
+(   layers, larger datasets, cross-domain corpora,and even automated methods for feature labeling and) Tj
+T*
+(   comparison.) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(   References) Tj
+T*
+(   [1] Trenton Bricken, Adly Templeton, Joshua Batson, Brian Chen, Adam Jermyn, Tom Conerly,) Tj
+T*
+(       Nick Turner, Cem Anil, Carson Denison, Amanda Askell, Robert Lasenby, Yifan Wu, Shauna) Tj
+T*
+(       Kravec, Nicholas Schiefer, Tim Maxwell, Nicholas Joseph, Zac Hatfield-Dodds, Alex Tamkin, Ka-) Tj
+T*
+(       rina Nguyen, Brayden McLean, Josiah E Burke, Tristan Hume, Shan Carter, Tom Henighan, and) Tj
+T*
+(       Christopher Olah. Towards monosemanticity: Decomposing language models with dictionary learn-) Tj
+T*
+(       ing. Transformer Circuits Thread, 2023. https://transformer-circuits.pub/2023/monosemantic-) Tj
+T*
+(       features/index.html.) Tj
+T*
+(   [2] Nelson Elhage, Tristan Hume, Catherine Olsson, Nicholas Schiefer, Tom Henighan, Shauna) Tj
+T*
+(       Kravec, Zac Hatfield-Dodds, Robert Lasenby, Dawn Drain, Carol Chen, Roger Grosse,) Tj
+T*
+(       Sam McCandlish, Jared Kaplan, Dario Amodei, Martin Wattenberg, and Christopher Olah.) Tj
+T*
+(       Toy models of superposition.      Transformer Circuits Thread, 2022. https://transformer-) Tj
+T*
+(       circuits.pub/2022/toym odel/index.html.) Tj
+T*
+([3] Catherine Olsson, Nelson Elhage, Neel Nanda, Nicholas Joseph, Nova DasSarma, Tom Henighan,) Tj
+T*
+(    Ben Mann, Amanda Askell, Yuntao Bai, Anna Chen, Tom Conerly, Dawn Drain, Deep Ganguli, Zac) Tj
+T*
+(    Hatfield-Dodds, Danny Hernandez, Scott Johnston, Andy Jones, Jackson Kernion, Liane Lovitt, Kamal) Tj
+T*
+(    Ndousse, Dario Amodei, Tom Brown, Jack Clark, Jared Kaplan, Sam McCandlish, and Chris Olah.) Tj
+T*
+(    In-context learning and induction heads. Transformer Circuits Thread, 2022. https://transformer-) Tj
+T*
+(    circuits.pub/2022/in-context-learning-and-induction-heads/index.html.) Tj
+T*
+([4] Yu Zhang, Peter Ti?o, Ale? Leonardis, and Ke Tang. A survey on neural network interpretability.) Tj
+T*
+(    IEEE transactions on emerging topics in computational intelligence, 5\(5\):726-742, 2021.) Tj
+T*
+([5] Neel Nanda. Interpretability will not reliably find deceptive ai, 2022. LessWrong essay.) Tj
+T*
+() Tj
+T*
+() Tj
+T*
+(                                                      4) Tj
+T*
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000133 00000 n 
+0000000260 00000 n 
+0000000387 00000 n 
+0000000514 00000 n 
+0000000642 00000 n 
+0000004476 00000 n 
+0000008316 00000 n 
+0000011895 00000 n 
+0000016331 00000 n 
+trailer
+<< /Size 12 /Root 1 0 R >>
+startxref
+16427
+%%EOF
