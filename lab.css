@@ -95,18 +95,10 @@ body[data-page="lab"] .lx-page .lx-preview, body[data-page="lab"] .lx-page .lx-c
 
 /* The research report sits after the project images in an editorial reader. */
 .pjs-report-section { margin: clamp(72px, 10vw, 132px) auto 0; max-width: 960px; }
-.pjs-report-heading { text-align: center; margin: 0 auto 24px; max-width: 600px; }
-.pjs-report-kicker {
-  font-family: 'Inter Tight', Helvetica, sans-serif; font-size: 10px; font-weight: 600;
-  letter-spacing: .17em; color: #766e61; margin: 0 0 8px;
-}
+.pjs-report-heading { text-align: center; margin: 0 auto 22px; }
 .pjs-report-heading h2 {
   font-family: 'Playfair Display', Georgia, serif; font-weight: 400;
-  font-size: clamp(25px, 3vw, 38px); letter-spacing: -.015em; line-height: 1.1; margin: 0 0 12px;
-}
-.pjs-report-heading > p:last-child {
-  font-family: 'Playfair Display', Georgia, serif; font-size: 16px;
-  line-height: 1.5; color: #564f46; margin: 0 auto;
+  font-size: clamp(25px, 3vw, 38px); letter-spacing: -.015em; line-height: 1.1; margin: 0;
 }
 .pjs-report-frame {
   display: block; border: 1px solid rgba(23,22,15,.25); width: 100%;
