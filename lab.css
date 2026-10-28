@@ -61,6 +61,7 @@ body[data-page="lab"] .lx-page .lx-writing-intro {
 .pjs-timeline { margin: 28px 0 0; max-width: 520px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.55; }
 .pjs-timeline p { margin: 0; }
 .pjs-timeline .pjs-tl-label { margin-bottom: 4px; }
+.pjs-note { margin: 22px 0 0; color: #6b6459; font-size: 17px; font-style: italic; }
 .pjs-links { display: flex; flex-wrap: wrap; gap: 22px; margin: 28px 0 0; }
 .pjs-links:empty { display: none; }
 .pjs-links a { display: inline-flex; align-items: baseline; gap: .3em; color: #17160F; font-style: italic; font-size: 18px; }
@@ -91,3 +92,29 @@ body[data-page="lab"] .lx-page .lx-writing-intro {
   .pjs-fig figcaption, .pjs-text { justify-self: start; max-width: none; }
 }
 body[data-page="lab"] .lx-page .lx-preview, body[data-page="lab"] .lx-page .lx-cap { text-transform: none; letter-spacing: 0; }
+
+/* The research report sits after the project images in an editorial reader. */
+.pjs-report-section { margin: clamp(72px, 10vw, 132px) auto 0; max-width: 960px; }
+.pjs-report-heading { text-align: center; margin: 0 auto 24px; max-width: 600px; }
+.pjs-report-kicker {
+  font-family: 'Inter Tight', Helvetica, sans-serif; font-size: 10px; font-weight: 600;
+  letter-spacing: .17em; color: #766e61; margin: 0 0 8px;
+}
+.pjs-report-heading h2 {
+  font-family: 'Playfair Display', Georgia, serif; font-weight: 400;
+  font-size: clamp(25px, 3vw, 38px); letter-spacing: -.015em; line-height: 1.1; margin: 0 0 12px;
+}
+.pjs-report-heading > p:last-child {
+  font-family: 'Playfair Display', Georgia, serif; font-size: 16px;
+  line-height: 1.5; color: #564f46; margin: 0 auto;
+}
+.pjs-report-frame {
+  display: block; border: 1px solid rgba(23,22,15,.25); width: 100%;
+  height: min(850px, 82vw); min-height: 590px; background: #f3f0e9;
+}
+@media (max-width: 760px) {
+  .pjs-report-frame { min-height: 430px; height: 620px; }
+}
+@media (max-width: 420px) {
+  .pjs-report-frame { min-height: 380px; height: 530px; }
+}
