@@ -506,6 +506,7 @@
           <sc-for list="{{ pj.timeline }}" as="t" hint-placeholder-count="3"><p>{{ t }}</p></sc-for>
         </div>
         </sc-if>
+        <sc-if value="{{ pj.hasNote }}"><p class="pjs-note">{{ pj.note }}</p></sc-if>
         <div class="pjs-links">
           <sc-for list="{{ pj.links }}" as="lk" hint-placeholder-count="1"><a href="{{ lk.href }}" target="_blank" rel="noopener noreferrer"><span>{{ lk.label }}</span><i aria-hidden="true">&#8599;</i></a></sc-for>
         </div>
@@ -530,6 +531,16 @@
         </div>
       </figure>
     </sc-for>
+    <sc-if value="{{ pj.hasZine }}">
+      <section class="pjs-report-section" aria-labelledby="pjs-report-heading">
+        <div class="pjs-report-heading">
+          <p class="pjs-report-kicker">THE RESEARCH REPORT</p>
+          <h2 id="pjs-report-heading">Towards Monosemanticity</h2>
+          <p>Flip through the report below, or open the complete PDF in a new tab.</p>
+        </div>
+        <iframe class="pjs-report-frame" src="{{ pj.zineSrc }}" title="Page-turning monosemanticity research report" loading="lazy"></iframe>
+      </section>
+    </sc-if>
   </main>
   </sc-if>
 
@@ -753,19 +764,26 @@ const PROJECTS = [
       "Later exploratory stages — I examined recurring traits, apparent growth patterns, contradictions and five possible explanations for them. I then added independent validation checks. None of these models by itself proves that I grew."
     ] },
   { cat: 'projects', title: 'eta estimator', blurb: 'quantified transit prediction error across routes, time periods, and weather to surface 6+ minute failure cases.', href: PLACEHOLDER, tag: 'data science', image: './C.jpg',
-    intro: "I used to check the bus arrival times on a transit app and then immediately open the live map because I didn't trust the times it showed me. I wondered if there were patterns to its errors. Using historical GPS records, predicted and actual arrivals, time of day, and weather, I measured when the estimates were reliably wrong. I also studied how long buses remained at stops. The idea was to improve predictions without paying for expensive traffic and weather data every single time." },
+    code: 'https://github.com/ruth1445/eta-optimization',
+        intro: "I used to check the bus arrival times on a transit app and then immediately open the live map because I didn't trust the times it showed me. I wondered if there were patterns to its errors. Using historical GPS records, predicted and actual arrivals, time of day, and weather, I measured when the estimates were reliably wrong. I also studied how long buses remained at stops. The idea was to improve predictions without paying for expensive traffic and weather data every single time." },
   { cat: 'projects', title: 'langpal 11labs pipeline', blurb: 'built an end-to-end voice loop with elevenlabs stt/tts, gemini, supabase, fastapi, and a flutter app.', href: PLACEHOLDER, tag: 'ai engineering', image: './D.jpg',
-    intro: "Language learning is one of my favourite things to do, so the prospect of building something you could actually talk to was particularly exciting. At LangPal, I worked on a speech-to-speech pipeline connecting ElevenLabs, Gemini, FastAPI, Supabase, and a Flutter app. A spoken sentence has to be transcribed, understood, answered, and spoken back. I was interested in making all of this happen quickly enough that it felt like a conversation rather than a collection of API calls." },
+    note: 'more details coming soon',
+        intro: "Language learning is one of my favourite things to do, so the prospect of building something you could actually talk to was particularly exciting. At LangPal, I worked on a speech-to-speech pipeline connecting ElevenLabs, Gemini, FastAPI, Supabase, and a Flutter app. A spoken sentence has to be transcribed, understood, answered, and spoken back. I was interested in making all of this happen quickly enough that it felt like a conversation rather than a collection of API calls." },
   { cat: 'projects', title: 'rational metareasoning', blurb: 'replicated value-of-computation style reasoning to decide when extra deliberation is worth the cost.', href: PLACEHOLDER, tag: 'research', image: './E.jpg', figures: [{ image: './lab-pics/rational-metareasoning/RAM.jpg' }, { video: './lab-pics/rational-metareasoning/ram.mp4' }],
-    intro: "I find it funny that we ask language models to think long and hard about problems that don't deserve it. Humans certainly don't spend the same amount of effort thinking about every question. Why should language models? I reproduced a paper on rational metareasoning to investigate whether a model could decide when more thinking was actually worth the cost. I used a value-of-computation score to weigh an extra reasoning step against the tokens it would consume, and compared it with approaches that follow a fixed reasoning process." },
+    code: 'https://github.com/ruth1445/RaM',
+        intro: "I find it funny that we ask language models to think long and hard about problems that don't deserve it. Humans certainly don't spend the same amount of effort thinking about every question. Why should language models? I reproduced a paper on rational metareasoning to investigate whether a model could decide when more thinking was actually worth the cost. I used a value-of-computation score to weigh an extra reasoning step against the tokens it would consume, and compared it with approaches that follow a fixed reasoning process." },
   { cat: 'projects', title: 'micro', blurb: 'replicated an expert-router setup with mlflow tracking, faster training, and module-level routing diagnostics.', href: PLACEHOLDER, tag: 'ml systems', image: './F.jpg', figures: [{ image: './lab-pics/micro/micro.jpg' }, { image: './lab-pics/micro/micro2.jpg' }],
-    intro: "One of the things that fascinates me about intelligence is how many different kinds of reasoning it involves. I came across MiCRo, a paper proposing four specialized experts for language, logic, social understanding, and world knowledge, with a router deciding which one to consult. I tried reproducing the architecture and then visualized where individual tokens went. I was particularly interested in seeing how different parts of the same sentence could be assigned to different specialists. I made routing heatmaps to understand what the model was doing." },
+    code: 'https://github.com/ruth1445/microrep',
+        intro: "One of the things that fascinates me about intelligence is how many different kinds of reasoning it involves. I came across MiCRo, a paper proposing four specialized experts for language, logic, social understanding, and world knowledge, with a router deciding which one to consult. I tried reproducing the architecture and then visualized where individual tokens went. I was particularly interested in seeing how different parts of the same sentence could be assigned to different specialists. I made routing heatmaps to understand what the model was doing." },
   { cat: 'projects', title: 'monosemanticity', blurb: 'trained sparse autoencoders on language-model activations to study interpretable features and superposition.', href: PLACEHOLDER, tag: 'interpretability', image: './H.jpg', figures: [{ image: './lab-pics/monosemanticity/interp.jpg' }],
-    intro: "For my final project at Rutgers, I wanted to understand what happens inside a language model rather than only judging the sentences it produces. I had been reading Anthropic's research on interpretability, which I found so fascinating that I decided to attempt a small replication with the resources I had. I trained sparse autoencoders on GPT-2 activations and looked for features that might correspond to recognizable concepts. I also started making visual explanations because I was new to this field and wanted a way to understand it myself." },
+    code: 'https://github.com/ruth1445/interpretability', visualRepo: 'https://github.com/ruth1445/monosemanticity', visualDemo: 'https://ruth1445.github.io/monosemanticity/', zine: true,
+        intro: "For my final project at Rutgers, I wanted to understand what happens inside a language model rather than only judging the sentences it produces. I had been reading Anthropic's research on interpretability, which I found so fascinating that I decided to attempt a small replication with the resources I had. I trained sparse autoencoders on GPT-2 activations and looked for features that might correspond to recognizable concepts. I also started making visual explanations because I was new to this field and wanted a way to understand it myself." },
   { cat: 'projects', title: 'societal impacts research paper', blurb: 'co-authored an nbea paper using an nlp pipeline over 8k+ reddit posts to study chatbot perception and bias.', href: PLACEHOLDER, tag: 'nlp research', image: './I.jpg',
-    intro: "I have spent an embarrassing amount of time reading strangers argue about AI on the internet, so I thought I might as well turn some of that into research. For a co-authored paper, I worked on an NLP pipeline that analyzed over 8,000 Reddit posts about chatbots, particularly the ways people perceive them and discuss bias. I wanted to see whether the arguments I kept noticing individually would still appear once I looked at thousands of them together." },
+    paper: 'https://www.researchgate.net/profile/Janki-Kanakia-2/publication/395721509_Societal_Impacts_and_Public_Perception_of_Chatbots_Implications_for_Individuals_and_Organizations/links/68ed8db602d6215259bb652c/Societal-Impacts-and-Public-Perception-of-Chatbots-Implications-for-Individuals-and-Organizations.pdf',
+        intro: "I have spent an embarrassing amount of time reading strangers argue about AI on the internet, so I thought I might as well turn some of that into research. For a co-authored paper, I worked on an NLP pipeline that analyzed over 8,000 Reddit posts about chatbots, particularly the ways people perceive them and discuss bias. I wanted to see whether the arguments I kept noticing individually would still appear once I looked at thousands of them together." },
   { cat: 'projects', title: 'does a growth mindset nudge boost achievement?', blurb: 'analyzed whether a short growth-mindset intervention shifts achievement outcomes using a causal/statistical lens.', href: PLACEHOLDER, tag: 'statistics', image: './J.jpg', figures: [{ image: './lab-pics/growth-mindset-nudge/growth_Nudge.jpg' }],
-    intro: "We hear an awful lot about the power of having a growth mindset, but can a brief intervention actually change academic outcomes? I used a synthetic replica of a study covering 10,391 students across 76 schools and tried to estimate the effect of a short growth-mindset intervention. I used propensity-score weighting, checked how comparable the groups were, and examined whether the estimated effects differed across students. I liked the idea of approaching such a familiar piece of advice with something more demanding than anecdotes." },
+    code: 'https://github.com/ruth1445/mindset-nudge',
+        intro: "We hear an awful lot about the power of having a growth mindset, but can a brief intervention actually change academic outcomes? I used a synthetic replica of a study covering 10,391 students across 76 schools and tried to estimate the effect of a short growth-mindset intervention. I used propensity-score weighting, checked how comparable the groups were, and examined whether the estimated effects differed across students. I liked the idea of approaching such a familiar piece of advice with something more demanding than anecdotes." },
   { cat: 'projects', title: 'harmonies', blurb: 'a small web experiment in layered sound, language, and visual rhythm.', href: 'https://ruth1445.github.io/harmonies/', tag: 'creative code', image: './K.jpg',
     demo: 'https://ruth1445.github.io/harmonies/',
     intro: "I picked up a copy of Johannes Kepler's *Harmonies of the World* intending to use it as a reference book. I ended up reading the whole thing. I loved how he brought geometry, astronomy, and music theory together, and naturally wanted to see whether I could make something out of it. I built an interactive universe where planetary motion can be seen and heard, mapping orbital relationships into sound. I then went looking for similar harmonies in moons, flowers, and other forms of geometry. The real planetary orbits sound rather less pleasant than the romanticized version, which I think is delightful.",
@@ -1070,7 +1088,13 @@ class Component extends DCLogic {
     const pjSrc = PROJECTS[pjIdx];
     const ext = (u) => u && /^https?:/.test(u);
     const pjLinks = [
-      ['code', pjSrc.code], ['live demo', pjSrc.demo], ['read the write-up', pjSrc.writeup], ['view project', !pjSrc.code && !pjSrc.demo && !pjSrc.writeup ? pjSrc.href : null],
+      ['go to GitHub repo', pjSrc.code],
+      ['view interactive visualization', pjSrc.visualDemo],
+      ['visualization source on GitHub', pjSrc.visualRepo],
+      ['live demo', pjSrc.demo],
+      ['read published paper', pjSrc.paper],
+      ['read the write-up', pjSrc.writeup],
+      ['view project', !pjSrc.code && !pjSrc.demo && !pjSrc.writeup && !pjSrc.paper ? pjSrc.href : null],
     ].filter(([, u]) => ext(u)).map(([label, href], i) => ({ label, href, cls: 'pj-btn' + (i === 0 ? ' pj-btn--main' : '') }));
     // Only display media that genuinely belongs to a project; don't invent extra figures.
     const projectMedia = (pjSrc.figures || []).filter((f) => f && (f.image || f.video));
@@ -1090,6 +1114,10 @@ class Component extends DCLogic {
       blurb: pjSrc.blurb,
       image: pjSrc.image,
       links: pjLinks,
+      note: pjSrc.note || '',
+      hasNote: Boolean(pjSrc.note),
+      hasZine: Boolean(pjSrc.zine),
+      zineSrc: './report-zine/',
       meta: [['role', pjSrc.role], ['when', pjSrc.when], ['stack', pjSrc.stack]].filter(([, v]) => v).map(([k, v]) => ({ k, v })),
       sections: pjSrc.sections || [],
       hasMeta: !!(pjSrc.role || pjSrc.when || pjSrc.stack),
