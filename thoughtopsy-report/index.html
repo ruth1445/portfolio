@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>thoughtopsy</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logo-pin-square.svg?v=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink: #17160f; --paper: #fffefa; --ground: #f3f0e9; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--ground); color: var(--ink); }
+    body { font-family: "Inter Tight", Helvetica, sans-serif; }
+    .zine { display: flex; flex-direction: column; min-height: 100vh; padding: 20px 22px 18px; gap: 10px; }
+    .zine-top { max-width: 960px; width: 100%; margin: 0 auto; display: flex; justify-content: flex-end; align-items: center; }
+    .zine-top a { color: var(--ink); font-family: "Instrument Serif", Georgia, serif; font-size: 18px; text-decoration: underline; text-underline-offset: 4px; }
+    .reading-area { flex: 1; min-height: 300px; display: flex; align-items: center; justify-content: center; position: relative; padding: 4px 50px; }
+    .paper-wrap { position: relative; max-width: 100%; perspective: 1400px; filter: drop-shadow(0 16px 18px rgba(40, 30, 20, .15)); }
+    #page { display: block; max-width: 100%; height: auto; background: var(--paper); border: 1px solid #d5cfc2; }
+    .turn-sheet { position: absolute; inset: 0; background-color: var(--paper); background-position: center; background-size: 100% 100%; border: 1px solid #c9c2b7; pointer-events: none; backface-visibility: hidden; }
+    .turn-sheet.next { transform-origin: left center; animation: turn-next .54s cubic-bezier(.5,.07,.2,1) both; }
+    .turn-sheet.prev { transform-origin: right center; animation: turn-prev .54s cubic-bezier(.5,.07,.2,1) both; }
+    @keyframes turn-next { 0% { transform: rotateY(0); opacity: 1; } 80% { opacity: .85; } 100% { transform: rotateY(-110deg); opacity: 0; } }
+    @keyframes turn-prev { 0% { transform: rotateY(0); opacity: 1; } 80% { opacity: .85; } 100% { transform: rotateY(110deg); opacity: 0; } }
+    .edge { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 54px; display: flex; align-items: center; justify-content: center; border: 0; background: transparent; color: var(--ink); font: 30px "Instrument Serif", Georgia, serif; cursor: pointer; transition: transform .2s ease; }
+    .edge:hover:not(:disabled) { transform: translateY(-50%) scale(1.15); }
+    .edge:disabled { opacity: .23; cursor: default; }
+    #prev { left: 0; } #next { right: 0; }
+    .bottom { width: min(100%, 960px); margin: 0 auto; display: flex; align-items: center; justify-content: center; border-top: 1px solid #d0c9bd; padding-top: 11px; }
+    #count { font-size: 13px; font-weight: 500; letter-spacing: .12em; font-variant-numeric: tabular-nums; }
+    .error { padding: 20px; max-width: 420px; text-align: center; color: #645d52; line-height: 1.6; }
+    .error a { color: var(--ink); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 620px) {
+      .zine { padding: 12px 10px; gap: 8px; }
+      .reading-area { padding: 2px 34px; min-height: 210px; }
+      .edge { width: 31px; font-size: 26px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .turn-sheet.next, .turn-sheet.prev { animation-duration: .01ms; }
+      .edge { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="zine">
+    <header class="zine-top">
+      <a href="./thoughtopsy_research.pdf" target="_blank" rel="noopener noreferrer">full pdf</a>
+    </header>
+    <div class="reading-area" id="area">
+      <button id="prev" class="edge" aria-label="Previous page" disabled>←</button>
+      <div class="paper-wrap" id="paper"><canvas id="page" aria-label="Current thoughtopsy research page"></canvas></div>
+      <button id="next" class="edge" aria-label="Next page" disabled>→</button>
+    </div>
+    <footer class="bottom">
+      <strong id="count" aria-label="Current page and total pages">— / —</strong>
+    </footer>
+    <span id="status" class="sr-only" role="status" aria-live="polite"></span>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script>
+    (() => {
+      const PDF_PATH = './thoughtopsy_research.pdf';
+      const byId = id => document.getElementById(id);
+      const canvas = byId('page'), paper = byId('paper'), area = byId('area');
+      const prev = byId('prev'), next = byId('next'), count = byId('count'), status = byId('status');
+      const state = {doc: null, page: 1, busy: false};
+      function controls() {
+        prev.disabled = !state.doc || state.busy || state.page <= 1;
+        next.disabled = !state.doc || state.busy || state.page >= state.doc.numPages;
+        count.textContent = state.doc ? String(state.page).padStart(2, '0') + ' / ' + String(state.doc.numPages).padStart(2, '0') : '— / —';
+      }
+      function failure() {
+        status.textContent = 'Report viewer unavailable';
+        paper.innerHTML = '<div class="error">Could not load the report here. <a href="' + PDF_PATH + '" target="_blank" rel="noopener noreferrer">Open the full pdf.</a></div>';
+        prev.disabled = true; next.disabled = true;
+      }
+      async function render(pageNum) {
+        const page = await state.doc.getPage(pageNum);
+        const viewport = page.getViewport({scale: 1});
+        const available = area.clientWidth - (window.innerWidth < 620 ? 75 : 110);
+        const width = Math.max(150, Math.min(620, available));
+        const pixelRatio = Math.min(2, window.devicePixelRatio || 1);
+        const scaled = page.getViewport({scale: width / viewport.width * pixelRatio});
+        const buffer = document.createElement('canvas');
+        buffer.width = Math.round(scaled.width);
+        buffer.height = Math.round(scaled.height);
+        await page.render({canvasContext: buffer.getContext('2d'), viewport: scaled}).promise;
+        canvas.width = buffer.width;
+        canvas.height = buffer.height;
+        canvas.style.width = Math.round(scaled.width / pixelRatio) + 'px';
+        canvas.style.height = Math.round(scaled.height / pixelRatio) + 'px';
+        canvas.getContext('2d').drawImage(buffer, 0, 0);
+      }
+      async function go(pageNum) {
+        if (!state.doc || state.busy || pageNum < 1 || pageNum > state.doc.numPages || pageNum === state.page) return;
+        state.busy = true; controls();
+        const sheet = document.createElement('div');
+        sheet.className = 'turn-sheet ' + (pageNum > state.page ? 'next' : 'prev');
+        try {
+          sheet.style.backgroundImage = 'url("' + canvas.toDataURL('image/png') + '")';
+          paper.appendChild(sheet);
+          await render(pageNum);
+          state.page = pageNum;
+          status.textContent = '';
+        } catch (_) {
+          status.textContent = 'Page could not be displayed';
+        } finally {
+          setTimeout(() => sheet.remove(), 560);
+          state.busy = false;
+          controls();
+        }
+      }
+      prev.addEventListener('click', () => go(state.page - 1));
+      next.addEventListener('click', () => go(state.page + 1));
+      document.addEventListener('keydown', event => {
+        if (event.key === 'ArrowRight') { event.preventDefault(); go(state.page + 1); }
+        if (event.key === 'ArrowLeft') { event.preventDefault(); go(state.page - 1); }
+      });
+      let resizeTimer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          if (state.doc && !state.busy) render(state.page).catch(() => {});
+        }, 200);
+      });
+      async function init() {
+        if (!window.pdfjsLib) { failure(); return; }
+        try {
+          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+          state.doc = await pdfjsLib.getDocument({url: PDF_PATH}).promise;
+          await render(1);
+          controls();
+        } catch (_) { failure(); }
+      }
+      init();
+    })();
+  </script>
+</body>
+</html>
