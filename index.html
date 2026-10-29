@@ -497,6 +497,7 @@
   <sc-if value="{{ isProject }}">
   <main class="pj-simple" aria-label="{{ pj.title }}">
     <h1 class="pjs-title">{{ pj.title }}</h1>
+    <sc-if value="{{ pj.hasStandardLayout }}">
     <section class="{{ pj.heroCls }}">
       <div class="pjs-text">
         <p class="pjs-lede"><sc-for list="{{ pj.introParts }}" as="seg"><sc-if value="{{ seg.it }}"><em>{{ seg.t }}</em></sc-if><sc-if value="{{ seg.plain }}">{{ seg.t }}</sc-if><sc-if value="{{ seg.link }}"><a href="{{ seg.link }}" target="_blank" rel="noopener noreferrer">{{ seg.t }}</a></sc-if></sc-for></p>
@@ -520,6 +521,30 @@
       </div>
       </sc-if>
     </section>
+    </sc-if>
+    <sc-if value="{{ pj.hasEditorial }}">
+      <article class="pjs-editorial" aria-label="Project write-up">
+        <sc-for list="{{ pj.editorialBlocks }}" as="block" hint-placeholder-count="5">
+          <sc-if value="{{ block.text }}">
+            <p class="pjs-editorial-copy"><sc-for list="{{ block.parts }}" as="part"><sc-if value="{{ part.it }}"><em>{{ part.t }}</em></sc-if><sc-if value="{{ part.plain }}">{{ part.t }}</sc-if></sc-for></p>
+          </sc-if>
+          <sc-if value="{{ block.image }}">
+            <figure class="pjs-editorial-figure">
+              <img src="{{ block.image }}" alt="{{ block.alt }}" loading="lazy">
+            </figure>
+          </sc-if>
+          <sc-if value="{{ block.video }}">
+            <figure class="pjs-editorial-figure">
+              <video src="{{ block.video }}" aria-label="{{ block.alt }}" autoplay muted loop playsinline preload="metadata"></video>
+            </figure>
+          </sc-if>
+        </sc-for>
+        <sc-if value="{{ pj.hasNote }}"><p class="pjs-note">{{ pj.note }}</p></sc-if>
+        <div class="pjs-links">
+          <sc-for list="{{ pj.links }}" as="lk" hint-placeholder-count="1"><a href="{{ lk.href }}" target="_blank" rel="noopener noreferrer"><span>{{ lk.label }}</span><i aria-hidden="true">&#8599;</i></a></sc-for>
+        </div>
+      </article>
+    </sc-if>
     <sc-if value="{{ pj.hasStory }}">
       <section class="pjs-story" aria-label="Thoughtopsy chatbot and citations">
         <p class="pjs-story-copy">{{ pj.chatbotLine }}</p>
