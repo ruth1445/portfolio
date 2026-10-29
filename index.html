@@ -520,6 +520,17 @@
       </div>
       </sc-if>
     </section>
+    <sc-for list="{{ pj.videos }}" as="clip" hint-placeholder-count="0">
+      <figure class="pjs-fig pjs-fig--image-only">
+        <div class="pjs-media">
+          <div class="pjs-sq">
+            <video src="{{ clip.src }}" aria-label="{{ clip.label }}" controls playsinline preload="metadata">
+              Your browser cannot play this clip. <a href="{{ clip.src }}">Open {{ clip.label }}</a>.
+            </video>
+          </div>
+        </div>
+      </figure>
+    </sc-for>
     <sc-for list="{{ pj.figures }}" as="fig" hint-placeholder-count="2">
       <figure class="{{ fig.cls }}">
         <sc-if value="{{ fig.text }}"><figcaption>{{ fig.text }}</figcaption></sc-if>
@@ -747,6 +758,12 @@ const PLACEHOLDER = '#lab-projects';
 // Missing project content stays absent; never render filler text or empty media.
 const PROJECTS = [
   { cat: 'projects', title: 'thought-opsy', blurb: 'autopsy of thought: a longitudinal data-science and qualitative study of six years of journal writing, tracing how beliefs about happiness, belonging, identity and purpose evolved.', href: './autopsy-of-mind/', demo: 'https://ruth1445.github.io/portfolio/autopsy-of-mind/', tag: 'data science', image: './L.jpg',
+    videos: [
+      { src: './QQ1.MOV', label: 'QQ1' },
+      { src: './QQ2.MOV', label: 'QQ2' },
+      { src: './RF1.MOV', label: 'RF1' },
+      { src: './RF2.MOV', label: 'RF2' },
+    ],
     intro: "Some time ago, I realized I could barely remember what occupied my mind just five months earlier. I wanted to believe my growth was exponential, but I had no way of proving it. Fortunately, I had been documenting my thoughts on Instagram for over six years. I exported 76 months of journal entries and began examining them for changes in my beliefs, interests, and ideas of happiness and belonging. I used statistics where I could, but I am equally interested in the changes that cannot be reduced to numbers.",
     timeline: [
       "Oct 4–7, 2026 — I exported my Instagram comments, then realized the post captions were missing. I exported those separately too, since many journal entries began in the caption and continued in the comments.",
@@ -1109,6 +1126,7 @@ class Component extends DCLogic {
       // the first real image sits beside the write-up; subsequent images follow below
       lead: ((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq' }))(projectMedia[0] || {}),
       figures: projectMedia.slice(1).map((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq', text: f.text || '', cls: 'pjs-fig' + (f.text ? '' : ' pjs-fig--image-only') })),
+      videos: pjSrc.videos || [],
       title: pjSrc.title,
       blurb: pjSrc.blurb,
       image: pjSrc.image,
