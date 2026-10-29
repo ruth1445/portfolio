@@ -93,6 +93,44 @@ body[data-page="lab"] .lx-page .lx-writing-intro {
 }
 body[data-page="lab"] .lx-page .lx-preview, body[data-page="lab"] .lx-page .lx-cap { text-transform: none; letter-spacing: 0; }
 
+/* Compact editorial media inside Thoughtopsy's narrative, rather than tall project-wide figures. */
+.pjs-story {
+  width: min(100%, 760px);
+  margin: clamp(24px, 3vw, 38px) auto 0;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+.pjs-story-copy,
+.pjs-story-closing {
+  margin: 0;
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.55;
+}
+.pjs-story-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(10px, 1.8vw, 18px);
+  width: min(100%, 670px);
+  margin: 18px auto 36px;
+  align-items: center;
+}
+.pjs-story-clip { margin: 0; min-width: 0; display: flex; align-items: center; justify-content: center; }
+.pjs-story-clip video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 285px;
+  object-fit: contain;
+  border: 1px solid rgba(23, 22, 15, .3);
+  background: #161412;
+}
+.pjs-story .pjs-timeline { margin: 34px 0 0; max-width: none; }
+.pjs-story-closing { margin-top: 28px; }
+@media (max-width: 600px) {
+  .pjs-story { width: 100%; }
+  .pjs-story-pair { gap: 9px; margin: 15px auto 27px; }
+  .pjs-story-clip video { max-height: 235px; }
+}
+
 /* The research report sits after the project images in an editorial reader. */
 .pjs-report-section { margin: clamp(72px, 10vw, 132px) auto 0; max-width: 960px; }
 .pjs-report-heading { text-align: center; margin: 0 auto 22px; }
