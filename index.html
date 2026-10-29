@@ -499,7 +499,7 @@
     <h1 class="pjs-title">{{ pj.title }}</h1>
     <section class="{{ pj.heroCls }}">
       <div class="pjs-text">
-        <p class="pjs-lede"><sc-for list="{{ pj.introParts }}" as="seg"><sc-if value="{{ seg.it }}"><em>{{ seg.t }}</em></sc-if><sc-if value="{{ seg.plain }}">{{ seg.t }}</sc-if></sc-for></p>
+        <p class="pjs-lede"><sc-for list="{{ pj.introParts }}" as="seg"><sc-if value="{{ seg.it }}"><em>{{ seg.t }}</em></sc-if><sc-if value="{{ seg.plain }}">{{ seg.t }}</sc-if><sc-if value="{{ seg.link }}"><a href="{{ seg.link }}" target="_blank" rel="noopener noreferrer">{{ seg.t }}</a></sc-if></sc-for></p>
         <sc-if value="{{ pj.hasTimeline }}">
         <div class="pjs-timeline">
           <p class="pjs-tl-label">timeline:</p>
@@ -764,7 +764,7 @@ const PROJECTS = [
       { src: './RF1.MOV', label: 'RF1' },
       { src: './RF2.MOV', label: 'RF2' },
     ],
-    intro: "Some time ago, I realized I could barely remember what occupied my mind just five months earlier. I wanted to believe my growth was exponential, but I had no way of proving it. Fortunately, I had been documenting my thoughts on Instagram for over six years. I exported 76 months of journal entries and began examining them for changes in my beliefs, interests, and ideas of happiness and belonging. I used statistics where I could, but I am equally interested in the changes that cannot be reduced to numbers.",
+    intro: "Some time ago, I realized I could barely remember what occupied my mind just five months earlier. After I interviewed someone for my [blog](https://publicyuzu.org/adhiv/), I realized how easily I could just assess my growth. I had been documenting my thoughts on Instagram for over six years. I exported 76 months of journal entries and began examining them for changes in my beliefs, interests, and ideas of happiness and belonging. Making use of statistics here was very important since I am trying to be more actively involved in the data science cycle rather than passively.",
     timeline: [
       "Oct 4–7, 2026 — I exported my Instagram comments, then realized the post captions were missing. I exported those separately too, since many journal entries began in the caption and continued in the comments.",
       "Oct 8 — I built a chronological, source-preserving archive: 15,534 normalized events, including 14,816 confirmed journal events. I kept the original text separate from any cleaning or corrections.",
@@ -1118,7 +1118,20 @@ class Component extends DCLogic {
     const pj = {
       intro: projectIntro,
       // *words between asterisks* in an intro are set in italics
-      introParts: projectIntro.split('*').map((t, k) => ({ t, it: k % 2 === 1, plain: k % 2 === 0 })).filter((x) => x.t),
+      introParts: (() => {
+        // Keep existing *italic* support, and render only HTTPS Markdown links as anchors.
+        const tokens = projectIntro.split(/(\[[^\]]+\]\(https:\/\/[^)\s]+\)|\*)/g);
+        let italic = false;
+        const parts = [];
+        for (const token of tokens) {
+          if (!token) continue;
+          if (token === '*') { italic = !italic; continue; }
+          const link = token.match(/^\[([^\]]+)\]\((https:\/\/[^)\s]+)\)$/);
+          if (link) parts.push({ t: link[1], link: link[2], it: false, plain: false });
+          else parts.push({ t: token, link: '', it: italic, plain: !italic });
+        }
+        return parts;
+      })(),
       timeline: pjSrc.timeline || [],
       hasTimeline: Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0,
       hasLead: projectMedia.length > 0,
