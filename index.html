@@ -757,13 +757,18 @@ const PLACEHOLDER = '#lab-projects';
 //   code, demo, writeup: links shown under the intro
 // Missing project content stays absent; never render filler text or empty media.
 const PROJECTS = [
-  { cat: 'projects', title: 'thought-opsy', blurb: 'autopsy of thought: a longitudinal data-science and qualitative study of six years of journal writing, tracing how beliefs about happiness, belonging, identity and purpose evolved.', href: './autopsy-of-mind/', demo: 'https://ruth1445.github.io/portfolio/autopsy-of-mind/', tag: 'data science', image: './L.jpg',
-    videos: [
+  { cat: 'projects', title: 'thought-opsy', blurb: 'autopsy of thought: a longitudinal data-science and qualitative study of six years of journal writing, tracing how beliefs about happiness, belonging, identity and purpose evolved.', href: './autopsy-of-mind/', noPublicDemo: true, tag: 'data science', image: './L.jpg',
+    chatbotLine: "Most recently, I added a chatbot that lets me ask questions about myself and my behaviors",
+    chatClips: [
       { src: './QQ1.MOV', label: 'QQ1' },
       { src: './QQ2.MOV', label: 'QQ2' },
+    ],
+    citationsLine: "The chatbot responds with numbered citations to my past journal entries and research notes. I can click on each citation to see the passage it drew from and examine the evidence for myself, rather than accepting an interpretation at face value. Those citations tell me what I wrote, not necessarily what happened.",
+    citationClips: [
       { src: './RF1.MOV', label: 'RF1' },
       { src: './RF2.MOV', label: 'RF2' },
     ],
+    privacyNote: "Since it contains personal data, the GitHub repo is private. But I would be more than happy to discuss the project and its workings.",
     intro: "Some time ago, I realized I could barely remember what occupied my mind just five months earlier. After I interviewed someone for my [blog](https://publicyuzu.org/adhiv/), I realized how easily I could just assess my growth. I had been documenting my thoughts on Instagram for over six years. I exported 76 months of journal entries and began examining them for changes in my beliefs, interests, and ideas of happiness and belonging. Making use of statistics here was very important since I am trying to be more actively involved in the data science cycle rather than passively.",
     timeline: [
       "Oct 4–7, 2026 — I exported my Instagram comments, then realized the post captions were missing. I exported those separately too, since many journal entries began in the caption and continued in the comments.",
