@@ -500,7 +500,7 @@
     <section class="{{ pj.heroCls }}">
       <div class="pjs-text">
         <p class="pjs-lede"><sc-for list="{{ pj.introParts }}" as="seg"><sc-if value="{{ seg.it }}"><em>{{ seg.t }}</em></sc-if><sc-if value="{{ seg.plain }}">{{ seg.t }}</sc-if><sc-if value="{{ seg.link }}"><a href="{{ seg.link }}" target="_blank" rel="noopener noreferrer">{{ seg.t }}</a></sc-if></sc-for></p>
-        <sc-if value="{{ pj.hasTimeline }}">
+        <sc-if value="{{ pj.timelineInHero }}">
         <div class="pjs-timeline">
           <p class="pjs-tl-label">timeline:</p>
           <sc-for list="{{ pj.timeline }}" as="t" hint-placeholder-count="3"><p>{{ t }}</p></sc-for>
@@ -520,17 +520,37 @@
       </div>
       </sc-if>
     </section>
-    <sc-for list="{{ pj.videos }}" as="clip" hint-placeholder-count="0">
-      <figure class="pjs-fig pjs-fig--image-only">
-        <div class="pjs-media">
-          <div class="pjs-sq">
-            <video src="{{ clip.src }}" aria-label="{{ clip.label }}" controls playsinline preload="metadata">
-              Your browser cannot play this clip. <a href="{{ clip.src }}">Open {{ clip.label }}</a>.
-            </video>
-          </div>
+    <sc-if value="{{ pj.hasStory }}">
+      <section class="pjs-story" aria-label="Thoughtopsy chatbot and citations">
+        <p class="pjs-story-copy">{{ pj.chatbotLine }}</p>
+        <div class="pjs-story-pair" aria-label="Chatbot walkthroughs">
+          <sc-for list="{{ pj.chatClips }}" as="clip" hint-placeholder-count="2">
+            <figure class="pjs-story-clip">
+              <video src="{{ clip.src }}" aria-label="{{ clip.label }} chatbot example" autoplay muted loop playsinline preload="auto">
+                Your browser does not support embedded video.
+              </video>
+            </figure>
+          </sc-for>
         </div>
-      </figure>
-    </sc-for>
+        <p class="pjs-story-copy">{{ pj.citationsLine }}</p>
+        <div class="pjs-story-pair" aria-label="Clickable citation walkthroughs">
+          <sc-for list="{{ pj.citationClips }}" as="clip" hint-placeholder-count="2">
+            <figure class="pjs-story-clip">
+              <video src="{{ clip.src }}" aria-label="{{ clip.label }} citation example" autoplay muted loop playsinline preload="auto">
+                Your browser does not support embedded video.
+              </video>
+            </figure>
+          </sc-for>
+        </div>
+        <sc-if value="{{ pj.hasTimeline }}">
+          <div class="pjs-timeline">
+            <p class="pjs-tl-label">timeline:</p>
+            <sc-for list="{{ pj.timeline }}" as="t" hint-placeholder-count="3"><p>{{ t }}</p></sc-for>
+          </div>
+        </sc-if>
+        <p class="pjs-story-closing">{{ pj.privacyNote }}</p>
+      </section>
+    </sc-if>
     <sc-for list="{{ pj.figures }}" as="fig" hint-placeholder-count="2">
       <figure class="{{ fig.cls }}">
         <sc-if value="{{ fig.text }}"><figcaption>{{ fig.text }}</figcaption></sc-if>
@@ -1115,7 +1135,7 @@ class Component extends DCLogic {
       ['live demo', pjSrc.demo],
       ['read published paper', pjSrc.paper],
       ['read the write-up', pjSrc.writeup],
-      ['view project', !pjSrc.code && !pjSrc.demo && !pjSrc.writeup && !pjSrc.paper ? pjSrc.href : null],
+      ['view project', !pjSrc.noPublicDemo && !pjSrc.code && !pjSrc.demo && !pjSrc.writeup && !pjSrc.paper ? pjSrc.href : null],
     ].filter(([, u]) => ext(u)).map(([label, href], i) => ({ label, href, cls: 'pj-btn' + (i === 0 ? ' pj-btn--main' : '') }));
     // Only display media that genuinely belongs to a project; don't invent extra figures.
     const projectMedia = (pjSrc.figures || []).filter((f) => f && (f.image || f.video));
@@ -1139,6 +1159,13 @@ class Component extends DCLogic {
       })(),
       timeline: pjSrc.timeline || [],
       hasTimeline: Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0,
+      timelineInHero: !pjSrc.chatbotLine && Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0,
+      hasStory: Boolean(pjSrc.chatbotLine),
+      chatbotLine: pjSrc.chatbotLine || '',
+      chatClips: pjSrc.chatClips || [],
+      citationsLine: pjSrc.citationsLine || '',
+      citationClips: pjSrc.citationClips || [],
+      privacyNote: pjSrc.privacyNote || '',
       hasLead: projectMedia.length > 0,
       heroCls: 'pjs-fig pjs-hero' + (projectMedia.length ? '' : ' pjs-hero--no-media'),
       // the first real image sits beside the write-up; subsequent images follow below
