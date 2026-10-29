@@ -497,6 +497,7 @@
   <sc-if value="{{ isProject }}">
   <main class="pj-simple" aria-label="{{ pj.title }}">
     <h1 class="pjs-title">{{ pj.title }}</h1>
+    <sc-if value="{{ pj.hasStandardLayout }}">
     <section class="{{ pj.heroCls }}">
       <div class="pjs-text">
         <p class="pjs-lede"><sc-for list="{{ pj.introParts }}" as="seg"><sc-if value="{{ seg.it }}"><em>{{ seg.t }}</em></sc-if><sc-if value="{{ seg.plain }}">{{ seg.t }}</sc-if><sc-if value="{{ seg.link }}"><a href="{{ seg.link }}" target="_blank" rel="noopener noreferrer">{{ seg.t }}</a></sc-if></sc-for></p>
@@ -520,6 +521,30 @@
       </div>
       </sc-if>
     </section>
+    </sc-if>
+    <sc-if value="{{ pj.hasEditorial }}">
+      <article class="pjs-editorial" aria-label="Project write-up">
+        <sc-for list="{{ pj.editorialBlocks }}" as="block" hint-placeholder-count="5">
+          <sc-if value="{{ block.text }}">
+            <p class="pjs-editorial-copy"><sc-for list="{{ block.parts }}" as="part"><sc-if value="{{ part.it }}"><em>{{ part.t }}</em></sc-if><sc-if value="{{ part.plain }}">{{ part.t }}</sc-if></sc-for></p>
+          </sc-if>
+          <sc-if value="{{ block.image }}">
+            <figure class="pjs-editorial-figure">
+              <img src="{{ block.image }}" alt="{{ block.alt }}" loading="lazy">
+            </figure>
+          </sc-if>
+          <sc-if value="{{ block.video }}">
+            <figure class="pjs-editorial-figure">
+              <video src="{{ block.video }}" aria-label="{{ block.alt }}" autoplay muted loop playsinline preload="metadata"></video>
+            </figure>
+          </sc-if>
+        </sc-for>
+        <sc-if value="{{ pj.hasNote }}"><p class="pjs-note">{{ pj.note }}</p></sc-if>
+        <div class="pjs-links">
+          <sc-for list="{{ pj.links }}" as="lk" hint-placeholder-count="1"><a href="{{ lk.href }}" target="_blank" rel="noopener noreferrer"><span>{{ lk.label }}</span><i aria-hidden="true">&#8599;</i></a></sc-for>
+        </div>
+      </article>
+    </sc-if>
     <sc-if value="{{ pj.hasStory }}">
       <section class="pjs-story" aria-label="Thoughtopsy chatbot and citations">
         <p class="pjs-story-copy">{{ pj.chatbotLine }}</p>
@@ -810,24 +835,29 @@ const PROJECTS = [
     note: 'more details coming soon',
         intro: "Language learning is one of my favourite things to do, so the prospect of building something you could actually talk to was particularly exciting. At LangPal, I worked on a speech-to-speech pipeline connecting ElevenLabs, Gemini, FastAPI, Supabase, and a Flutter app. A spoken sentence has to be transcribed, understood, answered, and spoken back. I was interested in making all of this happen quickly enough that it felt like a conversation rather than a collection of API calls." },
   { cat: 'projects', title: 'rational metareasoning', blurb: 'replicated value-of-computation style reasoning to decide when extra deliberation is worth the cost.', href: PLACEHOLDER, tag: 'research', image: './E.jpg', figures: [{ image: './lab-pics/rational-metareasoning/RAM.jpg' }, { video: './lab-pics/rational-metareasoning/ram.mp4' }],
+    mediaAfter: ["Why should language models?", "I reproduced a paper on rational metareasoning to investigate whether a model could decide when more thinking was actually worth the cost."],
     code: 'https://github.com/ruth1445/RaM',
         intro: "I find it funny that we ask language models to think long and hard about problems that don't deserve it. Humans certainly don't spend the same amount of effort thinking about every question. Why should language models? I reproduced a paper on rational metareasoning to investigate whether a model could decide when more thinking was actually worth the cost. I used a value-of-computation score to weigh an extra reasoning step against the tokens it would consume, and compared it with approaches that follow a fixed reasoning process." },
   { cat: 'projects', title: 'micro', blurb: 'replicated an expert-router setup with mlflow tracking, faster training, and module-level routing diagnostics.', href: PLACEHOLDER, tag: 'ml systems', image: './F.jpg', figures: [{ image: './lab-pics/micro/micro.jpg' }, { image: './lab-pics/micro/micro2.jpg' }],
+    mediaAfter: ["with a router deciding which one to consult.", "I was particularly interested in seeing how different parts of the same sentence could be assigned to different specialists."],
     code: 'https://github.com/ruth1445/microrep',
         intro: "One of the things that fascinates me about intelligence is how many different kinds of reasoning it involves. I came across MiCRo, a paper proposing four specialized experts for language, logic, social understanding, and world knowledge, with a router deciding which one to consult. I tried reproducing the architecture and then visualized where individual tokens went. I was particularly interested in seeing how different parts of the same sentence could be assigned to different specialists. I made routing heatmaps to understand what the model was doing." },
   { cat: 'projects', title: 'monosemanticity', blurb: 'trained sparse autoencoders on language-model activations to study interpretable features and superposition.', href: PLACEHOLDER, tag: 'interpretability', image: './H.jpg', figures: [{ image: './lab-pics/monosemanticity/interp.jpg' }],
+    mediaAfter: ["I trained sparse autoencoders on GPT-2 activations and looked for features that might correspond to recognizable concepts."],
     code: 'https://github.com/ruth1445/interpretability', visualRepo: 'https://github.com/ruth1445/monosemanticity', visualDemo: 'https://ruth1445.github.io/monosemanticity/', reportPdf: './report-zine/Ruth_SL_FinalReport_2.pdf', zine: true,
         intro: "For my final project at Rutgers, I wanted to understand what happens inside a language model rather than only judging the sentences it produces. I had been reading Anthropic's research on interpretability, which I found so fascinating that I decided to attempt a small replication with the resources I had. I trained sparse autoencoders on GPT-2 activations and looked for features that might correspond to recognizable concepts. I also started making visual explanations because I was new to this field and wanted a way to understand it myself." },
   { cat: 'projects', title: 'societal impacts research paper', blurb: 'co-authored an nbea paper using an nlp pipeline over 8k+ reddit posts to study chatbot perception and bias.', href: PLACEHOLDER, tag: 'nlp research', image: './I.jpg',
     paper: 'https://www.researchgate.net/profile/Janki-Kanakia-2/publication/395721509_Societal_Impacts_and_Public_Perception_of_Chatbots_Implications_for_Individuals_and_Organizations/links/68ed8db602d6215259bb652c/Societal-Impacts-and-Public-Perception-of-Chatbots-Implications-for-Individuals-and-Organizations.pdf',
         intro: "I have spent an embarrassing amount of time reading strangers argue about AI on the internet, so I thought I might as well turn some of that into research. For a co-authored paper, I worked on an NLP pipeline that analyzed over 8,000 Reddit posts about chatbots, particularly the ways people perceive them and discuss bias. I wanted to see whether the arguments I kept noticing individually would still appear once I looked at thousands of them together." },
   { cat: 'projects', title: 'does a growth mindset nudge boost achievement?', blurb: 'analyzed whether a short growth-mindset intervention shifts achievement outcomes using a causal/statistical lens.', href: PLACEHOLDER, tag: 'statistics', image: './J.jpg', figures: [{ image: './lab-pics/growth-mindset-nudge/growth_Nudge.jpg' }],
+    mediaAfter: ["I used propensity-score weighting, checked how comparable the groups were, and examined whether the estimated effects differed across students."],
     code: 'https://github.com/ruth1445/mindset-nudge',
         intro: "We hear an awful lot about the power of having a growth mindset, but can a brief intervention actually change academic outcomes? I used a synthetic replica of a study covering 10,391 students across 76 schools and tried to estimate the effect of a short growth-mindset intervention. I used propensity-score weighting, checked how comparable the groups were, and examined whether the estimated effects differed across students. I liked the idea of approaching such a familiar piece of advice with something more demanding than anecdotes." },
   { cat: 'projects', title: 'harmonies', blurb: 'a small web experiment in layered sound, language, and visual rhythm.', href: 'https://ruth1445.github.io/harmonies/', tag: 'creative code', image: './K.jpg',
     demo: 'https://ruth1445.github.io/harmonies/',
     intro: "I picked up a copy of Johannes Kepler's *Harmonies of the World* intending to use it as a reference book. I ended up reading the whole thing. I loved how he brought geometry, astronomy, and music theory together, and naturally wanted to see whether I could make something out of it. I built an interactive universe where planetary motion can be seen and heard, mapping orbital relationships into sound. I then went looking for similar harmonies in moons, flowers, and other forms of geometry. The real planetary orbits sound rather less pleasant than the romanticized version, which I think is delightful.",
-    figures: [{ image: './lab-pics/harmonies/harmonies.jpg' }] },
+    figures: [{ image: './lab-pics/harmonies/harmonies.jpg' }],
+    mediaAfter: ["I built an interactive universe where planetary motion can be seen and heard, mapping orbital relationships into sound."] },
 ];
 PROJECTS.forEach((p) => { p.slug = p.slug || p.title.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); });
 
@@ -1140,6 +1170,39 @@ class Component extends DCLogic {
     // Only display media that genuinely belongs to a project; don't invent extra figures.
     const projectMedia = (pjSrc.figures || []).filter((f) => f && (f.image || f.video));
     const projectIntro = pjSrc.intro || pjSrc.blurb || '';
+    // Editorial placements use exact sentence endings from the existing write-up.
+    // The original paragraphs and media file references remain the sole sources.
+    const editorialBlocks = (() => {
+      const markers = pjSrc.mediaAfter || [];
+      if (!markers.length || markers.length !== projectMedia.length) return [];
+      const blocks = [];
+      let offset = 0;
+      function addText(text) {
+        const copy = text.trim();
+        if (!copy) return;
+        blocks.push({
+          text: copy,
+          parts: copy.split(/(\*[^*]+\*)/g).filter(Boolean).map((piece) => ({
+            t: piece.startsWith('*') && piece.endsWith('*') ? piece.slice(1, -1) : piece,
+            it: piece.startsWith('*') && piece.endsWith('*'),
+            plain: !(piece.startsWith('*') && piece.endsWith('*')),
+          })),
+        });
+      }
+      for (let i = 0; i < markers.length; i++) {
+        const marker = markers[i];
+        const at = projectIntro.indexOf(marker, offset);
+        if (at < 0) return []; // a changed paragraph must never silently scramble its media
+        const ending = at + marker.length;
+        addText(projectIntro.slice(offset, ending));
+        const fig = projectMedia[i];
+        blocks.push({ image: fig.image || '', video: fig.video || '', alt: pjSrc.title + ' illustration ' + (i + 1) });
+        offset = ending;
+      }
+      addText(projectIntro.slice(offset));
+      return blocks;
+    })();
+    const hasEditorial = editorialBlocks.length > 0;
     const pj = {
       intro: projectIntro,
       // *words between asterisks* in an intro are set in italics
@@ -1159,6 +1222,9 @@ class Component extends DCLogic {
       })(),
       timeline: pjSrc.timeline || [],
       hasTimeline: Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0,
+      hasEditorial,
+      hasStandardLayout: !hasEditorial,
+      editorialBlocks,
       timelineInHero: !pjSrc.chatbotLine && Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0,
       hasStory: Boolean(pjSrc.chatbotLine),
       chatbotLine: pjSrc.chatbotLine || '',
@@ -1166,11 +1232,11 @@ class Component extends DCLogic {
       citationsLine: pjSrc.citationsLine || '',
       citationClips: pjSrc.citationClips || [],
       privacyNote: pjSrc.privacyNote || '',
-      hasLead: projectMedia.length > 0,
+      hasLead: !hasEditorial && projectMedia.length > 0,
       heroCls: 'pjs-fig pjs-hero' + (projectMedia.length ? '' : ' pjs-hero--no-media'),
       // the first real image sits beside the write-up; subsequent images follow below
       lead: ((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq' }))(projectMedia[0] || {}),
-      figures: projectMedia.slice(1).map((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq', text: f.text || '', cls: 'pjs-fig' + (f.text ? '' : ' pjs-fig--image-only') })),
+      figures: (hasEditorial ? [] : projectMedia.slice(1)).map((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq', text: f.text || '', cls: 'pjs-fig' + (f.text ? '' : ' pjs-fig--image-only') })),
       videos: pjSrc.videos || [],
       title: pjSrc.title,
       blurb: pjSrc.blurb,
