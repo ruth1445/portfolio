@@ -856,7 +856,8 @@ const PROJECTS = [
   { cat: 'projects', title: 'harmonies', blurb: 'a small web experiment in layered sound, language, and visual rhythm.', href: 'https://ruth1445.github.io/harmonies/', tag: 'creative code', image: './K.jpg',
     demo: 'https://ruth1445.github.io/harmonies/',
     intro: "I picked up a copy of Johannes Kepler's *Harmonies of the World* intending to use it as a reference book. I ended up reading the whole thing. I loved how he brought geometry, astronomy, and music theory together, and naturally wanted to see whether I could make something out of it. I built an interactive universe where planetary motion can be seen and heard, mapping orbital relationships into sound. I then went looking for similar harmonies in moons, flowers, and other forms of geometry. The real planetary orbits sound rather less pleasant than the romanticized version, which I think is delightful.",
-    figures: [{ image: './lab-pics/harmonies/harmonies.jpg' }] },
+    figures: [{ image: './lab-pics/harmonies/harmonies.jpg' }],
+    mediaAfter: ["I built an interactive universe where planetary motion can be seen and heard, mapping orbital relationships into sound."] },
 ];
 PROJECTS.forEach((p) => { p.slug = p.slug || p.title.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); });
 
