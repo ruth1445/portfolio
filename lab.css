@@ -93,6 +93,45 @@ body[data-page="lab"] .lx-page .lx-writing-intro {
 }
 body[data-page="lab"] .lx-page .lx-preview, body[data-page="lab"] .lx-page .lx-cap { text-transform: none; letter-spacing: 0; }
 
+
+/* Sentence-level project illustrations: the same restrained article scale as Thought-opsy.
+   Preserve aspect ratio and keep images/videos close to the text they explain. */
+.pjs-editorial {
+  width: min(100%, 760px);
+  margin: clamp(38px, 5vw, 66px) auto 0;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+.pjs-editorial-copy {
+  max-width: 68ch;
+  margin: 0 auto 22px;
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.55;
+}
+.pjs-editorial-figure {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: min(100%, 390px);
+  margin: 18px auto 32px;
+}
+.pjs-editorial-figure img,
+.pjs-editorial-figure video {
+  display: block;
+  width: 100%;
+  max-height: 285px;
+  height: auto;
+  object-fit: contain;
+  background: transparent;
+  border: 1px solid rgba(23, 22, 15, .30);
+}
+.pjs-editorial .pjs-links { margin-top: 28px; }
+@media (max-width: 600px) {
+  .pjs-editorial-figure { max-width: min(100%, 350px); }
+  .pjs-editorial-figure img,
+  .pjs-editorial-figure video { max-height: 235px; }
+}
+
+/* Retain the legacy two-column layout for projects without article media. */
 /* Compact editorial media inside Thoughtopsy's narrative, rather than tall project-wide figures. */
 .pjs-story {
   width: min(100%, 760px);
