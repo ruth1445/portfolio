@@ -111,7 +111,7 @@ body[data-page="lab"] .lx-page .lx-preview, body[data-page="lab"] .lx-page .lx-c
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: min(100%, 390px);
+  max-width: min(100%, 326px);
   margin: 18px auto 32px;
 }
 .pjs-editorial-figure img,
@@ -126,7 +126,7 @@ body[data-page="lab"] .lx-page .lx-preview, body[data-page="lab"] .lx-page .lx-c
 }
 .pjs-editorial .pjs-links { margin-top: 28px; }
 @media (max-width: 600px) {
-  .pjs-editorial-figure { max-width: min(100%, 350px); }
+  .pjs-editorial-figure { max-width: min(100%, 326px); }
   .pjs-editorial-figure img,
   .pjs-editorial-figure video { max-height: 235px; }
 }
