@@ -1177,7 +1177,7 @@ class Component extends DCLogic {
         if (!copy) return;
         blocks.push({
           text: copy,
-          parts: copy.split(/(\\*[^*]+\\*)/g).filter(Boolean).map((piece) => ({
+          parts: copy.split(/(\*[^*]+\*)/g).filter(Boolean).map((piece) => ({
             t: piece.startsWith('*') && piece.endsWith('*') ? piece.slice(1, -1) : piece,
             it: piece.startsWith('*') && piece.endsWith('*'),
             plain: !(piece.startsWith('*') && piece.endsWith('*')),
