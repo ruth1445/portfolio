@@ -1165,6 +1165,39 @@ class Component extends DCLogic {
     // Only display media that genuinely belongs to a project; don't invent extra figures.
     const projectMedia = (pjSrc.figures || []).filter((f) => f && (f.image || f.video));
     const projectIntro = pjSrc.intro || pjSrc.blurb || '';
+    // Editorial placements use exact sentence endings from the existing write-up.
+    // The original paragraphs and media file references remain the sole sources.
+    const editorialBlocks = (() => {
+      const markers = pjSrc.mediaAfter || [];
+      if (!markers.length || markers.length !== projectMedia.length) return [];
+      const blocks = [];
+      let offset = 0;
+      function addText(text) {
+        const copy = text.trim();
+        if (!copy) return;
+        blocks.push({
+          text: copy,
+          parts: copy.split(/(\\*[^*]+\\*)/g).filter(Boolean).map((piece) => ({
+            t: piece.startsWith('*') && piece.endsWith('*') ? piece.slice(1, -1) : piece,
+            it: piece.startsWith('*') && piece.endsWith('*'),
+            plain: !(piece.startsWith('*') && piece.endsWith('*')),
+          })),
+        });
+      }
+      for (let i = 0; i < markers.length; i++) {
+        const marker = markers[i];
+        const at = projectIntro.indexOf(marker, offset);
+        if (at < 0) return []; // a changed paragraph must never silently scramble its media
+        const ending = at + marker.length;
+        addText(projectIntro.slice(offset, ending));
+        const fig = projectMedia[i];
+        blocks.push({ image: fig.image || '', video: fig.video || '', alt: pjSrc.title + ' illustration ' + (i + 1) });
+        offset = ending;
+      }
+      addText(projectIntro.slice(offset));
+      return blocks;
+    })();
+    const hasEditorial = editorialBlocks.length > 0;
     const pj = {
       intro: projectIntro,
       // *words between asterisks* in an intro are set in italics
@@ -1184,6 +1217,9 @@ class Component extends DCLogic {
       })(),
       timeline: pjSrc.timeline || [],
       hasTimeline: Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0,
+      hasEditorial,
+      hasStandardLayout: !hasEditorial,
+      editorialBlocks,
       timelineInHero: !pjSrc.chatbotLine && Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0,
       hasStory: Boolean(pjSrc.chatbotLine),
       chatbotLine: pjSrc.chatbotLine || '',
@@ -1191,11 +1227,11 @@ class Component extends DCLogic {
       citationsLine: pjSrc.citationsLine || '',
       citationClips: pjSrc.citationClips || [],
       privacyNote: pjSrc.privacyNote || '',
-      hasLead: projectMedia.length > 0,
+      hasLead: !hasEditorial && projectMedia.length > 0,
       heroCls: 'pjs-fig pjs-hero' + (projectMedia.length ? '' : ' pjs-hero--no-media'),
       // the first real image sits beside the write-up; subsequent images follow below
       lead: ((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq' }))(projectMedia[0] || {}),
-      figures: projectMedia.slice(1).map((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq', text: f.text || '', cls: 'pjs-fig' + (f.text ? '' : ' pjs-fig--image-only') })),
+      figures: (hasEditorial ? [] : projectMedia.slice(1)).map((f) => ({ image: f.image || '', video: f.video || '', boxCls: 'pjs-sq', text: f.text || '', cls: 'pjs-fig' + (f.text ? '' : ' pjs-fig--image-only') })),
       videos: pjSrc.videos || [],
       title: pjSrc.title,
       blurb: pjSrc.blurb,
