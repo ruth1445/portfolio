@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ruth Sharon — Quotes</title>
+<title>Ruth Sharon — Favorite Excerpts & Books</title>
 <link rel="icon" type="image/svg+xml" href="../../assets/logo-pin-square.svg?v=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,6 +56,24 @@ main{max-width:1240px;margin:0 auto;padding:clamp(110px,12vw,170px) clamp(22px,5
 .q.at-c{margin-left:auto;margin-right:auto}
 .q.at-i{margin-left:clamp(0px,14vw,200px)}
 .q.it{font-style:italic}
+.section-kicker{font:600 11px var(--gr);letter-spacing:.19em;text-transform:uppercase;color:#84796c;margin:0 0 36px}
+.excerpts-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;border-bottom:1px solid rgba(23,22,15,.22);padding-bottom:14px;margin-bottom:clamp(55px,8vw,90px)}
+.excerpts-head h1,.books h2{font:400 clamp(36px,5vw,67px)/1.03 var(--ser);letter-spacing:-.025em;margin:0}
+.excerpts-head span{font:400 13px var(--gr);color:var(--mid)}
+.quote-entry{margin:0 0 clamp(64px,8vw,112px)}
+.quote-entry blockquote{margin:0}
+.quote-entry p{white-space:normal}
+.quote-entry cite{display:block;margin-top:18px;font:400 13px/1.6 var(--gr);color:#756a5e;font-style:normal}
+.quote-entry cite em{font-style:italic}
+.quote-entry:nth-child(even){margin-left:auto}
+.quote-entry:nth-child(3){margin-left:clamp(0px,8vw,115px)}
+.books{margin:clamp(80px,11vw,160px) 0 75px;padding-top:30px;border-top:1px solid rgba(23,22,15,.25)}
+.books .books-intro{max-width:630px;font:400 clamp(17px,1.6vw,21px)/1.5 var(--ser);margin:20px 0 40px;color:#4a4339}
+.book-list{list-style:none;margin:0;padding:0;max-width:900px;border-top:1px solid rgba(23,22,15,.18)}
+.book-list li{display:grid;grid-template-columns:minmax(0,1fr) minmax(100px,190px);gap:20px;align-items:baseline;padding:18px 0;border-bottom:1px solid rgba(23,22,15,.18)}
+.book-title{font:400 clamp(21px,2.2vw,28px)/1.2 var(--ser)}
+.book-author{font:400 13px/1.5 var(--gr);color:var(--mid);text-align:right}
+@media(max-width:600px){.excerpts-head{align-items:start;flex-direction:column;gap:8px}.quote-entry:nth-child(3){margin-left:0}.book-list li{grid-template-columns:1fr;gap:4px}.book-author{text-align:left}}
 .back{display:inline-flex;gap:.3em;align-items:baseline;font-family:var(--ser);font-style:italic;font-size:clamp(18px,1.5vw,23px)}
 .back:hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
 </style>
@@ -65,10 +83,41 @@ main{max-width:1240px;margin:0 auto;padding:clamp(110px,12vw,170px) clamp(22px,5
   <nav><a href="../../assets/RuthSharon__Resume.pdf">resume</a><a href="https://github.com/ruth1445">github</a><a href="mailto:ruth.sharon@rutgers.edu">email</a></nav></div>
 
 <main>
-  <!-- one block per quote. sizes: big / mid / small. placement: (none) left, at-r right, at-c centre, at-i indented. add "it" for italics -->
-  <blockquote class="q big">
-    <p>When you read biographies of people who&rsquo;ve done great work, it&rsquo;s remarkable how much luck is involved. They discover what to work on as a result of a chance meeting, or by reading a book they happen to pick up. So you need to make yourself a big target for luck, and the way to do that is to be curious. Try lots of things, meet lots of people, read lots of books, ask lots of questions.</p>
-  </blockquote>
+  <header class="excerpts-head">
+    <h1>favorite excerpts</h1>
+    <span>words I keep coming back to</span>
+  </header>
+
+  <section aria-label="Favorite excerpts">
+    <article class="quote-entry">
+      <blockquote class="q mid"><p>We sometimes hear of things that can travel faster than light. Something called &lsquo;the speed of thought&rsquo; is occasionally proffered. This is an exceptionally silly notion especially since the speed of impulses through the neurons in our brains is about the same as the speed of a donkey cart. That human beings have been clever enough to devise relativity shows that we think well, but I do not think we can boast about thinking fast. The electrical impulses in modern computers do, however, travel nearly at the speed of light.</p></blockquote>
+      <cite>Carl Sagan, <em>Cosmos</em></cite>
+    </article>
+
+    <article class="quote-entry">
+      <blockquote class="q mid"><p>And I haven't even mentioned the lack of mathematical criticism in school. At no time are students let in on the secret that mathematics, like any literature, is created by human beings for their own amusement; that works of mathematics are subject to critical appraisal; that one can have and develop mathematical taste. A piece of mathematics is like a poem, and we can ask if it satisfies our aesthetic criteria: Is this argument sound? Does it make sense? Is it simple and elegant? Does it get me closer to the heart of the matter? Of course there's no criticism going on in school &mdash; there's no art being done to criticize!</p></blockquote>
+      <cite>Paul Lockhart, <em>A Mathematician's Lament</em></cite>
+    </article>
+
+    <article class="quote-entry">
+      <blockquote class="q big"><p>What should you do if you're young and ambitious but don't know what to work on? What you should <em>not</em> do is drift along passively, assuming the problem will solve itself. You need to take action. But there is no systematic procedure you can follow. When you read biographies of people who've done great work, it's remarkable how much luck is involved. They discover what to work on as a result of a chance meeting, or by reading a book they happen to pick up. So you need to make yourself a big target for luck, and the way to do that is to be curious. Try lots of things, meet lots of people, read lots of books, ask lots of questions.</p></blockquote>
+      <cite>Paul Graham, <em>How to Do Great Work</em></cite>
+    </article>
+
+    <article class="quote-entry">
+      <blockquote class="q mid"><p>People who fall victim to a monotonically increasing confidence in their opinions are implicitly concluding the world is static. If you consciously remind yourself it isn't, you start to look for change.</p></blockquote>
+      <cite>Paul Graham, <em>How to Be an Expert in a Changing World</em></cite>
+    </article>
+  </section>
+
+  <section class="books" aria-labelledby="books-title">
+    <h2 id="books-title">books I've read</h2>
+    <p class="books-intro">A small shelf of books I've finished. I'll keep adding to it.</p>
+    <ul class="book-list">
+      <li><span class="book-title">Sapiens: A Brief History of Humankind</span><span class="book-author">Yuval Noah Harari</span></li>
+      <li><span class="book-title">Harmonies of the World</span><span class="book-author">Johannes Kepler</span></li>
+    </ul>
+  </section>
 
   <a data-up class="back" href="../"><span aria-hidden="true">&#8598;</span>back</a>
 </main>
