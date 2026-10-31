@@ -170,6 +170,29 @@ body[data-page="lab"] .lx-page .lx-preview, body[data-page="lab"] .lx-page .lx-c
   .pjs-story-clip video { max-height: 235px; }
 }
 
+/* All project article media use the same compact footprint as Thought-opsy's paired clips.
+   Natural aspect ratios are preserved, with no cropping or upscaling of small assets. */
+.pjs-inline-media {
+  box-sizing: border-box;
+  width: min(100%, 326px);
+  max-width: 326px;
+  min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+.pjs-inline-media img,
+.pjs-inline-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 285px;
+  object-fit: contain;
+}
+@media (max-width: 600px) {
+  .pjs-inline-media img,
+  .pjs-inline-media video { max-height: 235px; }
+}
+
 /* The research report sits after the project images in an editorial reader. */
 .pjs-report-section { margin: clamp(72px, 10vw, 132px) auto 0; max-width: 960px; }
 .pjs-report-heading { text-align: center; margin: 0 auto 22px; }
