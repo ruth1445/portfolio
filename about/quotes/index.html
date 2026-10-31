@@ -47,48 +47,38 @@ a{color:inherit;text-decoration:none}
 @media (max-width:700px){.bar{height:46px;padding:0 14px}.bar.is-floating{left:8px;right:8px;top:8px}.bar .crumbs .logo img{width:auto;height:28px}}
 @media (max-width:520px){.bar nav{display:none}.bar .crumbs{white-space:nowrap}}
 main{max-width:1240px;margin:0 auto;padding:clamp(110px,12vw,170px) clamp(22px,5vw,72px) clamp(90px,10vw,150px)}
-.q{margin:0 0 clamp(64px,8vw,120px);font-family:var(--ser);font-weight:400;color:#111;text-wrap:pretty}
-.q p{margin:0}
-.q.big{font-size:clamp(26px,3vw,44px);line-height:1.12;width:min(100%,820px)}
-.q.mid{font-size:clamp(22px,2.2vw,32px);line-height:1.18;width:min(100%,600px)}
-.q.small{font-size:clamp(20px,1.8vw,26px);line-height:1.22;width:min(100%,460px)}
-.q.at-r{margin-left:auto}
-.q.at-c{margin-left:auto;margin-right:auto}
-.q.at-i{margin-left:clamp(0px,14vw,200px)}
-.q.it{font-style:italic}
-.section-kicker{font:600 11px var(--gr);letter-spacing:.19em;text-transform:uppercase;color:#84796c;margin:0 0 36px}
-.excerpts-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;border-bottom:1px solid rgba(23,22,15,.22);padding-bottom:14px;margin-bottom:clamp(55px,8vw,90px)}
-.excerpts-head h1,.books h2{font:400 clamp(36px,5vw,67px)/1.03 var(--ser);letter-spacing:-.025em;margin:0}
-.excerpts-head span{font:400 13px var(--gr);color:var(--mid)}
-.quote-entry{margin:0 0 clamp(64px,8vw,112px)}
-.quote-entry blockquote{margin:0}
-.quote-entry p{white-space:normal}
-.quote-entry cite{display:block;margin-top:18px;font:400 13px/1.6 var(--gr);color:#756a5e;font-style:normal}
-.quote-entry cite em{font-style:italic}
-.quote-entry:nth-child(even){margin-left:auto}
-.quote-entry:nth-child(3){margin-left:clamp(0px,8vw,115px)}
-.books{margin:clamp(80px,11vw,160px) 0 75px;padding-top:30px;border-top:1px solid rgba(23,22,15,.25)}
-.books .books-intro{max-width:630px;font:400 clamp(17px,1.6vw,21px)/1.5 var(--ser);margin:20px 0 40px;color:#4a4339}
-.book-list{list-style:none;margin:0;padding:0;max-width:900px;border-top:1px solid rgba(23,22,15,.18)}
-.book-list li{display:grid;grid-template-columns:minmax(0,1fr) minmax(100px,190px);gap:20px;align-items:baseline;padding:18px 0;border-bottom:1px solid rgba(23,22,15,.18)}
-.book-title{font:400 clamp(21px,2.2vw,28px)/1.2 var(--ser)}
-.book-author{font:400 13px/1.5 var(--gr);color:var(--mid);text-align:right}
-@media(max-width:600px){.excerpts-head{align-items:start;flex-direction:column;gap:8px}.quote-entry:nth-child(3){margin-left:0}.book-list li{grid-template-columns:1fr;gap:4px}.book-author{text-align:left}}
-.back{display:inline-flex;gap:.3em;align-items:baseline;font-family:var(--ser);font-style:italic;font-size:clamp(18px,1.5vw,23px)}
+.excerpts-head{border-bottom:1px solid rgba(23,22,15,.22);padding-bottom:14px}
+.excerpts-head h1,.shelf-h{font:400 clamp(36px,5vw,67px)/1.03 var(--ser);letter-spacing:-.025em;margin:0}
+blockquote{margin:0}
+blockquote p{margin:0;text-wrap:pretty}
+cite{display:block;font:400 13px/1.5 var(--gr);color:#756a5e;font-style:normal}
+cite em{font-style:italic}
+/* each excerpt sits beside its book, as if the book were open at that page */
+.spreads{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(48px,6vw,88px) clamp(40px,6vw,96px);margin-top:clamp(48px,6vw,80px);align-items:start}
+.spread{display:grid;grid-template-columns:clamp(96px,10vw,132px) minmax(0,1fr);gap:clamp(18px,2vw,28px);align-items:start}
+.spread p{font:400 clamp(18px,1.4vw,21px)/1.34 var(--ser);color:#111}
+.spread cite{margin-top:14px}
+/* a book cover: the real cover art, or for an essay a plain outlined card with its title */
+.cover{position:relative;display:block;aspect-ratio:2/3;overflow:hidden;background:#E8E3D9;border:1px solid rgba(23,22,15,.1);transition:transform .25s ease}
+.cover img{position:relative;z-index:1;display:block;width:100%;height:100%;object-fit:cover}
+a.cover:hover{transform:translateY(-4px)}
+a.cover:focus-visible{outline:2px solid #b4482f;outline-offset:3px}
+.cover .fb{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:10% 9%;color:#17160F}
+.cover .fb b{font:400 clamp(12px,1vw,15px)/1.05 var(--ser)}
+.cover .fb small{font:500 9px/1.3 var(--gr);letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.cover.essay{background:#FAF9F6;border-color:#17160F}
+/* the shelf carries straight on in the same covers */
+.shelf{margin-top:clamp(64px,8vw,104px)}
+.shelf-top{display:flex;align-items:baseline;gap:18px;margin-bottom:22px}
+.shelf-top .line{flex:1;height:1px;background:rgba(23,22,15,.2)}
+.shelf-h{font-size:clamp(28px,3vw,40px)}
+.shelf-n{font:400 13px var(--gr);color:var(--mid)}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(96px,10vw,132px),1fr));gap:clamp(18px,2vw,28px);list-style:none;margin:0;padding:0}
+.wall li{min-width:0}
+@media (max-width:860px){.spreads{grid-template-columns:1fr}}
+@media (max-width:480px){.spread{grid-template-columns:72px minmax(0,1fr)}}
+.back{display:inline-flex;gap:.3em;align-items:baseline;margin-top:clamp(56px,7vw,96px);font-family:var(--ser);font-style:italic;font-size:clamp(18px,1.5vw,23px)}
 .back:hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
-/* A wall of actual book jackets, inspired by an image library rather than a text catalogue. */
-.books{max-width:none}
-.books .books-intro{margin-bottom:32px}
-.cover-wall{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:0;padding:0;width:100%}
-.cover-wall li{min-width:0}
-.book-cover{position:relative;display:block;aspect-ratio:2 / 3;overflow:hidden;background:#e8e3d9;border:1px solid rgba(23,22,15,.08)}
-.book-cover img{position:relative;z-index:1;display:block;width:100%;height:100%;object-fit:cover;transition:transform .25s ease}
-.book-cover:hover img,.book-cover:focus-visible img{transform:scale(1.035)}
-.book-cover:focus-visible{outline:2px solid #b4482f;outline-offset:3px}
-.book-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:14px;font:400 clamp(16px,2vw,27px)/1.08 var(--ser);color:#352b24}
-.book-fallback small{font:400 12px/1.3 var(--gr);opacity:.7}
-@media(max-width:800px){.cover-wall{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}}
-@media(max-width:480px){.cover-wall{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}}
 </style>
 </head>
 <body>
@@ -96,42 +86,39 @@ main{max-width:1240px;margin:0 auto;padding:clamp(110px,12vw,170px) clamp(22px,5
   <nav><a href="../../assets/RuthSharon__Resume.pdf">resume</a><a href="https://github.com/ruth1445">github</a><a href="mailto:ruth.sharon@rutgers.edu">email</a></nav></div>
 
 <main>
-  <header class="excerpts-head">
-    <h1>favorite excerpts</h1>
-    <span>words I keep coming back to</span>
-  </header>
+  <header class="excerpts-head"><h1>favorite excerpts</h1></header>
 
-  <section aria-label="Favorite excerpts">
-    <article class="quote-entry">
-      <blockquote class="q mid"><p>We sometimes hear of things that can travel faster than light. Something called &lsquo;the speed of thought&rsquo; is occasionally proffered. This is an exceptionally silly notion especially since the speed of impulses through the neurons in our brains is about the same as the speed of a donkey cart. That human beings have been clever enough to devise relativity shows that we think well, but I do not think we can boast about thinking fast. The electrical impulses in modern computers do, however, travel nearly at the speed of light.</p></blockquote>
-      <cite>Carl Sagan, <em>Cosmos</em></cite>
+  <section class="spreads" aria-label="Favorite excerpts">
+    <article class="spread">
+      <a class="cover" href="https://openlibrary.org/isbn/9780345539434" target="_blank" rel="noopener noreferrer" aria-label="Cosmos by Carl Sagan"><span class="fb" aria-hidden="true"><b>Cosmos</b><small>Carl Sagan</small></span><img src="https://covers.openlibrary.org/b/isbn/9780345539434-L.jpg?default=false" alt="Cover of Cosmos" decoding="async" onerror="this.remove()"></a>
+      <div><blockquote><p>We sometimes hear of things that can travel faster than light. Something called &lsquo;the speed of thought&rsquo; is occasionally proffered. This is an exceptionally silly notion especially since the speed of impulses through the neurons in our brains is about the same as the speed of a donkey cart. That human beings have been clever enough to devise relativity shows that we think well, but I do not think we can boast about thinking fast. The electrical impulses in modern computers do, however, travel nearly at the speed of light.</p></blockquote>
+      <cite>Carl Sagan, <em>Cosmos</em></cite></div>
     </article>
-
-    <article class="quote-entry">
-      <blockquote class="q mid"><p>And I haven't even mentioned the lack of mathematical criticism in school. At no time are students let in on the secret that mathematics, like any literature, is created by human beings for their own amusement; that works of mathematics are subject to critical appraisal; that one can have and develop mathematical taste. A piece of mathematics is like a poem, and we can ask if it satisfies our aesthetic criteria: Is this argument sound? Does it make sense? Is it simple and elegant? Does it get me closer to the heart of the matter? Of course there's no criticism going on in school &mdash; there's no art being done to criticize!</p></blockquote>
-      <cite>Paul Lockhart, <em>A Mathematician's Lament</em></cite>
+    <article class="spread">
+      <a class="cover" href="https://openlibrary.org/isbn/9781934137178" target="_blank" rel="noopener noreferrer" aria-label="A Mathematician&#x27;s Lament by Paul Lockhart"><span class="fb" aria-hidden="true"><b>A Mathematician&#x27;s Lament</b><small>Paul Lockhart</small></span><img src="https://covers.openlibrary.org/b/isbn/9781934137178-L.jpg?default=false" alt="Cover of A Mathematician&#x27;s Lament" decoding="async" onerror="this.remove()"></a>
+      <div><blockquote><p>And I haven't even mentioned the lack of mathematical criticism in school. At no time are students let in on the secret that mathematics, like any literature, is created by human beings for their own amusement; that works of mathematics are subject to critical appraisal; that one can have and develop mathematical taste. A piece of mathematics is like a poem, and we can ask if it satisfies our aesthetic criteria: Is this argument sound? Does it make sense? Is it simple and elegant? Does it get me closer to the heart of the matter? Of course there's no criticism going on in school &mdash; there's no art being done to criticize!</p></blockquote>
+      <cite>Paul Lockhart, <em>A Mathematician's Lament</em></cite></div>
     </article>
-
-    <article class="quote-entry">
-      <blockquote class="q big"><p>What should you do if you're young and ambitious but don't know what to work on? What you should <em>not</em> do is drift along passively, assuming the problem will solve itself. You need to take action. But there is no systematic procedure you can follow. When you read biographies of people who've done great work, it's remarkable how much luck is involved. They discover what to work on as a result of a chance meeting, or by reading a book they happen to pick up. So you need to make yourself a big target for luck, and the way to do that is to be curious. Try lots of things, meet lots of people, read lots of books, ask lots of questions.</p></blockquote>
-      <cite>Paul Graham, <em>How to Do Great Work</em></cite>
+    <article class="spread">
+      <a class="cover essay" href="https://paulgraham.com/greatwork.html" target="_blank" rel="noopener noreferrer" aria-label="How to Do Great Work by Paul Graham"><span class="fb"><b>How to Do Great Work</b><small>Paul Graham</small></span></a>
+      <div><blockquote><p>What should you do if you're young and ambitious but don't know what to work on? What you should <em>not</em> do is drift along passively, assuming the problem will solve itself. You need to take action. But there is no systematic procedure you can follow. When you read biographies of people who've done great work, it's remarkable how much luck is involved. They discover what to work on as a result of a chance meeting, or by reading a book they happen to pick up. So you need to make yourself a big target for luck, and the way to do that is to be curious. Try lots of things, meet lots of people, read lots of books, ask lots of questions.</p></blockquote>
+      <cite>Paul Graham, <em>How to Do Great Work</em></cite></div>
     </article>
-
-    <article class="quote-entry">
-      <blockquote class="q mid"><p>People who fall victim to a monotonically increasing confidence in their opinions are implicitly concluding the world is static. If you consciously remind yourself it isn't, you start to look for change.</p></blockquote>
-      <cite>Paul Graham, <em>How to Be an Expert in a Changing World</em></cite>
+    <article class="spread">
+      <a class="cover essay" href="https://paulgraham.com/ecw.html" target="_blank" rel="noopener noreferrer" aria-label="How to Be an Expert in a Changing World by Paul Graham"><span class="fb"><b>How to Be an Expert in a Changing World</b><small>Paul Graham</small></span></a>
+      <div><blockquote><p>People who fall victim to a monotonically increasing confidence in their opinions are implicitly concluding the world is static. If you consciously remind yourself it isn't, you start to look for change.</p></blockquote>
+      <cite>Paul Graham, <em>How to Be an Expert in a Changing World</em></cite></div>
     </article>
   </section>
 
-  <section class="books" aria-labelledby="books-title">
-    <h2 id="books-title">library</h2>
-    <p class="books-intro">A growing collection of books I've read.</p>
-    <ul class="cover-wall">
-      <li><a class="book-cover" href="https://openlibrary.org/isbn/9780062316097" target="_blank" rel="noopener noreferrer" aria-label="Sapiens: A Brief History of Humankind by Yuval Noah Harari"><img src="https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg" alt="Cover of Sapiens: A Brief History of Humankind" loading="lazy" decoding="async"><span class="book-fallback" aria-hidden="true">Sapiens: A Brief History of Humankind<small>Yuval Noah Harari</small></span></a></li>
-      <li><a class="book-cover" href="https://openlibrary.org/isbn/9780871692092" target="_blank" rel="noopener noreferrer" aria-label="Harmonies of the World by Johannes Kepler"><img src="https://covers.openlibrary.org/b/isbn/9780871692092-L.jpg" alt="Cover of Harmonies of the World" loading="lazy" decoding="async"><span class="book-fallback" aria-hidden="true">Harmonies of the World<small>Johannes Kepler</small></span></a></li>
-      <li><a class="book-cover" href="https://openlibrary.org/isbn/9781541672482" target="_blank" rel="noopener noreferrer" aria-label="The Art of Logic in an Illogical World by Eugenia Cheng"><img src="https://covers.openlibrary.org/b/isbn/9781541672482-L.jpg" alt="Cover of The Art of Logic in an Illogical World" loading="lazy" decoding="async"><span class="book-fallback" aria-hidden="true">The Art of Logic in an Illogical World<small>Eugenia Cheng</small></span></a></li>
-      <li><a class="book-cover" href="https://openlibrary.org/isbn/9780061209192" target="_blank" rel="noopener noreferrer" aria-label="Physics and Philosophy by Werner Heisenberg"><img src="https://covers.openlibrary.org/b/isbn/9780061209192-L.jpg" alt="Cover of Physics and Philosophy" loading="lazy" decoding="async"><span class="book-fallback" aria-hidden="true">Physics and Philosophy<small>Werner Heisenberg</small></span></a></li>
-      <li><a class="book-cover" href="https://openlibrary.org/isbn/9780393316049" target="_blank" rel="noopener noreferrer" aria-label="Surely You&#39;re Joking, Mr. Feynman! by Richard P. Feynman"><img src="https://covers.openlibrary.org/b/isbn/9780393316049-L.jpg" alt="Cover of Surely You&#39;re Joking, Mr. Feynman!" loading="lazy" decoding="async"><span class="book-fallback" aria-hidden="true">Surely You&#39;re Joking, Mr. Feynman!<small>Richard P. Feynman</small></span></a></li>
+  <section class="shelf" aria-labelledby="books-title">
+    <div class="shelf-top"><h2 class="shelf-h" id="books-title">library</h2><i class="line"></i><span class="shelf-n">A growing collection of books I've read.</span></div>
+    <ul class="wall">
+      <li><a class="cover" href="https://openlibrary.org/isbn/9780062316097" target="_blank" rel="noopener noreferrer" aria-label="Sapiens: A Brief History of Humankind by Yuval Noah Harari"><span class="fb" aria-hidden="true"><b>Sapiens: A Brief History of Humankind</b><small>Yuval Noah Harari</small></span><img src="https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg?default=false" alt="Cover of Sapiens: A Brief History of Humankind" loading="lazy" decoding="async" onerror="this.remove()"></a></li>
+      <li><a class="cover" href="https://openlibrary.org/isbn/9780871692092" target="_blank" rel="noopener noreferrer" aria-label="Harmonies of the World by Johannes Kepler"><span class="fb" aria-hidden="true"><b>Harmonies of the World</b><small>Johannes Kepler</small></span><img src="https://covers.openlibrary.org/b/isbn/9780871692092-L.jpg?default=false" alt="Cover of Harmonies of the World" loading="lazy" decoding="async" onerror="this.remove()"></a></li>
+      <li><a class="cover" href="https://openlibrary.org/isbn/9781541672482" target="_blank" rel="noopener noreferrer" aria-label="The Art of Logic in an Illogical World by Eugenia Cheng"><span class="fb" aria-hidden="true"><b>The Art of Logic in an Illogical World</b><small>Eugenia Cheng</small></span><img src="https://covers.openlibrary.org/b/isbn/9781541672482-L.jpg?default=false" alt="Cover of The Art of Logic in an Illogical World" loading="lazy" decoding="async" onerror="this.remove()"></a></li>
+      <li><a class="cover" href="https://openlibrary.org/isbn/9780061209192" target="_blank" rel="noopener noreferrer" aria-label="Physics and Philosophy by Werner Heisenberg"><span class="fb" aria-hidden="true"><b>Physics and Philosophy</b><small>Werner Heisenberg</small></span><img src="https://covers.openlibrary.org/b/isbn/9780061209192-L.jpg?default=false" alt="Cover of Physics and Philosophy" loading="lazy" decoding="async" onerror="this.remove()"></a></li>
+      <li><a class="cover" href="https://openlibrary.org/isbn/9780393316049" target="_blank" rel="noopener noreferrer" aria-label="Surely You&#x27;re Joking, Mr. Feynman! by Richard P. Feynman"><span class="fb" aria-hidden="true"><b>Surely You&#x27;re Joking, Mr. Feynman!</b><small>Richard P. Feynman</small></span><img src="https://covers.openlibrary.org/b/isbn/9780393316049-L.jpg?default=false" alt="Cover of Surely You&#x27;re Joking, Mr. Feynman!" loading="lazy" decoding="async" onerror="this.remove()"></a></li>
     </ul>
   </section>
 
