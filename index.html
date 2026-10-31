@@ -529,12 +529,12 @@
             <p class="pjs-editorial-copy"><sc-for list="{{ block.parts }}" as="part"><sc-if value="{{ part.it }}"><em>{{ part.t }}</em></sc-if><sc-if value="{{ part.plain }}">{{ part.t }}</sc-if></sc-for></p>
           </sc-if>
           <sc-if value="{{ block.image }}">
-            <figure class="pjs-editorial-figure">
+            <figure class="pjs-editorial-figure pjs-inline-media">
               <img src="{{ block.image }}" alt="{{ block.alt }}" loading="lazy">
             </figure>
           </sc-if>
           <sc-if value="{{ block.video }}">
-            <figure class="pjs-editorial-figure">
+            <figure class="pjs-editorial-figure pjs-inline-media">
               <video src="{{ block.video }}" aria-label="{{ block.alt }}" autoplay muted loop playsinline preload="metadata"></video>
             </figure>
           </sc-if>
@@ -550,7 +550,7 @@
         <p class="pjs-story-copy">{{ pj.chatbotLine }}</p>
         <div class="pjs-story-pair" aria-label="Chatbot walkthroughs">
           <sc-for list="{{ pj.chatClips }}" as="clip" hint-placeholder-count="2">
-            <figure class="pjs-story-clip">
+            <figure class="pjs-story-clip pjs-inline-media">
               <video src="{{ clip.src }}" aria-label="{{ clip.label }} chatbot example" autoplay muted loop playsinline preload="auto">
                 Your browser does not support embedded video.
               </video>
@@ -560,7 +560,7 @@
         <p class="pjs-story-copy">{{ pj.citationsLine }}</p>
         <div class="pjs-story-pair" aria-label="Clickable citation walkthroughs">
           <sc-for list="{{ pj.citationClips }}" as="clip" hint-placeholder-count="2">
-            <figure class="pjs-story-clip">
+            <figure class="pjs-story-clip pjs-inline-media">
               <video src="{{ clip.src }}" aria-label="{{ clip.label }} citation example" autoplay muted loop playsinline preload="auto">
                 Your browser does not support embedded video.
               </video>
