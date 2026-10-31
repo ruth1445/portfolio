@@ -57,6 +57,17 @@ body[data-page="lab"] .lx-page .lx-writing-intro {
   color: #17160F; font-family: 'Playfair Display', Georgia, serif; animation: pageFloatIn 600ms cubic-bezier(.2,.9,.2,1) both;
 }
 .pjs-title { margin: 0; text-align: center; font-weight: 400; font-size: clamp(30px, 3.1vw, 48px); line-height: 1.05; letter-spacing: -.012em; }
+/* Make inline article references discoverable without requiring hover. */
+.pjs-lede a {
+  color: #B4482F;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.pjs-lede a:hover, .pjs-lede a:focus-visible {
+  color: #86301F;
+  text-decoration-thickness: 2px;
+}
 .pjs-lede { margin: 0; max-width: 520px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.55; }
 .pjs-timeline { margin: 28px 0 0; max-width: 520px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.55; }
 .pjs-timeline p { margin: 0; }
