@@ -6,7 +6,7 @@ body[data-page="lab"] .site-shell, body[data-page="project"] .site-shell { backg
 /* ---------- laboratory ---------- */
 body[data-page="lab"] .lx-page { max-width: none; margin: 0; padding: 56px 44px 110px; color: #17160F; }
 body[data-page="lab"] .lx-page .lx-intro {
-  max-width: 720px; margin: 0 0 72px; color: #17160F; text-transform: none; letter-spacing: 0;
+  box-sizing: border-box; max-width: 720px; margin: 0 0 72px; padding: 22px 26px; border: 1px solid #17160F; background: transparent; color: #17160F; text-transform: none; letter-spacing: 0;
   font-family: 'Playfair Display', Georgia, serif; font-weight: 400; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.55;
 }
 body[data-page="lab"] .lx-intro-second { display: block; margin-top: .7em; }
@@ -47,6 +47,7 @@ body[data-page="lab"] .lx-page .lx-writing-intro {
 
 @media (max-width: 700px) {
   body[data-page="lab"] .lx-page { padding: 36px 20px 72px; }
+  body[data-page="lab"] .lx-page .lx-intro { padding: 18px 20px; }
   body[data-page="lab"] .lx-page .lx-thumb { border-radius: 0; border: 1.5px solid #17160F; width: 52px; height: 52px; }
   body[data-page="lab"] .lx-page .lx-row:hover .lx-thumb, body[data-page="lab"] .lx-page .lx-row.is-active .lx-thumb { border-color: #FAF9F6; }
 }
