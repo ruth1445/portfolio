@@ -250,6 +250,27 @@
   }
   /* End Laboratory folder view */
 
+  .pjs-editorial .pjs-timeline {
+    max-width: 68ch;
+    margin: 40px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid #23201A;
+  }
+  .pjs-editorial .pjs-timeline h2 {
+    margin: 0 0 12px;
+    font-size: 1.25em;
+    font-weight: 600;
+  }
+  .pjs-editorial .pjs-timeline ol {
+    margin: 0;
+    padding-inline-start: 1.4em;
+  }
+  .pjs-editorial .pjs-timeline li + li { margin-top: 12px; }
+  .pjs-editorial .pjs-timeline p { margin-top: 16px; }
+  .pjs-editorial .pjs-timeline a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 </style>
 
 </head>
@@ -543,6 +564,17 @@
         <div class="pjs-links">
           <sc-for list="{{ pj.links }}" as="lk" hint-placeholder-count="1"><a href="{{ lk.href }}" target="_blank" rel="noopener noreferrer"><span>{{ lk.label }}</span><i aria-hidden="true">&#8599;</i></a></sc-for>
         </div>
+        <sc-if value="{{ pj.timelineInEditorial }}">
+          <section class="pjs-timeline" aria-labelledby="pjs-timeline-heading">
+            <h2 id="pjs-timeline-heading">Research timeline</h2>
+            <ol>
+              <sc-for list="{{ pj.timeline }}" as="entry" hint-placeholder-count="3"><li>{{ entry }}</li></sc-for>
+            </ol>
+            <sc-if value="{{ pj.relatedProject }}">
+              <p>{{ pj.relatedProject.description }} <a href="{{ pj.relatedProject.href }}" onclick="{{ pj.relatedProject.open }}">{{ pj.relatedProject.label }}</a></p>
+            </sc-if>
+          </section>
+        </sc-if>
       </article>
     </sc-if>
     <sc-if value="{{ pj.hasStory }}">
@@ -844,6 +876,20 @@ const PROJECTS = [
   { cat: 'projects', title: 'monosemanticity', blurb: 'trained sparse autoencoders on language-model activations to study interpretable features and superposition.', href: PLACEHOLDER, tag: 'interpretability', image: './H.jpg', figures: [{ image: './lab-pics/monosemanticity/interp.jpg' }],
     mediaAfter: ["I trained sparse autoencoders on GPT-2 activations and looked for features that might correspond to recognizable concepts."],
     code: 'https://github.com/ruth1445/interpretability', visualRepo: 'https://github.com/ruth1445/monosemanticity', visualDemo: 'https://ruth1445.github.io/monosemanticity/', reportPdf: './report-zine/Ruth_SL_FinalReport_2.pdf', zine: true,
+    timeline: [
+      "July–August 2025 — I was drawn to the parallels between neuroscience and neural networks. I started reading work by Anthropic researchers and became interested in how language models encode thought and carry out different kinds of reasoning.",
+      "October 2025 — I was studying interpretability almost every day. The idea that the field was still years away from its first textbook made me want to find a way in. I kept coming back to how well language models make analogies. A good analogy carries the relationships from one situation to another. What would a model have to represent internally to do that?",
+      "October 2025 — I began exploring a related question with the multilingual model XGLM. Would the same internal feature activate when a concept was expressed in different languages? I was also curious how learned mechanisms could work together or compete, as when a model can continue a sentence fluently and also has mechanisms that push it toward refusal.",
+      "Early November 2025 — I wrote about what had changed my mind about interpretability. I found it strange that we could discover things inside a system we had built ourselves. Reading Anthropic's work on superposition gave that idea a concrete form. If individual neurons respond to unrelated inputs, could patterns across those neurons reveal something more coherent?",
+      "Mid-November–December 2025 — I set out to reproduce part of Anthropic's Towards Monosemanticity with the compute I had. I ran a physics-heavy corpus through GPT-2, trained a sparse autoencoder on its activations, and inspected the words and contexts that activated the features most strongly.",
+      "December 2025 — When I prepared to present the paper in class, I remember thinking it was very, very, very beautiful and wanting to use all seven minutes to show why it mattered. I kept thinking about how much of a child's experience is sensory and embodied, and what we might learn by examining the concepts a model acquires mostly through text.",
+      "Later — I turned what I had learned into a visual guide. I had wanted a way into the field when I was starting out, so I built the explanation I would have liked to find."
+    ],
+    relatedProject: {
+      slug: 'micro',
+      description: "I explored the division of labor inside a model from another angle by reproducing an architecture that routes tokens to specialists.",
+      label: 'See my MiCRo project',
+    },
         intro: "For my final project at Rutgers, I wanted to understand what happens inside a language model rather than only judging the sentences it produces. I had been reading Anthropic's research on interpretability and found the possibility of identifying meaningful internal features fascinating. The difficulty is that a model doesn't necessarily reserve one neuron for one concept. Information can be distributed and overlapping, which makes interpreting a single activation rather unreliable. I trained sparse autoencoders on GPT-2 activations and looked for features that might correspond to recognizable concepts. A sparse autoencoder tries to represent those activations using a larger set of features while keeping only a small number active at a time. The hope is that these features might be easier to interpret than the original neurons, though that is a hypothesis to test rather than a guarantee. I examined feature activations and started building visual explanations to see what seemed to recur across examples and what remained ambiguous. I was new to mechanistic interpretability, so making the explanations was also a way of forcing myself to understand what I had actually done. The project left me with a question I still find exciting: how much of a model's internal organization can we explain without projecting our own categories onto it?" },
   { cat: 'projects', title: 'societal impacts research paper', blurb: 'co-authored an nbea paper using an nlp pipeline over 8k+ reddit posts to study chatbot perception and bias.', href: PLACEHOLDER, tag: 'nlp research', image: './I.jpg',
     paper: 'https://www.researchgate.net/profile/Janki-Kanakia-2/publication/395721509_Societal_Impacts_and_Public_Perception_of_Chatbots_Implications_for_Individuals_and_Organizations/links/68ed8db602d6215259bb652c/Societal-Impacts-and-Public-Perception-of-Chatbots-Implications-for-Individuals-and-Organizations.pdf',
@@ -1202,6 +1248,8 @@ class Component extends DCLogic {
       return blocks;
     })();
     const hasEditorial = editorialBlocks.length > 0;
+    const hasTimeline = Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0;
+    const relatedProject = pjSrc.relatedProject;
     const pj = {
       intro: projectIntro,
       // *words between asterisks* in an intro are set in italics
@@ -1220,11 +1268,17 @@ class Component extends DCLogic {
         return parts;
       })(),
       timeline: pjSrc.timeline || [],
-      hasTimeline: Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0,
+      hasTimeline,
       hasEditorial,
       hasStandardLayout: !hasEditorial,
       editorialBlocks,
-      timelineInHero: !pjSrc.chatbotLine && Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0,
+      timelineInHero: !hasEditorial && !pjSrc.chatbotLine && hasTimeline,
+      timelineInEditorial: hasEditorial && !pjSrc.chatbotLine && hasTimeline,
+      relatedProject: relatedProject ? {
+        ...relatedProject,
+        href: '#p/' + relatedProject.slug,
+        open: openProject(relatedProject.slug),
+      } : null,
       hasStory: Boolean(pjSrc.chatbotLine),
       chatbotLine: pjSrc.chatbotLine || '',
       chatClips: pjSrc.chatClips || [],
