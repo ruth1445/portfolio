@@ -266,7 +266,6 @@
     padding-inline-start: 1.4em;
   }
   .pjs-editorial .pjs-timeline li + li { margin-top: 12px; }
-  .pjs-editorial .pjs-timeline p { margin-top: 16px; }
   .pjs-editorial .pjs-timeline a {
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -568,11 +567,10 @@
           <section class="pjs-timeline" aria-labelledby="pjs-timeline-heading">
             <h2 id="pjs-timeline-heading">Research timeline</h2>
             <ol>
-              <sc-for list="{{ pj.timeline }}" as="entry" hint-placeholder-count="3"><li>{{ entry }}</li></sc-for>
+              <sc-for list="{{ pj.editorialTimeline }}" as="entry" hint-placeholder-count="3">
+                <li><sc-for list="{{ entry }}" as="part"><sc-if value="{{ part.internal }}"><a href="{{ part.href }}" onclick="{{ part.open }}">{{ part.text }}</a></sc-if><sc-if value="{{ part.external }}"><a href="{{ part.href }}" target="_blank" rel="noopener noreferrer">{{ part.text }}</a></sc-if><sc-if value="{{ part.plain }}">{{ part.text }}</sc-if></sc-for></li>
+              </sc-for>
             </ol>
-            <sc-if value="{{ pj.relatedProject }}">
-              <p>{{ pj.relatedProject.description }} <a href="{{ pj.relatedProject.href }}" onclick="{{ pj.relatedProject.open }}">{{ pj.relatedProject.label }}</a></p>
-            </sc-if>
           </section>
         </sc-if>
       </article>
@@ -877,20 +875,15 @@ const PROJECTS = [
     mediaAfter: ["I trained sparse autoencoders on GPT-2 activations and looked for features that might correspond to recognizable concepts."],
     code: 'https://github.com/ruth1445/interpretability', visualRepo: 'https://github.com/ruth1445/monosemanticity', visualDemo: 'https://ruth1445.github.io/monosemanticity/', reportPdf: './report-zine/Ruth_SL_FinalReport_2.pdf', zine: true,
     timeline: [
-      "July–August 2025 — I was drawn to the parallels between neuroscience and neural networks. I started reading work by Anthropic researchers and became interested in how language models encode thought and carry out different kinds of reasoning.",
-      "October 2025 — I was studying interpretability almost every day. The idea that the field was still years away from its first textbook made me want to find a way in. I kept coming back to how well language models make analogies. A good analogy carries the relationships from one situation to another. What would a model have to represent internally to do that?",
-      "October 2025 — I began exploring a related question with the multilingual model XGLM. Would the same internal feature activate when a concept was expressed in different languages? I was also curious how learned mechanisms could work together or compete, as when a model can continue a sentence fluently and also has mechanisms that push it toward refusal.",
-      "Early November 2025 — I wrote about what had changed my mind about interpretability. I found it strange that we could discover things inside a system we had built ourselves. Reading Anthropic's work on superposition gave that idea a concrete form. If individual neurons respond to unrelated inputs, could patterns across those neurons reveal something more coherent?",
-      "Mid-November–December 2025 — I set out to reproduce part of Anthropic's Towards Monosemanticity with the compute I had. I ran a physics-heavy corpus through GPT-2, trained a sparse autoencoder on its activations, and inspected the words and contexts that activated the features most strongly.",
-      "December 2025 — When I prepared to present the paper in class, I remember thinking it was very, very, very beautiful and wanting to use all seven minutes to show why it mattered. I kept thinking about how much of a child's experience is sensory and embodied, and what we might learn by examining the concepts a model acquires mostly through text.",
-      "Later — I turned what I had learned into a visual guide. I had wanted a way into the field when I was starting out, so I built the explanation I would have liked to find."
+      "July–August 2025 — I was drawn to the parallels between neuroscience and neural networks. I had worked on reproducing two other papers with similar themes: [MiCRo](#p/micro) and [RAM](#p/rational-metareasoning). I was also very interested in the relationship between [language and thought](https://arxiv.org/abs/2301.06627) and began to explore ways I might research this with respect to LLMs.",
+      "October 2025 — I was studying interpretability almost every day. Knowing that the field was still years away from its first textbook discouraged me slightly at times but I kept coming back. I was also struggling to convince myself why interpretability research was important and needed in the first place.",
+      "October 2025 — I began exploring a related question with the multilingual model XGLM.",
+      "Early November 2025 — I wrote about what had changed my mind about interpretability. I started exploring methods other than monosemanticty. I also started reading Anthropic's work on superposition to give me more context on the research problem.",
+      "Mid-November–December 2025 — I set out to reproduce part of Anthropic's Towards Monosemanticity with the compute I had. I created and ran a physics-heavy corpus through GPT-2, trained a sparse autoencoder on its activations, and inspected the words and contexts that activated the features most strongly.",
+      "December 2025 — When I prepared to present the paper in class, I remember thinking it was very, very, very beautiful and wanting to use all seven minutes to show why it mattered. I got too excited and started quoting Yann LeCun’s idea of how a 4 year old and our most advanced LLMs today have access to roughly the same amount of tokens of knowledge, but a child takes in information through visual cues as well, making the learning process much richer. I was talking about world models and the disadvantaged of only-text training. I later realized it was inappropriate to introduce this concept in a 7 minute talk about a field so different albeit adjacent.",
+      "Later — I turned what I had learned into a visual guide which I would have liked to find at the beginning of my journey. I also started exploring world models in a little more depth."
     ],
-    relatedProject: {
-      slug: 'micro',
-      description: "I explored the division of labor inside a model from another angle by reproducing an architecture that routes tokens to specialists.",
-      label: 'See my MiCRo project',
-    },
-        intro: "For my final project at Rutgers, I wanted to understand what happens inside a language model rather than only judging the sentences it produces. I had been reading Anthropic's research on interpretability and found the possibility of identifying meaningful internal features fascinating. The difficulty is that a model doesn't necessarily reserve one neuron for one concept. Information can be distributed and overlapping, which makes interpreting a single activation rather unreliable. I trained sparse autoencoders on GPT-2 activations and looked for features that might correspond to recognizable concepts. A sparse autoencoder tries to represent those activations using a larger set of features while keeping only a small number active at a time. The hope is that these features might be easier to interpret than the original neurons, though that is a hypothesis to test rather than a guarantee. I examined feature activations and started building visual explanations to see what seemed to recur across examples and what remained ambiguous. I was new to mechanistic interpretability, so making the explanations was also a way of forcing myself to understand what I had actually done. The project left me with a question I still find exciting: how much of a model's internal organization can we explain without projecting our own categories onto it?" },
+    intro: "For my final project at Rutgers, I wanted to understand what happens inside the “brain” of a language model. I had been reading Anthropic's research on interpretability and found the experiments fascinating. The problem I chose to research was polysemanticity which means that a model doesn't necessarily reserve one neuron for one concept. Information can be distributed and overlapping, which makes interpreting a single activation rather unreliable. I trained sparse autoencoders on GPT-2 activations and looked for features that might correspond to recognizable concepts.\n\nA sparse autoencoder tries to represent those activations using a larger set of features while keeping only a small number active at a time. The hope is that these features might be easier to interpret than the original neurons. I examined feature activations and started building visual explanations to see what seemed to recur across examples and what remained ambiguous. I was new to mechanistic interpretability, so making the explanations was also a way of teaching myself what I had actually done." },
   { cat: 'projects', title: 'societal impacts research paper', blurb: 'co-authored an nbea paper using an nlp pipeline over 8k+ reddit posts to study chatbot perception and bias.', href: PLACEHOLDER, tag: 'nlp research', image: './I.jpg',
     paper: 'https://www.researchgate.net/profile/Janki-Kanakia-2/publication/395721509_Societal_Impacts_and_Public_Perception_of_Chatbots_Implications_for_Individuals_and_Organizations/links/68ed8db602d6215259bb652c/Societal-Impacts-and-Public-Perception-of-Chatbots-Implications-for-Individuals-and-Organizations.pdf',
         intro: "I have spent an embarrassing amount of time reading strangers argue about AI on the internet, so I thought I might as well turn some of that into research. People speak about chatbots in wildly different ways: as useful tools, unreliable sources, companions, or systems they don't quite trust. I was curious whether those attitudes would still be visible when we moved beyond individual posts and looked at a much larger collection. For a co-authored paper, I worked on an NLP pipeline analyzing more than 8,000 Reddit posts about chatbots, including how people discuss their usefulness, social effects, and bias. Working with Reddit data brings its own problems. People are sarcastic, use the same words to mean different things, and often respond to another person's argument rather than stating their own position directly. I wanted to see which patterns could be surfaced systematically, and which would still require us to read the surrounding context. The aim wasn't to treat a collection of Reddit posts as a representative poll of everyone who uses AI. It was to use text analysis to study the conversations people were already having, then consider what those conversations might tell us about the technology's reception." },
@@ -1249,7 +1242,7 @@ class Component extends DCLogic {
     })();
     const hasEditorial = editorialBlocks.length > 0;
     const hasTimeline = Array.isArray(pjSrc.timeline) && pjSrc.timeline.length > 0;
-    const relatedProject = pjSrc.relatedProject;
+    const timelineInEditorial = hasEditorial && !pjSrc.chatbotLine && hasTimeline;
     const pj = {
       intro: projectIntro,
       // *words between asterisks* in an intro are set in italics
@@ -1273,12 +1266,16 @@ class Component extends DCLogic {
       hasStandardLayout: !hasEditorial,
       editorialBlocks,
       timelineInHero: !hasEditorial && !pjSrc.chatbotLine && hasTimeline,
-      timelineInEditorial: hasEditorial && !pjSrc.chatbotLine && hasTimeline,
-      relatedProject: relatedProject ? {
-        ...relatedProject,
-        href: '#p/' + relatedProject.slug,
-        open: openProject(relatedProject.slug),
-      } : null,
+      timelineInEditorial,
+      editorialTimeline: timelineInEditorial ? pjSrc.timeline.map((entry) => (
+        entry.split(/(\[[^\]]+\]\((?:#p\/[a-z0-9-]+|https:\/\/[^)\s]+)\))/g).filter(Boolean).map((part) => {
+          const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+          if (!link) return { text: part, plain: true };
+          const [, text, href] = link;
+          if (href.startsWith('#p/')) return { text, href, internal: true, open: openProject(href.slice(3)) };
+          return { text, href, external: true };
+        })
+      )) : [],
       hasStory: Boolean(pjSrc.chatbotLine),
       chatbotLine: pjSrc.chatbotLine || '',
       chatClips: pjSrc.chatClips || [],
